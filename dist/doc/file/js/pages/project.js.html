@@ -32,7 +32,9 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">common</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Create">Create</a></span></span></li>
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">common</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-event">event</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-pageview">pageview</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Create">Create</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Delete">Delete</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Read">Read</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Update">Update</a></span></span></li>
@@ -67,6 +69,8 @@ const projects = require(&apos;projects&apos;);
 const types = require(&apos;types&apos;);
 const pluralise = require(&apos;pluralize&apos;);
 const naturalSort = require(&apos;javascript-natural-sort&apos;);
+
+import * as analytics from &quot;common/analytics&quot;;
 
 export default function(context)
 {
@@ -104,17 +108,27 @@ function newFile(context, parent, project, folder)
   let templateInput = parent.Select().Options(getTypeDefaults(typeInput.Value())).Display(&apos;block&apos;);
   typeInput.OnChange(() =&gt;
   {
+    analytics.event(typeInput.Value(), &apos;select&apos;);
     templateInput.Options(getTypeDefaults(typeInput.Value()));
+  });
+  templateInput.OnChange(() =&gt;
+  {
+    analytics.event(typeInput.Value(), &apos;select&apos;, templateInput.Value());
   });
   parent.Button(&apos;Create&apos;).OnClick(() =&gt;
   {
     let name = nameInput.Value();
     let type = typeInput.Value();
     let template = templateInput.Value();
+    analytics.event(type, &apos;create&apos;, template);
     if (name &amp;&amp; nameInput.Validity().valid)
     {
       project.setFile(folder, project.makeKey(name, type), types[type].templates[template])
-        .then(() =&gt; showFolder(context, project, folder));
+        .then(() =&gt;
+      {
+        analytics.event(type, &apos;create-success&apos;, template);
+        showFolder(context, project, folder)
+      });
     }
   }).Display(&apos;block&apos;);
 }
@@ -132,6 +146,7 @@ function showFile(context, section, project, folder, item)
     module.view(itemContent.clear(), item, contents);
     itemToolbar.Button(&apos;Rename&apos;).OnClick(() =&gt;
     {
+      analytics.event(item.module, &apos;rename&apos;, &apos;attempt&apos;);
       let newName = prompt(`Please enter a new name for ${item.name}`, item.name);
       if (newName)
       {
@@ -142,14 +157,20 @@ function showFile(context, section, project, folder, item)
           project.renameFile(folder, item.key, newKey)
             .then(() =&gt;
             {
+              analytics.event(item.module, &apos;rename&apos;, &apos;success&apos;);
               item.key = newKey;
               showFolder(context, project, folder);
+            }, err =&gt;
+            {
+              alert(err);
+              analytics.event(item.module, &apos;rename&apos;, &apos;failure&apos;);
             });
         }
       }
     });
     itemToolbar.Button(&apos;Edit&apos;).OnClick(() =&gt;
     {
+      analytics.event(item.module, &apos;edit&apos;);
       itemToolbar.Display(&apos;none&apos;);
       let editContainer = itemContent.clear().Div();
       let changed = item;
@@ -160,10 +181,16 @@ function showFile(context, section, project, folder, item)
       let editToolbar = itemContent.Div();
       editToolbar.Button(&apos;Save&apos;).OnClick(() =&gt;
       {
+        analytics.event(item.module, &apos;save&apos;, &apos;attempt&apos;);
         project.setFile(folder, item.key, changed).then(() =&gt;
         {
           alert(&apos;Saved&apos;);
           contents = changed;
+          analytics.event(item.module, &apos;save&apos;, &apos;success&apos;);
+        }, err =&gt;
+        {
+          alert(err);
+          analytics.event(item.module, &apos;save&apos;, &apos;failure&apos;);
         });
       });
       editToolbar.Button(&apos;Done&apos;).OnClick(() =&gt;
@@ -171,24 +198,44 @@ function showFile(context, section, project, folder, item)
         itemToolbar.Display(&apos;&apos;);
         if (JSON.stringify(contents) !== JSON.stringify(changed) &amp;&amp; confirm(&quot;Save changes?&quot;))
         {
+          analytics.event(item.module, &apos;done&apos;, &apos;attempt&apos;);
           project.setFile(folder, item.key, changed).then(() =&gt;
           {
+            analytics.event(item.module, &apos;done&apos;, &apos;success&apos;);
             contents = changed;
             module.view(itemContent.clear(), item, contents);
+          }, err =&gt;
+          {
+            analytics.event(item.module, &apos;done&apos;, &apos;failure&apos;);
           });
         }
         else
         {
+          analytics.event(item.module, &apos;done&apos;, &apos;nochange&apos;);
           module.view(itemContent.clear(), item, contents);
         }
       });
     });
     itemToolbar.Button(&apos;Delete&apos;).OnClick(() =&gt;
     {
+      analytics.event(item.module, &apos;delete&apos;, &apos;click&apos;);
       if (confirm(`Are you sure you want to delete ${item.name}?`))
       {
+        analytics.event(item.module, &apos;delete&apos;, &apos;attempt&apos;);
         project.deleteFile(folder, item.key)
-          .then(() =&gt; showFolder(context, project, folder));
+          .then(() =&gt;
+        {
+          analytics.event(item.module, &apos;delete&apos;, &apos;success&apos;);
+          showFolder(context, project, folder);
+        }, err =&gt;
+        {
+          analytics.event(item.module, &apos;delete&apos;, &apos;failure&apos;);
+          alert(err);
+        });
+      }
+      else
+      {
+        analytics.event(item.module, &apos;delete&apos;, &apos;cancel&apos;);
       }
     });
   });

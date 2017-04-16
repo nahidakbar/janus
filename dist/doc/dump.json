@@ -2,6 +2,94 @@
   {
     "__docId__": 0,
     "kind": "file",
+    "name": "js/common/analytics.js",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nwindow.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;\n\nga('create', 'UA-97457188-1', 'auto');\n\nexport function pageview(page)\n{\n  try\n  {\n    ga('set', 'page', page);\n    ga('send', 'pageview');\n  }\n  catch(e)\n  {\n    \n  }\n};\n\nexport function event(category, action, extra='')\n{\n  try\n  {\n    console.log(category, action, extra);\n    ga('send', 'event', category, action, extra);\n  }\n  catch(e)\n  {\n    \n  }\n};\n",
+    "static": true,
+    "longname": "js/common/analytics.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 1,
+    "kind": "function",
+    "name": "pageview",
+    "memberof": "js/common/analytics.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "js/common/analytics.js~pageview",
+    "access": null,
+    "export": true,
+    "importPath": "janus/js/common/analytics.js",
+    "importStyle": "{pageview}",
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "page",
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
+    "__docId__": 2,
+    "kind": "function",
+    "name": "event",
+    "memberof": "js/common/analytics.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "js/common/analytics.js~event",
+    "access": null,
+    "export": true,
+    "importPath": "janus/js/common/analytics.js",
+    "importStyle": "{event}",
+    "description": null,
+    "lineNumber": 24,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "category",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "action",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "extra",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "__docId__": 3,
+    "kind": "file",
     "name": "js/common/request.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst d3 = require(\"d3-request\");\n\n/**\n * Make a http request.\n * @return {Promise}\n */\nexport function request(method, url, body=null, transform=x=>x)\n{\n  let start = Date.now();\n  return new Promise((resolve, reject) =>\n  {\n    d3.request(url)\n    .header(\"Content-Type\", \"application/json\")\n    .send(method, JSON.stringify(body), function(err, xhr)\n    {\n      console.log(method, url, 'took', Date.now() - start, 'ms');\n      if (err)\n      {\n        xhr = err.srcElement;\n        reject(xhr && (xhr.response || xhr.responseText) || err);\n      }\n      else\n      {\n        resolve(transform(JSON.parse(xhr.responseText)));\n      }\n    });\n  });\n};\n\nexport function Create (url, body=null, transform=x=>x) {\n  return request.apply(null, ['post'].concat(arguments));\n}\n\nexport function Read (url, body=null, transform=x=>x) {\n  return request.apply(null, ['get'].concat(arguments));\n}\n\nexport function Update (url, body=null, transform=x=>x) {\n  return request.apply(null, ['put'].concat(arguments));\n}\n\nexport function Delete (url, body=null, transform=x=>x) {\n  return request.apply(null, ['delete'].concat(arguments));\n}\n",
     "static": true,
@@ -11,7 +99,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 1,
+    "__docId__": 4,
     "kind": "variable",
     "name": "d3",
     "memberof": "js/common/request.js",
@@ -37,7 +125,7 @@
     }
   },
   {
-    "__docId__": 2,
+    "__docId__": 5,
     "kind": "function",
     "name": "request",
     "memberof": "js/common/request.js",
@@ -90,7 +178,7 @@
     }
   },
   {
-    "__docId__": 3,
+    "__docId__": 6,
     "kind": "function",
     "name": "Create",
     "memberof": "js/common/request.js",
@@ -141,7 +229,7 @@
     }
   },
   {
-    "__docId__": 4,
+    "__docId__": 7,
     "kind": "function",
     "name": "Read",
     "memberof": "js/common/request.js",
@@ -192,7 +280,7 @@
     }
   },
   {
-    "__docId__": 5,
+    "__docId__": 8,
     "kind": "function",
     "name": "Update",
     "memberof": "js/common/request.js",
@@ -243,7 +331,7 @@
     }
   },
   {
-    "__docId__": 6,
+    "__docId__": 9,
     "kind": "function",
     "name": "Delete",
     "memberof": "js/common/request.js",
@@ -294,10 +382,10 @@
     }
   },
   {
-    "__docId__": 7,
+    "__docId__": 10,
     "kind": "file",
     "name": "js/index.js",
-    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst d3 = require(\"d3-selection\"); require(\"d3-html\")\n\nwindow.onload = function()\n{\n  // ================\n  // PAGES\n  // ================\n  const parent = d3.select(\"body\");\n  let context = {\n    pages: {\n      '': require('pages/index').default,\n      'project': require('pages/project').default,\n      'github': require('pages/github').default,\n      'dropbox': require('pages/dropbox').default,\n      'localstorage': require('pages/localstorage').default,\n    }\n  };\n\n  // ================\n  // LAYOUT\n  // ================\n  // heading\n  context.head = parent.Div().Class('head').H1().Class(\"container\").A(\"Janus - Heavily Under Construction\").Href('#');\n\n  // body\n  context.body = parent.Div().Class(\"body\").Div().Class(\"container\");\n\n  // ================\n  // LAYOUT\n  // ================\n\n  d3.HashStateRouter(context);\n\n  window.onhashchange = function()\n  {\n    context.head.text(\"Janus - Heavily Under Construction\");\n    context.body.Loader();\n    context.Reload();\n  }; \n\n};\n\nd3.selection.prototype.Loader = function()\n{\n  return this.html(`<div style=\"text-align: center;\"><svg style=\"max-width: 100%;\" width='200px' height='200px' xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" preserveAspectRatio=\"xMidYMid\" class=\"uil-gears\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" class=\"bk\"></rect><g transform=\"translate(-20,-20)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#336699\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"90 50 50\" to=\"0 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g><g transform=\"translate(20,20) rotate(15 50 50)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#6699bb\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"0 50 50\" to=\"90 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g></svg></div>`);\n};\n\nd3.selection.prototype.Markdown = function(content, options)\n{\n  const marked = require('marked');\n  return this.html(marked(content, options));\n};\n\nString.prototype.toUncamelCase = function()\n{\n  return this.replace(/([A-Z]+)/g, ' $1').trim();\n};\n\nString.prototype.trim = function()\n{\n  return this.replace(/(^\\s+|\\s+$)/g, '');\n};\n",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst d3 = require(\"d3-selection\"); require(\"d3-html\")\n\nimport * as analytics from \"common/analytics\";\n\nwindow.onload = function()\n{\n  // ================\n  // PAGES\n  // ================\n  const parent = d3.select(\"body\");\n  let context = {\n    pages: {\n      '': require('pages/index').default,\n      'project': require('pages/project').default,\n      'github': require('pages/github').default,\n      'dropbox': require('pages/dropbox').default,\n      'localstorage': require('pages/localstorage').default,\n    }\n  };\n\n  // ================\n  // LAYOUT\n  // ================\n  // heading\n  context.head = parent.Div().Class('head').H1().Class(\"container\").A(\"Janus - Heavily Under Construction\").Href('#');\n\n  // body\n  context.body = parent.Div().Class(\"body\").Div().Class(\"container\");\n\n  // ================\n  // LAYOUT\n  // ================\n\n  d3.HashStateRouter(context);\n\n  window.onhashchange = function()\n  {\n    analytics.pageview(context.params.page);\n    context.head.text(\"Janus - Heavily Under Construction\");\n    context.body.Loader();\n    context.Reload();\n  };\n  \n  analytics.pageview(context.params.page) \n\n};\n\nd3.selection.prototype.Loader = function()\n{\n  return this.html(`<div style=\"text-align: center;\"><svg style=\"max-width: 100%;\" width='200px' height='200px' xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" preserveAspectRatio=\"xMidYMid\" class=\"uil-gears\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" class=\"bk\"></rect><g transform=\"translate(-20,-20)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#336699\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"90 50 50\" to=\"0 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g><g transform=\"translate(20,20) rotate(15 50 50)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#6699bb\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"0 50 50\" to=\"90 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g></svg></div>`);\n};\n\nd3.selection.prototype.Markdown = function(content, options)\n{\n  const marked = require('marked');\n  return this.html(marked(content, options));\n};\n\nString.prototype.toUncamelCase = function()\n{\n  return this.replace(/([A-Z]+)/g, ' $1').trim();\n};\n\nString.prototype.trim = function()\n{\n  return this.replace(/(^\\s+|\\s+$)/g, '');\n};\n",
     "static": true,
     "longname": "js/index.js",
     "access": null,
@@ -305,7 +393,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 8,
+    "__docId__": 11,
     "kind": "variable",
     "name": "d3",
     "memberof": "js/index.js",
@@ -331,7 +419,7 @@
     }
   },
   {
-    "__docId__": 9,
+    "__docId__": 12,
     "kind": "function",
     "name": "onload",
     "memberof": "js/index.js",
@@ -344,7 +432,7 @@
     "importPath": "janus/js/index.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 11,
     "undocument": true,
     "unknown": [
       {
@@ -355,7 +443,7 @@
     "params": []
   },
   {
-    "__docId__": 10,
+    "__docId__": 13,
     "kind": "function",
     "name": "Loader",
     "memberof": "js/index.js",
@@ -368,7 +456,7 @@
     "importPath": "janus/js/index.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 49,
+    "lineNumber": 54,
     "undocument": true,
     "unknown": [
       {
@@ -384,7 +472,7 @@
     }
   },
   {
-    "__docId__": 11,
+    "__docId__": 14,
     "kind": "function",
     "name": "Markdown",
     "memberof": "js/index.js",
@@ -397,7 +485,7 @@
     "importPath": "janus/js/index.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 54,
+    "lineNumber": 59,
     "undocument": true,
     "unknown": [
       {
@@ -426,7 +514,7 @@
     }
   },
   {
-    "__docId__": 12,
+    "__docId__": 15,
     "kind": "function",
     "name": "toUncamelCase",
     "memberof": "js/index.js",
@@ -434,35 +522,6 @@
     "async": false,
     "static": true,
     "longname": "js/index.js~toUncamelCase",
-    "access": null,
-    "export": false,
-    "importPath": "janus/js/index.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 60,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "params": [],
-    "return": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 13,
-    "kind": "function",
-    "name": "trim",
-    "memberof": "js/index.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "js/index.js~trim",
     "access": null,
     "export": false,
     "importPath": "janus/js/index.js",
@@ -484,7 +543,36 @@
     }
   },
   {
-    "__docId__": 14,
+    "__docId__": 16,
+    "kind": "function",
+    "name": "trim",
+    "memberof": "js/index.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "js/index.js~trim",
+    "access": null,
+    "export": false,
+    "importPath": "janus/js/index.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 70,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 17,
     "kind": "file",
     "name": "js/pages/dropbox.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport default function(context)\n{\n  const parent = context.contents.clear();\n  \n  parent.Markdown(`TODO`);\n\n};\n",
@@ -495,7 +583,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 15,
+    "__docId__": 18,
     "kind": "function",
     "name": "dropbox",
     "memberof": "js/pages/dropbox.js",
@@ -526,7 +614,7 @@
     ]
   },
   {
-    "__docId__": 16,
+    "__docId__": 19,
     "kind": "file",
     "name": "js/pages/github.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst request = require(\"common/request\");\n/*\nfunction getAccessToken(context)\n{\n  const parent = context.contents.clear();\n  \n  parent.Markdown(`\n  ## Setp 1: Set Up Github Access\n  \n  Janus will not store or manage any secrets and keys outside an your browser.\n  \n  You will be required generate a personal access token for janus and fill it in.\n  \n  To get started, create a new Personal Access Token from your github settings page.\n\n  Be sure to select the following scopes:\n  \n  * \"repo\" for using both private and public repos or just \"public_repo\".\n  \n  Nothing else is necessary.\n  \n  Once done, fill in the following details: `);\n\n  parent.Br();\n\n  parent.Label('Access Token:');\n  const token = parent.Text();\n  \n  parent.Br();\n  \n  parent.Button('Set').OnClick(() =>\n  {\n    localStorage.githubToken = token.Value();\n    context.Reload();\n  });\n}\n\nfunction getRepository(context)\n{\n  request.read(`https://api.github.com/user/repos?access_token=${localStorage.githubToken}`).then(repos =>\n  {\n    const parent = context.contents.clear();\n    parent.H2('Please select a repository:');\n    repos.forEach(repo =>\n    {\n      parent.Button(repo.full_name).OnClick(() =>\n      {\n        window.githubRepopsitory = repo;\n        console.log(repo);\n        context.Reload();\n      }).Class('big').Display('block');\n    });\n  });\n}\n\nfunction getBranch(context)\n{\n  request.read(window.githubRepopsitory.branches_url.replace('{/branch}', `?access_token=${localStorage.githubToken}`)).then(branches =>\n  {\n    const parent = context.contents.clear();\n    parent.H2('Please select a branch:');\n    branches.forEach(branch =>\n    {\n      parent.Button(branch.name).OnClick(() =>\n      {\n        window.githubBranch = branch;\n        console.log(branch);\n        context.Reload();\n      }).Class('big').Display('block');\n    });\n    if (branches.length === 1)\n    {\n      window.githubBranch = branches[0];\n      console.log(branches[0]);\n      context.Reload();\n    }\n  });\n}\n\nfunction getFolder(context, path='', parent=null)\n{\n  parent = parent || window.githubBranch.commit;\n  request.read(window.githubRepopsitory.trees_url.replace('{/sha}', `/${parent.sha}?access_token=${localStorage.githubToken}`)).then(tree =>\n  {\n    console.log(tree);\n    const parent = context.contents.clear();\n    parent.H2(`Please select a folder: ${path}`);\n    tree.tree.filter(xx => xx.type === \"tree\").forEach(tree =>\n    {\n      parent.Button(tree.path).OnClick(() =>\n      {\n        getFolder(context, (path? path + '/' : '') + tree.path, tree);\n      }).Class('big').Display('block');\n    });\n    parent.Button('Select This Folder').OnClick(() =>\n    {\n      parent.path = path;\n      window.githubFolder = parent;\n      console.log(parent);\n      context.Reload();\n    }).Class('big').Display('block');\n  });\n}\n*/\n\nfunction getRepositories(endpoint, accessToken)\n{\n  return new Promise((resolve, reject) =>\n  {\n    request.read(`${endpoint}/user/repos?access_token=${accessToken}`).then(repos =>\n    {\n      resolve(repos.map(repo => repo.full_name));\n    }, reject);\n  });\n}\n\nfunction getBranches(endpoint, accessToken, repository)\n{\n  return new Promise((resolve, reject) =>\n  {\n    request.read(`${endpoint}/user/repos?access_token=${accessToken}`).then(repos =>\n    {\n      resolve(repos.map(repo => repo.full_name));\n    }, reject);\n  });\n}\n\nexport default function(context)\n{\n  const parent = context.contents.clear();\n  \n  const title = parent.H2('New Github Project');\n  \n  const form = parent.Div();\n  \n  form.Label('API Endpoint:').Display('block');\n  const endpointInput = form.Text().Value('https://api.github.com').Display('block');\n  \n  form.Label('Personal Access Token:').Display('block');\n  const accessTokenInput = form.Text().Display('block');\n  \n  const output = parent.Div();\n  \n  form.Button(\"Next\").OnClick(() =>\n  {\n    let endpoint = endpointInput.Value();\n    let accessToken = accessTokenInput.Value();\n    getRepositories(endpoint, accessToken).then(repos =>\n    {\n      form.clear();\n      form.Label('Repository:').Display('block')\n      let repositoryInput = form.Select().Options(repos).Display('block');\n      form.Button(\"Next\").OnClick(() =>\n      {\n        let repository = repositoryInput.Value();\n        getBranches(endpoint, accessToken, repository).then(repos =>\n        {\n          form.clear();\n          form.Label('Branch:').Display('block')\n          let branchInput = form.Select().Options(repos).Display('block');\n          form.Button(\"Next\").OnClick(() =>\n          {\n            let name = repository;\n            let type = 'github';\n            addNewProject({\n              name,\n              type,\n              endpoint,\n              accessToken,\n              repository,\n              branch\n            });\n          });\n        }, err => \n        {\n          output.html(JSON.stringify(err, null, 2));\n        });\n      });      \n    }, err => \n    {\n      output.html(JSON.stringify(err, null, 2));\n    });\n  });\n};\n",
@@ -537,7 +625,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 17,
+    "__docId__": 20,
     "kind": "variable",
     "name": "request",
     "memberof": "js/pages/github.js",
@@ -563,7 +651,7 @@
     }
   },
   {
-    "__docId__": 18,
+    "__docId__": 21,
     "kind": "function",
     "name": "getRepositories",
     "memberof": "js/pages/github.js",
@@ -605,7 +693,7 @@
     }
   },
   {
-    "__docId__": 19,
+    "__docId__": 22,
     "kind": "function",
     "name": "getBranches",
     "memberof": "js/pages/github.js",
@@ -653,7 +741,7 @@
     }
   },
   {
-    "__docId__": 20,
+    "__docId__": 23,
     "kind": "function",
     "name": "github",
     "memberof": "js/pages/github.js",
@@ -684,7 +772,7 @@
     ]
   },
   {
-    "__docId__": 21,
+    "__docId__": 24,
     "kind": "file",
     "name": "js/pages/index.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require('projects');\n\nexport default function(context)\n{\n  const parent = context.body.clear();\n  showProjects(parent, context);\n  showStorage(parent, context);\n};\n\nfunction showProjects(parent, context)\n{\n  parent.H2(`Current Projects`);\n  \n  projects.list().forEach(project =>\n  {\n    parent.Button(project.name).OnClick(() =>\n    {\n      window.location.hash = context.Link({\n        page: 'project',\n        name: project.name\n      });\n    }).Display('block');\n  });\n  if (projects.list().length === 0)\n  {\n    parent.P(`No projects`);\n  }\n}\n\nfunction showStorage(parent, context)\n{\n  const storageModules = [\n    {\n      page: 'localstorage',\n      label: 'Local Storage'\n    }\n  ];\n\n  parent.H2(`Start A New Project`);\n  \n  const buttons = parent.P();\n  storageModules.forEach(module =>\n  {\n    buttons.Button(`In ${module.label}`).OnClick(() =>\n    {\n      window.location = context.Link({\n        page: module.page, \n      });\n    }).Class('big').Display('block');\n  });\n\n}\n",
@@ -695,7 +783,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 22,
+    "__docId__": 25,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/pages/index.js",
@@ -721,7 +809,7 @@
     }
   },
   {
-    "__docId__": 23,
+    "__docId__": 26,
     "kind": "function",
     "name": "index",
     "memberof": "js/pages/index.js",
@@ -752,7 +840,7 @@
     ]
   },
   {
-    "__docId__": 24,
+    "__docId__": 27,
     "kind": "function",
     "name": "showProjects",
     "memberof": "js/pages/index.js",
@@ -789,7 +877,7 @@
     ]
   },
   {
-    "__docId__": 25,
+    "__docId__": 28,
     "kind": "function",
     "name": "showStorage",
     "memberof": "js/pages/index.js",
@@ -826,7 +914,7 @@
     ]
   },
   {
-    "__docId__": 26,
+    "__docId__": 29,
     "kind": "file",
     "name": "js/pages/localstorage.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require('projects');\n\nexport default function(context)\n{\n  const parent = context.body.clear();\n  projects.add({\n    type: 'localstorage',\n    name: 'LocalStorage'\n  });\n  window.location.hash = '#';\n};\n",
@@ -837,7 +925,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 27,
+    "__docId__": 30,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/pages/localstorage.js",
@@ -863,7 +951,7 @@
     }
   },
   {
-    "__docId__": 28,
+    "__docId__": 31,
     "kind": "function",
     "name": "localstorage",
     "memberof": "js/pages/localstorage.js",
@@ -894,10 +982,10 @@
     ]
   },
   {
-    "__docId__": 29,
+    "__docId__": 32,
     "kind": "file",
     "name": "js/pages/project.js",
-    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require('projects');\nconst types = require('types');\nconst pluralise = require('pluralize');\nconst naturalSort = require('javascript-natural-sort');\n\nexport default function(context)\n{\n  context.head.text(context.State('name').toUncamelCase());\n  showFolder(context, projects.get(context.State('name')), context.State('folder'));\n};\n\nfunction showFolder(context, project, folder)\n{\n  project.listFolder(folder).then(list =>\n  {\n    let parent = context.body.clear();\n    if (folder)\n    {\n      parent.H2(folder);\n    }\n    Object.keys(list).sort(naturalSort).forEach(key =>\n    {\n      let item = list[key]\n      showFile(context, parent.Div(), project, folder, item);\n    });\n    \n    newFile(context, parent.Div().Class('noprint'), project, folder);\n  });\n}\n\nfunction newFile(context, parent, project, folder)\n{\n  parent.H2('Create New File');\n  parent.Label('Name: ').Display('block');\n  let nameInput = parent.Text().Pattern('^[A-Za-z0-9\\-_]+$').Display('block');\n  parent.Label('Type: ').Display('block');\n  let typeInput = parent.Select().Options(getTypes()).Display('block');\n  parent.Label('Template: ').Display('block');\n  let templateInput = parent.Select().Options(getTypeDefaults(typeInput.Value())).Display('block');\n  typeInput.OnChange(() =>\n  {\n    templateInput.Options(getTypeDefaults(typeInput.Value()));\n  });\n  parent.Button('Create').OnClick(() =>\n  {\n    let name = nameInput.Value();\n    let type = typeInput.Value();\n    let template = templateInput.Value();\n    if (name && nameInput.Validity().valid)\n    {\n      project.setFile(folder, project.makeKey(name, type), types[type].templates[template])\n        .then(() => showFolder(context, project, folder));\n    }\n  }).Display('block');\n}\n\nfunction showFile(context, section, project, folder, item)\n{\n  section.H1(item.name.toUncamelCase());\n  let itemContainer = section.Div().Class('item');\n  let itemContent = itemContainer.Div().Class('content');\n  let itemToolbar = itemContainer.Div().Class('toolbar');\n  let module = types[item.module];\n  itemContent.Loader();\n  project.getFile(folder, item.key).then(contents =>\n  {\n    module.view(itemContent.clear(), item, contents);\n    itemToolbar.Button('Rename').OnClick(() =>\n    {\n      let newName = prompt(`Please enter a new name for ${item.name}`, item.name);\n      if (newName)\n      {\n        newName = newName.replace(/[^A-Z0-9a-z\\-_]/g, '');\n        if (newName && newName !== item.name)\n        {\n          let newKey = project.makeKey(newName, item.module);\n          project.renameFile(folder, item.key, newKey)\n            .then(() =>\n            {\n              item.key = newKey;\n              showFolder(context, project, folder);\n            });\n        }\n      }\n    });\n    itemToolbar.Button('Edit').OnClick(() =>\n    {\n      itemToolbar.Display('none');\n      let editContainer = itemContent.clear().Div();\n      let changed = item;\n      types[item.module].edit(editContainer, item, contents, update =>\n      {\n        changed = update;\n      });  \n      let editToolbar = itemContent.Div();\n      editToolbar.Button('Save').OnClick(() =>\n      {\n        project.setFile(folder, item.key, changed).then(() =>\n        {\n          alert('Saved');\n          contents = changed;\n        });\n      });\n      editToolbar.Button('Done').OnClick(() =>\n      {\n        itemToolbar.Display('');\n        if (JSON.stringify(contents) !== JSON.stringify(changed) && confirm(\"Save changes?\"))\n        {\n          project.setFile(folder, item.key, changed).then(() =>\n          {\n            contents = changed;\n            module.view(itemContent.clear(), item, contents);\n          });\n        }\n        else\n        {\n          module.view(itemContent.clear(), item, contents);\n        }\n      });\n    });\n    itemToolbar.Button('Delete').OnClick(() =>\n    {\n      if (confirm(`Are you sure you want to delete ${item.name}?`))\n      {\n        project.deleteFile(folder, item.key)\n          .then(() => showFolder(context, project, folder));\n      }\n    });\n  });\n}\n\nfunction getTypes()\n{\n  let output = {};\n  Object.keys(types).forEach(type => output[type] = types[type].name);\n  return output;\n}\n\nfunction getTypeDefaults(type)\n{\n  let output = {};\n  Object.keys(types[type].templates).forEach(template => output[template] = template.toUncamelCase());\n  return output;\n}\n",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require('projects');\nconst types = require('types');\nconst pluralise = require('pluralize');\nconst naturalSort = require('javascript-natural-sort');\n\nimport * as analytics from \"common/analytics\";\n\nexport default function(context)\n{\n  context.head.text(context.State('name').toUncamelCase());\n  showFolder(context, projects.get(context.State('name')), context.State('folder'));\n};\n\nfunction showFolder(context, project, folder)\n{\n  project.listFolder(folder).then(list =>\n  {\n    let parent = context.body.clear();\n    if (folder)\n    {\n      parent.H2(folder);\n    }\n    Object.keys(list).sort(naturalSort).forEach(key =>\n    {\n      let item = list[key]\n      showFile(context, parent.Div(), project, folder, item);\n    });\n    \n    newFile(context, parent.Div().Class('noprint'), project, folder);\n  });\n}\n\nfunction newFile(context, parent, project, folder)\n{\n  parent.H2('Create New File');\n  parent.Label('Name: ').Display('block');\n  let nameInput = parent.Text().Pattern('^[A-Za-z0-9\\-_]+$').Display('block');\n  parent.Label('Type: ').Display('block');\n  let typeInput = parent.Select().Options(getTypes()).Display('block');\n  parent.Label('Template: ').Display('block');\n  let templateInput = parent.Select().Options(getTypeDefaults(typeInput.Value())).Display('block');\n  typeInput.OnChange(() =>\n  {\n    analytics.event(typeInput.Value(), 'select');\n    templateInput.Options(getTypeDefaults(typeInput.Value()));\n  });\n  templateInput.OnChange(() =>\n  {\n    analytics.event(typeInput.Value(), 'select', templateInput.Value());\n  });\n  parent.Button('Create').OnClick(() =>\n  {\n    let name = nameInput.Value();\n    let type = typeInput.Value();\n    let template = templateInput.Value();\n    analytics.event(type, 'create', template);\n    if (name && nameInput.Validity().valid)\n    {\n      project.setFile(folder, project.makeKey(name, type), types[type].templates[template])\n        .then(() =>\n      {\n        analytics.event(type, 'create-success', template);\n        showFolder(context, project, folder)\n      });\n    }\n  }).Display('block');\n}\n\nfunction showFile(context, section, project, folder, item)\n{\n  section.H1(item.name.toUncamelCase());\n  let itemContainer = section.Div().Class('item');\n  let itemContent = itemContainer.Div().Class('content');\n  let itemToolbar = itemContainer.Div().Class('toolbar');\n  let module = types[item.module];\n  itemContent.Loader();\n  project.getFile(folder, item.key).then(contents =>\n  {\n    module.view(itemContent.clear(), item, contents);\n    itemToolbar.Button('Rename').OnClick(() =>\n    {\n      analytics.event(item.module, 'rename', 'attempt');\n      let newName = prompt(`Please enter a new name for ${item.name}`, item.name);\n      if (newName)\n      {\n        newName = newName.replace(/[^A-Z0-9a-z\\-_]/g, '');\n        if (newName && newName !== item.name)\n        {\n          let newKey = project.makeKey(newName, item.module);\n          project.renameFile(folder, item.key, newKey)\n            .then(() =>\n            {\n              analytics.event(item.module, 'rename', 'success');\n              item.key = newKey;\n              showFolder(context, project, folder);\n            }, err =>\n            {\n              alert(err);\n              analytics.event(item.module, 'rename', 'failure');\n            });\n        }\n      }\n    });\n    itemToolbar.Button('Edit').OnClick(() =>\n    {\n      analytics.event(item.module, 'edit');\n      itemToolbar.Display('none');\n      let editContainer = itemContent.clear().Div();\n      let changed = item;\n      types[item.module].edit(editContainer, item, contents, update =>\n      {\n        changed = update;\n      });  \n      let editToolbar = itemContent.Div();\n      editToolbar.Button('Save').OnClick(() =>\n      {\n        analytics.event(item.module, 'save', 'attempt');\n        project.setFile(folder, item.key, changed).then(() =>\n        {\n          alert('Saved');\n          contents = changed;\n          analytics.event(item.module, 'save', 'success');\n        }, err =>\n        {\n          alert(err);\n          analytics.event(item.module, 'save', 'failure');\n        });\n      });\n      editToolbar.Button('Done').OnClick(() =>\n      {\n        itemToolbar.Display('');\n        if (JSON.stringify(contents) !== JSON.stringify(changed) && confirm(\"Save changes?\"))\n        {\n          analytics.event(item.module, 'done', 'attempt');\n          project.setFile(folder, item.key, changed).then(() =>\n          {\n            analytics.event(item.module, 'done', 'success');\n            contents = changed;\n            module.view(itemContent.clear(), item, contents);\n          }, err =>\n          {\n            analytics.event(item.module, 'done', 'failure');\n          });\n        }\n        else\n        {\n          analytics.event(item.module, 'done', 'nochange');\n          module.view(itemContent.clear(), item, contents);\n        }\n      });\n    });\n    itemToolbar.Button('Delete').OnClick(() =>\n    {\n      analytics.event(item.module, 'delete', 'click');\n      if (confirm(`Are you sure you want to delete ${item.name}?`))\n      {\n        analytics.event(item.module, 'delete', 'attempt');\n        project.deleteFile(folder, item.key)\n          .then(() =>\n        {\n          analytics.event(item.module, 'delete', 'success');\n          showFolder(context, project, folder);\n        }, err =>\n        {\n          analytics.event(item.module, 'delete', 'failure');\n          alert(err);\n        });\n      }\n      else\n      {\n        analytics.event(item.module, 'delete', 'cancel');\n      }\n    });\n  });\n}\n\nfunction getTypes()\n{\n  let output = {};\n  Object.keys(types).forEach(type => output[type] = types[type].name);\n  return output;\n}\n\nfunction getTypeDefaults(type)\n{\n  let output = {};\n  Object.keys(types[type].templates).forEach(template => output[template] = template.toUncamelCase());\n  return output;\n}\n",
     "static": true,
     "longname": "js/pages/project.js",
     "access": null,
@@ -905,7 +993,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 30,
+    "__docId__": 33,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/pages/project.js",
@@ -931,7 +1019,7 @@
     }
   },
   {
-    "__docId__": 31,
+    "__docId__": 34,
     "kind": "variable",
     "name": "types",
     "memberof": "js/pages/project.js",
@@ -957,7 +1045,7 @@
     }
   },
   {
-    "__docId__": 32,
+    "__docId__": 35,
     "kind": "variable",
     "name": "pluralise",
     "memberof": "js/pages/project.js",
@@ -983,7 +1071,7 @@
     }
   },
   {
-    "__docId__": 33,
+    "__docId__": 36,
     "kind": "variable",
     "name": "naturalSort",
     "memberof": "js/pages/project.js",
@@ -1009,7 +1097,7 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 37,
     "kind": "function",
     "name": "project",
     "memberof": "js/pages/project.js",
@@ -1022,7 +1110,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": "project",
     "description": null,
-    "lineNumber": 12,
+    "lineNumber": 14,
     "undocument": true,
     "unknown": [
       {
@@ -1040,7 +1128,7 @@
     ]
   },
   {
-    "__docId__": 35,
+    "__docId__": 38,
     "kind": "function",
     "name": "showFolder",
     "memberof": "js/pages/project.js",
@@ -1053,7 +1141,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 18,
+    "lineNumber": 20,
     "undocument": true,
     "unknown": [
       {
@@ -1083,7 +1171,7 @@
     ]
   },
   {
-    "__docId__": 36,
+    "__docId__": 39,
     "kind": "function",
     "name": "newFile",
     "memberof": "js/pages/project.js",
@@ -1096,7 +1184,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 37,
+    "lineNumber": 39,
     "undocument": true,
     "unknown": [
       {
@@ -1132,7 +1220,7 @@
     ]
   },
   {
-    "__docId__": 37,
+    "__docId__": 40,
     "kind": "function",
     "name": "showFile",
     "memberof": "js/pages/project.js",
@@ -1145,7 +1233,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 63,
+    "lineNumber": 75,
     "undocument": true,
     "unknown": [
       {
@@ -1187,7 +1275,7 @@
     ]
   },
   {
-    "__docId__": 38,
+    "__docId__": 41,
     "kind": "function",
     "name": "getTypes",
     "memberof": "js/pages/project.js",
@@ -1200,7 +1288,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 138,
+    "lineNumber": 183,
     "undocument": true,
     "unknown": [
       {
@@ -1216,7 +1304,7 @@
     }
   },
   {
-    "__docId__": 39,
+    "__docId__": 42,
     "kind": "function",
     "name": "getTypeDefaults",
     "memberof": "js/pages/project.js",
@@ -1229,7 +1317,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 145,
+    "lineNumber": 190,
     "undocument": true,
     "unknown": [
       {
@@ -1252,7 +1340,7 @@
     }
   },
   {
-    "__docId__": 40,
+    "__docId__": 43,
     "kind": "file",
     "name": "js/projects/GitHub.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport { Storage } from './Storage';\n\nexport class Github extends Storage\n{\n  constructor(state)\n  {\n    this.state = state; \n  }\n}\n",
@@ -1263,7 +1351,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 41,
+    "__docId__": 44,
     "kind": "class",
     "name": "Github",
     "memberof": "js/projects/GitHub.js",
@@ -1288,7 +1376,7 @@
     ]
   },
   {
-    "__docId__": 42,
+    "__docId__": 45,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "js/projects/GitHub.js~Github",
@@ -1316,7 +1404,7 @@
     ]
   },
   {
-    "__docId__": 43,
+    "__docId__": 46,
     "kind": "member",
     "name": "state",
     "memberof": "js/projects/GitHub.js~Github",
@@ -1339,7 +1427,7 @@
     }
   },
   {
-    "__docId__": 44,
+    "__docId__": 47,
     "kind": "file",
     "name": "js/projects/LocalStorage.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport { Storage } from './Storage';\n\nexport class LocalStorage extends Storage\n{\n  /**\n   * @param {String} folder Folder to list dir of.\n   * @return {Promise} Will resolve with map[filekey]FileDetails\n   */\n  listFolder(folder)\n  {\n    return new Promise(resolve =>\n    {\n      let output = {};\n      for (let key in localStorage)\n      {\n        if (this.isKey(key))\n        {\n          output[key] = this.getKeyItem(key);\n        }\n      }\n      resolve(output);\n    });\n  }\n  \n  /**\n   * @param {String} folder Folder where file exists.\n   * @param {String} key Name of file to read.\n   * @return {Promise} Will resolve with content of file (string).\n   */\n  getFile(folder, key)\n  {\n    return new Promise(resolve => resolve(localStorage[key]));\n  }\n  \n  /**\n   * @param {String} folder Folder where file should be.\n   * @param {String} key Name of file to write.\n   * @param {String} contents Contents of file.\n   * @return {Promise} Will resolve when file is saved.\n   */\n  setFile(folder, key, contents)\n  {\n    localStorage[key] = contents;\n    return new Promise(resolve => resolve());\n  }\n  \n  /**\n   * @param {String} folder Folder where file exists.\n   * @param {String} key Name of file to delete.\n   * @return {Promise} Will resolve when file is deleted.\n   */\n  deleteFile(folder, key)\n  {\n    delete localStorage[key];\n    return new Promise(resolve => resolve());\n  }\n  \n  /**\n   * @param {String} folder Folder where file exists.\n   * @param {String} oldKey Name of file to rename.\n   * @param {String} newKey New name of file.\n   * @return {Promise} Will resolve when file is renamed.\n   */\n  renameFile(folder, oldKey, newKey)\n  {\n    return new Promise((resolve, reject) =>\n    {\n      if (localStorage[newKey])\n      {\n        reject(`New file already exists.`);\n      }\n      else\n      {\n        localStorage[newKey] = localStorage[oldKey];\n        delete localStorage[oldKey];\n        resolve();\n      }\n    });\n  }\n}\n",
@@ -1350,7 +1438,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 45,
+    "__docId__": 48,
     "kind": "class",
     "name": "LocalStorage",
     "memberof": "js/projects/LocalStorage.js",
@@ -1375,7 +1463,7 @@
     ]
   },
   {
-    "__docId__": 46,
+    "__docId__": 49,
     "kind": "method",
     "name": "listFolder",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -1408,7 +1496,7 @@
     }
   },
   {
-    "__docId__": 47,
+    "__docId__": 50,
     "kind": "method",
     "name": "getFile",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -1451,7 +1539,7 @@
     }
   },
   {
-    "__docId__": 48,
+    "__docId__": 51,
     "kind": "method",
     "name": "setFile",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -1504,7 +1592,7 @@
     }
   },
   {
-    "__docId__": 49,
+    "__docId__": 52,
     "kind": "method",
     "name": "deleteFile",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -1547,7 +1635,7 @@
     }
   },
   {
-    "__docId__": 50,
+    "__docId__": 53,
     "kind": "method",
     "name": "renameFile",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -1600,7 +1688,7 @@
     }
   },
   {
-    "__docId__": 51,
+    "__docId__": 54,
     "kind": "file",
     "name": "js/projects/Storage.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\n/**\n * Parent class of all storage elements.\n */\nexport class Storage\n{\n  constructor(state)\n  {\n    this.state = state; \n  }\n  \n  makeKey(name, type)\n  {\n    return `${name}.${type}`;\n  }\n  \n  isKey(name)\n  {\n    return name.match(/^([A-Za-z0-9\\-_]+)\\.(md)$/)\n  }\n  \n  getKeyItem(name)\n  {\n    let match = name.match(/^([A-Za-z0-9\\-_]+)\\.(\\w+)$/);\n    return {\n      key: name,\n      type: 'file',\n      name: match[1],\n      module: match[2],\n    };\n  }\n}\n",
@@ -1611,7 +1699,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 52,
+    "__docId__": 55,
     "kind": "class",
     "name": "Storage",
     "memberof": "js/projects/Storage.js",
@@ -1626,7 +1714,7 @@
     "interface": false
   },
   {
-    "__docId__": 53,
+    "__docId__": 56,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "js/projects/Storage.js~Storage",
@@ -1654,7 +1742,7 @@
     ]
   },
   {
-    "__docId__": 54,
+    "__docId__": 57,
     "kind": "member",
     "name": "state",
     "memberof": "js/projects/Storage.js~Storage",
@@ -1677,7 +1765,7 @@
     }
   },
   {
-    "__docId__": 55,
+    "__docId__": 58,
     "kind": "method",
     "name": "makeKey",
     "memberof": "js/projects/Storage.js~Storage",
@@ -1716,7 +1804,7 @@
     }
   },
   {
-    "__docId__": 56,
+    "__docId__": 59,
     "kind": "method",
     "name": "isKey",
     "memberof": "js/projects/Storage.js~Storage",
@@ -1749,7 +1837,7 @@
     }
   },
   {
-    "__docId__": 57,
+    "__docId__": 60,
     "kind": "method",
     "name": "getKeyItem",
     "memberof": "js/projects/Storage.js~Storage",
@@ -1782,7 +1870,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 61,
     "kind": "file",
     "name": "js/projects/index.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nlet projects = JSON.parse(localStorage.janus || '{}');\n\nimport { LocalStorage } from \"./LocalStorage\";\n\nlet types = {\n  'localstorage': LocalStorage,\n};\n\nexport function add(spec)\n{\n  projects[spec.name] = spec;\n  localStorage.janus = JSON.stringify(projects);\n};\n\nexport function get(name)\n{\n  let project = projects[name];\n  let class_ = types[project.type];\n  return new class_(project);\n};\n\nexport function list()\n{\n  return Object.keys(projects).map(name => projects[name]);\n};\n",
@@ -1793,7 +1881,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 59,
+    "__docId__": 62,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/projects/index.js",
@@ -1819,7 +1907,7 @@
     }
   },
   {
-    "__docId__": 60,
+    "__docId__": 63,
     "kind": "variable",
     "name": "types",
     "memberof": "js/projects/index.js",
@@ -1845,7 +1933,7 @@
     }
   },
   {
-    "__docId__": 61,
+    "__docId__": 64,
     "kind": "function",
     "name": "add",
     "memberof": "js/projects/index.js",
@@ -1876,7 +1964,7 @@
     ]
   },
   {
-    "__docId__": 62,
+    "__docId__": 65,
     "kind": "function",
     "name": "get",
     "memberof": "js/projects/index.js",
@@ -1912,7 +2000,7 @@
     }
   },
   {
-    "__docId__": 63,
+    "__docId__": 66,
     "kind": "function",
     "name": "list",
     "memberof": "js/projects/index.js",
@@ -1941,7 +2029,7 @@
     }
   },
   {
-    "__docId__": 64,
+    "__docId__": 67,
     "kind": "file",
     "name": "js/types/index.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport * as md from \"./md\";\n\nmodule.exports = {\n  md,\n}\n",
@@ -1952,7 +2040,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 65,
+    "__docId__": 68,
     "kind": "file",
     "name": "js/types/md/index.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst marked = require('marked');\n\nexport const name = 'Note';\n\nexport function view(container, item, content)\n{\n\n  let sanitize = true;\n    \n  content = marked(content, {sanitize});\n  \n  let progress = content.match(/\\[[x ]\\]/g);\n  \n  //content = content.replace(/\\[ ]/g, '<input type=\"checkbox\" onclick=\"return false;\" />');\n  //content = content.replace(/\\[x\\]/g, '<input type=\"checkbox\" checked onclick=\"return false;\" />');\n  \n  container.html(content);\n  \n  if (progress)\n  {\n    let width = Math.floor(progress.filter(x => x === '[x]').length / progress.length * 100) + '%';\n    if (width !== '0%')\n    {\n      container.Div().Class('progress').Div('Progress ' + width).Width(width).Class('bar');\n    }\n  }\n}\n\nexport function edit(container, item, content, save)\n{\n  let editor = container.Textarea(content).Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').MinHeight('200px').Resize('vertical');\n  let preview = container.Div().Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').Padding('0.5em 0.5em 0.5em 0.5em');\n  editor.OnInput(() =>\n  {\n    this.view(preview, item, editor.Value());\n    save(editor.Value());\n  });\n  editor.OnChange(() =>\n  {\n    save(editor.Value());\n  });\n  editor.OnInput()();\n}\n\nexport const templates = {\n  Blank: ``,\n  Checklist: `\n\n- [x] Task #1\n- [ ] Task #2\n- [ ] Task #3\n\n`,\n};\n",
@@ -1963,7 +2051,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 66,
+    "__docId__": 69,
     "kind": "variable",
     "name": "marked",
     "memberof": "js/types/md/index.js",
@@ -1989,7 +2077,7 @@
     }
   },
   {
-    "__docId__": 67,
+    "__docId__": 70,
     "kind": "variable",
     "name": "name",
     "memberof": "js/types/md/index.js",
@@ -2015,7 +2103,7 @@
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 71,
     "kind": "function",
     "name": "view",
     "memberof": "js/types/md/index.js",
@@ -2058,7 +2146,7 @@
     ]
   },
   {
-    "__docId__": 69,
+    "__docId__": 72,
     "kind": "function",
     "name": "edit",
     "memberof": "js/types/md/index.js",
@@ -2107,7 +2195,7 @@
     ]
   },
   {
-    "__docId__": 70,
+    "__docId__": 73,
     "kind": "variable",
     "name": "templates",
     "memberof": "js/types/md/index.js",
@@ -2133,7 +2221,7 @@
     }
   },
   {
-    "__docId__": 72,
+    "__docId__": 75,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -2145,7 +2233,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 73,
+    "__docId__": 76,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -2157,7 +2245,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 74,
+    "__docId__": 77,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -2169,7 +2257,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 75,
+    "__docId__": 78,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -2181,7 +2269,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 76,
+    "__docId__": 79,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -2193,7 +2281,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 77,
+    "__docId__": 80,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -2205,7 +2293,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 78,
+    "__docId__": 81,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -2217,7 +2305,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 79,
+    "__docId__": 82,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -2229,7 +2317,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 80,
+    "__docId__": 83,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -2241,7 +2329,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 81,
+    "__docId__": 84,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -2253,7 +2341,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 82,
+    "__docId__": 85,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -2265,7 +2353,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 83,
+    "__docId__": 86,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -2277,7 +2365,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 84,
+    "__docId__": 87,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -2289,7 +2377,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 85,
+    "__docId__": 88,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -2301,7 +2389,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 86,
+    "__docId__": 89,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -2313,7 +2401,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 87,
+    "__docId__": 90,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -2325,7 +2413,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 88,
+    "__docId__": 91,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -2337,7 +2425,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 89,
+    "__docId__": 92,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -2349,7 +2437,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 90,
+    "__docId__": 93,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -2361,7 +2449,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 94,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -2373,7 +2461,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 95,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -2385,7 +2473,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 93,
+    "__docId__": 96,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -2397,7 +2485,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 94,
+    "__docId__": 97,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -2409,7 +2497,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 95,
+    "__docId__": 98,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -2421,7 +2509,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 96,
+    "__docId__": 99,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -2433,7 +2521,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 97,
+    "__docId__": 100,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -2445,7 +2533,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 98,
+    "__docId__": 101,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -2457,7 +2545,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 99,
+    "__docId__": 102,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -2469,7 +2557,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 100,
+    "__docId__": 103,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -2481,7 +2569,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 101,
+    "__docId__": 104,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -2493,7 +2581,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 102,
+    "__docId__": 105,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -2505,7 +2593,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 103,
+    "__docId__": 106,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -2517,7 +2605,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 104,
+    "__docId__": 107,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -2529,7 +2617,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 105,
+    "__docId__": 108,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -2541,7 +2629,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 106,
+    "__docId__": 109,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -2553,7 +2641,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 107,
+    "__docId__": 110,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -2565,7 +2653,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 108,
+    "__docId__": 111,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -2577,7 +2665,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 109,
+    "__docId__": 112,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -2589,7 +2677,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 110,
+    "__docId__": 113,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -2601,7 +2689,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 111,
+    "__docId__": 114,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -2613,7 +2701,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 112,
+    "__docId__": 115,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -2625,7 +2713,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 113,
+    "__docId__": 116,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -2637,7 +2725,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 114,
+    "__docId__": 117,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -2649,7 +2737,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 115,
+    "__docId__": 118,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -2661,7 +2749,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 116,
+    "__docId__": 119,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -2673,7 +2761,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 117,
+    "__docId__": 120,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -2685,7 +2773,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 118,
+    "__docId__": 121,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -2698,7 +2786,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 120,
+    "__docId__": 123,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -2710,7 +2798,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 121,
+    "__docId__": 124,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -2722,7 +2810,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 122,
+    "__docId__": 125,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -2734,7 +2822,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 123,
+    "__docId__": 126,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -2746,7 +2834,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 124,
+    "__docId__": 127,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -2758,7 +2846,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 125,
+    "__docId__": 128,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -2770,7 +2858,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 126,
+    "__docId__": 129,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -2782,7 +2870,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 127,
+    "__docId__": 130,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",

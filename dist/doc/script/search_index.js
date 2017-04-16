@@ -60,6 +60,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "janus/js/common/analytics.js~event",
+    "function/index.html#static-function-event",
+    "<span>event</span> <span class=\"search-result-import-path\">janus/js/common/analytics.js</span>",
+    "function"
+  ],
+  [
     "janus/js/projects/index.js~get",
     "function/index.html#static-function-get",
     "<span>get</span> <span class=\"search-result-import-path\">janus/js/projects/index.js</span>",
@@ -94,6 +100,12 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-name",
     "<span>name</span> <span class=\"search-result-import-path\">janus/js/types/md/index.js</span>",
     "variable"
+  ],
+  [
+    "janus/js/common/analytics.js~pageview",
+    "function/index.html#static-function-pageview",
+    "<span>pageview</span> <span class=\"search-result-import-path\">janus/js/common/analytics.js</span>",
+    "function"
   ],
   [
     "janus/js/pages/project.js~project",
@@ -448,6 +460,12 @@ window.esdocSearchIndex = [
     "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
     "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
     "external"
+  ],
+  [
+    "js/common/analytics.js",
+    "file/js/common/analytics.js.html",
+    "js/common/analytics.js",
+    "file"
   ],
   [
     "js/common/request.js",
