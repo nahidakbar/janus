@@ -1,6 +1,12 @@
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
+"use strict";
+
 const projects = require('projects');
 
-module.exports = function(context)
+export default function(context)
 {
   const parent = context.body.clear();
   projects.add({

@@ -1,10 +1,15 @@
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
 
-class Github
+"use strict";
+
+import { Storage } from './Storage';
+
+export class Github extends Storage
 {
   constructor(state)
   {
     this.state = state; 
   }
 }
-
-module.exports = Github;

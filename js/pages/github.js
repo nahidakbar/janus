@@ -1,3 +1,9 @@
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
+"use strict";
+
 const request = require("common/request");
 /*
 function getAccessToken(context)
@@ -125,7 +131,7 @@ function getBranches(endpoint, accessToken, repository)
   });
 }
 
-module.exports = function(context)
+export default function(context)
 {
   const parent = context.contents.clear();
   

@@ -1,8 +1,14 @@
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
+"use strict";
+
 const marked = require('marked');
 
-const name = 'Note';
+export const name = 'Note';
 
-function view(container, item, content)
+export function view(container, item, content)
 {
 
   let sanitize = true;
@@ -19,13 +25,16 @@ function view(container, item, content)
   if (progress)
   {
     let width = Math.floor(progress.filter(x => x === '[x]').length / progress.length * 100) + '%';
-    container.Div().Class('progress').Div('Progress ' + width).Width(width).Class('bar');
+    if (width !== '0%')
+    {
+      container.Div().Class('progress').Div('Progress ' + width).Width(width).Class('bar');
+    }
   }
 }
 
-function edit(container, item, content, save)
+export function edit(container, item, content, save)
 {
-  let editor = container.Textarea(content).Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').MinHeight('200px');
+  let editor = container.Textarea(content).Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').MinHeight('200px').Resize('vertical');
   let preview = container.Div().Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').Padding('0.5em 0.5em 0.5em 0.5em');
   editor.OnInput(() =>
   {
@@ -39,15 +48,13 @@ function edit(container, item, content, save)
   editor.OnInput()();
 }
 
-const defaultValue = `## Note Title
+export const templates = {
+  Blank: ``,
+  Checklist: `
 
-[ ] insert **notes** here
+- [x] Task #1
+- [ ] Task #2
+- [ ] Task #3
 
-`;
-
-module.exports = {
-  name,
-  view,
-  edit,
-  defaultValue
+`,
 };

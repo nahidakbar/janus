@@ -1,6 +1,12 @@
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
 "use strict";
 
 const d3 = require("d3-selection"); require("d3-html")
+
+import * as analytics from "common/analytics";
 
 window.onload = function()
 {
@@ -10,11 +16,11 @@ window.onload = function()
   const parent = d3.select("body");
   let context = {
     pages: {
-      '': require('pages/index'),
-      'project': require('pages/project'),
-      'github': require('pages/github'),
-      'dropbox': require('pages/dropbox'),
-      'localstorage': require('pages/localstorage'),
+      '': require('pages/index').default,
+      'project': require('pages/project').default,
+      'github': require('pages/github').default,
+      'dropbox': require('pages/dropbox').default,
+      'localstorage': require('pages/localstorage').default,
     }
   };
 
@@ -35,10 +41,13 @@ window.onload = function()
 
   window.onhashchange = function()
   {
+    analytics.pageview(context.params.page);
     context.head.text("Janus - Heavily Under Construction");
     context.body.Loader();
     context.Reload();
-  }; 
+  };
+  
+  analytics.pageview(context.params.page) 
 
 };
 
@@ -51,4 +60,14 @@ d3.selection.prototype.Markdown = function(content, options)
 {
   const marked = require('marked');
   return this.html(marked(content, options));
+};
+
+String.prototype.toUncamelCase = function()
+{
+  return this.replace(/([A-Z]+)/g, ' $1').trim();
+};
+
+String.prototype.trim = function()
+{
+  return this.replace(/(^\s+|\s+$)/g, '');
 };

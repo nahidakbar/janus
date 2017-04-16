@@ -1,4 +1,13 @@
-class Storage
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
+"use strict";
+
+/**
+ * Parent class of all storage elements.
+ */
+export class Storage
 {
   constructor(state)
   {
@@ -7,17 +16,17 @@ class Storage
   
   makeKey(name, type)
   {
-    return `${name}.${type}.janus`;
+    return `${name}.${type}`;
   }
   
   isKey(name)
   {
-    return name.match(/^(\w+)\.(\w+)\.janus$/)
+    return name.match(/^([A-Za-z0-9\-_]+)\.(md)$/)
   }
   
   getKeyItem(name)
   {
-    let match = name.match(/^(\w+)\.(\w+)\.janus$/);
+    let match = name.match(/^([A-Za-z0-9\-_]+)\.(\w+)$/);
     return {
       key: name,
       type: 'file',
@@ -25,7 +34,4 @@ class Storage
       module: match[2],
     };
   }
-  
 }
-
-module.exports = Storage;

@@ -1,5 +1,10 @@
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
 
-module.exports = function(context)
+"use strict";
+
+export default function(context)
 {
   const parent = context.contents.clear();
   

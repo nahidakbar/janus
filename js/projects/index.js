@@ -1,22 +1,31 @@
+/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
 "use strict";
 
 let projects = JSON.parse(localStorage.janus || '{}');
 
+import { LocalStorage } from "./LocalStorage";
+
 let types = {
-  'localstorage': require('./LocalStorage'),
+  'localstorage': LocalStorage,
 };
 
-module.exports.add = spec =>
+export function add(spec)
 {
   projects[spec.name] = spec;
   localStorage.janus = JSON.stringify(projects);
 };
 
-module.exports.get = name =>
+export function get(name)
 {
   let project = projects[name];
   let class_ = types[project.type];
   return new class_(project);
 };
 
-module.exports.list = () => Object.keys(projects).map(name => projects[name]);
+export function list()
+{
+  return Object.keys(projects).map(name => projects[name]);
+};

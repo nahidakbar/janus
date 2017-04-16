@@ -1,0 +1,98 @@
+{
+  "coverage": "21.87%",
+  "expectCount": 32,
+  "actualCount": 7,
+  "files": {
+    "js/common/request.js": {
+      "expectCount": 5,
+      "actualCount": 1,
+      "undocumentLines": [
+        36,
+        48,
+        40,
+        44
+      ]
+    },
+    "js/projects/GitHub.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        9,
+        11,
+        13
+      ]
+    },
+    "js/projects/LocalStorage.js": {
+      "expectCount": 6,
+      "actualCount": 5,
+      "undocumentLines": [
+        9
+      ]
+    },
+    "js/projects/Storage.js": {
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
+        12,
+        27,
+        22,
+        17,
+        14
+      ]
+    },
+    "js/projects/index.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        15,
+        21,
+        28
+      ]
+    },
+    "js/pages/dropbox.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "js/types/md/index.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        35,
+        9,
+        51,
+        11
+      ]
+    },
+    "js/pages/github.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        134
+      ]
+    },
+    "js/pages/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        9
+      ]
+    },
+    "js/pages/localstorage.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        9
+      ]
+    },
+    "js/pages/project.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        12
+      ]
+    }
+  }
+}

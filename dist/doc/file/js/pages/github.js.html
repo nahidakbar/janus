@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">js/pages/github.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/nahidakbar/janus" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">common</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Create">Create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Delete">Delete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Read">Read</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Update">Update</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-request">request</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">pages</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dropbox">dropbox</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-github">github</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-index">index</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-localstorage">localstorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-project">project</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">projects</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/GitHub.js~Github.html">Github</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/LocalStorage.js~LocalStorage.html">LocalStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/md</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-edit">edit</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-view">view</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-name">name</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-templates">templates</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/pages/github.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
+&quot;use strict&quot;;
+
+const request = require(&quot;common/request&quot;);
+/*
+function getAccessToken(context)
+{
+  const parent = context.contents.clear();
+  
+  parent.Markdown(`
+  ## Setp 1: Set Up Github Access
+  
+  Janus will not store or manage any secrets and keys outside an your browser.
+  
+  You will be required generate a personal access token for janus and fill it in.
+  
+  To get started, create a new Personal Access Token from your github settings page.
+
+  Be sure to select the following scopes:
+  
+  * &quot;repo&quot; for using both private and public repos or just &quot;public_repo&quot;.
+  
+  Nothing else is necessary.
+  
+  Once done, fill in the following details: `);
+
+  parent.Br();
+
+  parent.Label(&apos;Access Token:&apos;);
+  const token = parent.Text();
+  
+  parent.Br();
+  
+  parent.Button(&apos;Set&apos;).OnClick(() =&gt;
+  {
+    localStorage.githubToken = token.Value();
+    context.Reload();
+  });
+}
+
+function getRepository(context)
+{
+  request.read(`https://api.github.com/user/repos?access_token=${localStorage.githubToken}`).then(repos =&gt;
+  {
+    const parent = context.contents.clear();
+    parent.H2(&apos;Please select a repository:&apos;);
+    repos.forEach(repo =&gt;
+    {
+      parent.Button(repo.full_name).OnClick(() =&gt;
+      {
+        window.githubRepopsitory = repo;
+        console.log(repo);
+        context.Reload();
+      }).Class(&apos;big&apos;).Display(&apos;block&apos;);
+    });
+  });
+}
+
+function getBranch(context)
+{
+  request.read(window.githubRepopsitory.branches_url.replace(&apos;{/branch}&apos;, `?access_token=${localStorage.githubToken}`)).then(branches =&gt;
+  {
+    const parent = context.contents.clear();
+    parent.H2(&apos;Please select a branch:&apos;);
+    branches.forEach(branch =&gt;
+    {
+      parent.Button(branch.name).OnClick(() =&gt;
+      {
+        window.githubBranch = branch;
+        console.log(branch);
+        context.Reload();
+      }).Class(&apos;big&apos;).Display(&apos;block&apos;);
+    });
+    if (branches.length === 1)
+    {
+      window.githubBranch = branches[0];
+      console.log(branches[0]);
+      context.Reload();
+    }
+  });
+}
+
+function getFolder(context, path=&apos;&apos;, parent=null)
+{
+  parent = parent || window.githubBranch.commit;
+  request.read(window.githubRepopsitory.trees_url.replace(&apos;{/sha}&apos;, `/${parent.sha}?access_token=${localStorage.githubToken}`)).then(tree =&gt;
+  {
+    console.log(tree);
+    const parent = context.contents.clear();
+    parent.H2(`Please select a folder: ${path}`);
+    tree.tree.filter(xx =&gt; xx.type === &quot;tree&quot;).forEach(tree =&gt;
+    {
+      parent.Button(tree.path).OnClick(() =&gt;
+      {
+        getFolder(context, (path? path + &apos;/&apos; : &apos;&apos;) + tree.path, tree);
+      }).Class(&apos;big&apos;).Display(&apos;block&apos;);
+    });
+    parent.Button(&apos;Select This Folder&apos;).OnClick(() =&gt;
+    {
+      parent.path = path;
+      window.githubFolder = parent;
+      console.log(parent);
+      context.Reload();
+    }).Class(&apos;big&apos;).Display(&apos;block&apos;);
+  });
+}
+*/
+
+function getRepositories(endpoint, accessToken)
+{
+  return new Promise((resolve, reject) =&gt;
+  {
+    request.read(`${endpoint}/user/repos?access_token=${accessToken}`).then(repos =&gt;
+    {
+      resolve(repos.map(repo =&gt; repo.full_name));
+    }, reject);
+  });
+}
+
+function getBranches(endpoint, accessToken, repository)
+{
+  return new Promise((resolve, reject) =&gt;
+  {
+    request.read(`${endpoint}/user/repos?access_token=${accessToken}`).then(repos =&gt;
+    {
+      resolve(repos.map(repo =&gt; repo.full_name));
+    }, reject);
+  });
+}
+
+export default function(context)
+{
+  const parent = context.contents.clear();
+  
+  const title = parent.H2(&apos;New Github Project&apos;);
+  
+  const form = parent.Div();
+  
+  form.Label(&apos;API Endpoint:&apos;).Display(&apos;block&apos;);
+  const endpointInput = form.Text().Value(&apos;https://api.github.com&apos;).Display(&apos;block&apos;);
+  
+  form.Label(&apos;Personal Access Token:&apos;).Display(&apos;block&apos;);
+  const accessTokenInput = form.Text().Display(&apos;block&apos;);
+  
+  const output = parent.Div();
+  
+  form.Button(&quot;Next&quot;).OnClick(() =&gt;
+  {
+    let endpoint = endpointInput.Value();
+    let accessToken = accessTokenInput.Value();
+    getRepositories(endpoint, accessToken).then(repos =&gt;
+    {
+      form.clear();
+      form.Label(&apos;Repository:&apos;).Display(&apos;block&apos;)
+      let repositoryInput = form.Select().Options(repos).Display(&apos;block&apos;);
+      form.Button(&quot;Next&quot;).OnClick(() =&gt;
+      {
+        let repository = repositoryInput.Value();
+        getBranches(endpoint, accessToken, repository).then(repos =&gt;
+        {
+          form.clear();
+          form.Label(&apos;Branch:&apos;).Display(&apos;block&apos;)
+          let branchInput = form.Select().Options(repos).Display(&apos;block&apos;);
+          form.Button(&quot;Next&quot;).OnClick(() =&gt;
+          {
+            let name = repository;
+            let type = &apos;github&apos;;
+            addNewProject({
+              name,
+              type,
+              endpoint,
+              accessToken,
+              repository,
+              branch
+            });
+          });
+        }, err =&gt; 
+        {
+          output.html(JSON.stringify(err, null, 2));
+        });
+      });      
+    }, err =&gt; 
+    {
+      output.html(JSON.stringify(err, null, 2));
+    });
+  });
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
