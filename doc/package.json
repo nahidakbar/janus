@@ -1,0 +1,37 @@
+{
+  "name": "janus",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "javascript-natural-sort": "^0.7.1",
+    "js-client-boilderplate-nahid": "0.0.2",
+    "marked": "^0.3.6",
+    "pluralize": "^4.0.0"
+  },
+  "scripts": {
+    "builder": "node ./node_modules/js-client-boilderplate-nahid/index.js --base $PWD --dist dist --js js/index.js --scss scss/index.scss --static static --command",
+    "build": "npm run builder -- build",
+    "watch": "npm run builder -- watch",
+    "release": "npm run builder -- release",
+    "publish-gh-pages": "git subtree push --prefix dist/ origin gh-pages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nahidakbar/janus.git"
+  },
+  "author": "Nahid Akbar",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nahidakbar/janus/issues"
+  },
+  "homepage": "https://github.com/nahidakbar/janus#readme",
+  "esdoc" : {
+    "source": "./js",
+    "destination": "./dist/doc",
+    "manual": {
+      "changelog": ["./CHANGELOG.md"],
+      "design": ["./DESIGN.md"]
+    }
+  }
+}
