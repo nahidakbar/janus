@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">js/types/md/index.js | API Document</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">js/common/analytics.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -58,66 +58,41 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">js/types/md/index.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">js/common/analytics.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
 
 &quot;use strict&quot;;
 
-const marked = require(&apos;marked&apos;);
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
 
-export const name = &apos;Note&apos;;
+ga(&apos;create&apos;, &apos;UA-97457188-1&apos;, &apos;auto&apos;);
 
-export function view(container, item, content)
+export function pageview(page)
 {
-
-  let sanitize = true;
-    
-  content = marked(content, {sanitize});
-  
-  let progress = content.match(/\[[x ]\]/g);
-  
-  //content = content.replace(/\[ ]/g, &apos;&lt;input type=&quot;checkbox&quot; onclick=&quot;return false;&quot; /&gt;&apos;);
-  //content = content.replace(/\[x\]/g, &apos;&lt;input type=&quot;checkbox&quot; checked onclick=&quot;return false;&quot; /&gt;&apos;);
-  
-  container.html(content);
-  
-  if (progress)
+  try
   {
-    let width = Math.floor(progress.filter(x =&gt; x === &apos;[x]&apos;).length / progress.length * 100) + &apos;%&apos;;
-    if (width !== &apos;0%&apos;)
-    {
-      container.Div().Class(&apos;progress&apos;).Div(&apos;Progress &apos; + width).Width(width).Class(&apos;bar&apos;);
-    }
+    ga(&apos;set&apos;, &apos;page&apos;, page);
+    ga(&apos;send&apos;, &apos;pageview&apos;);
   }
-}
+  catch(e)
+  {
+    
+  }
+};
 
-export function edit(container, item, content, save)
+export function event(category, action, extra=&apos;&apos;)
 {
-  let editor = container.Textarea(content).Display(&apos;inline-block&apos;).BoxSizing(&apos;border-box&apos;).VerticalAlign(&apos;top&apos;).Width(&apos;50%&apos;).MinHeight(&apos;200px&apos;).Resize(&apos;vertical&apos;);
-  let preview = container.Div().Display(&apos;inline-block&apos;).BoxSizing(&apos;border-box&apos;).VerticalAlign(&apos;top&apos;).Width(&apos;50%&apos;).Padding(&apos;0.5em 0.5em 0.5em 0.5em&apos;);
-  editor.OnInput(() =&gt;
+  try
   {
-    this.view(preview, item, editor.Value());
-    save(editor.Value());
-  });
-  editor.OnChange(() =&gt;
+    console.log(category, action, extra);
+    ga(&apos;send&apos;, &apos;event&apos;, category, action, extra);
+  }
+  catch(e)
   {
-    save(editor.Value());
-  });
-  editor.OnInput()();
-}
-
-export const templates = {
-  Blank: ``,
-  Checklist: `
-
-- [x] Task #1
-- [ ] Task #2
-- [ ] Task #3
-
-`,
+    
+  }
 };
 </code></pre>
 
