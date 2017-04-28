@@ -4,6 +4,8 @@
 
 "use strict";
 
+import * as types from "types";
+
 /**
  * Parent class of all storage elements.
  */
@@ -21,7 +23,8 @@ export class Storage
   
   isKey(name)
   {
-    return name.match(/^([A-Za-z0-9\-_]+)\.(md)$/);
+    const match = name.match(/^([A-Za-z0-9\-_]+)\.(\w+)$/);
+    return match && types[match[2]];
   }
   
   getKeyItem(name)

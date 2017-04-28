@@ -4,7 +4,17 @@
 
 "use strict";
 
-export function boolean(container, schema, content, save)
+export function booleanEditor(editors, container, schema, content, save)
 {
-  console.error('TODO');
+  const editor = container.Checkbox();
+  editor.Checked(content);
+  editor.OnChange(() =>
+  {
+    save(editor.Checked() || undefined);
+  });
+}
+
+export function booleanViewer(viewers, container, schema, content)
+{
+  
 }

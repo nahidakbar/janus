@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 541,
+  "end": 540,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 541,
+    "end": 540,
     "loc": {
       "start": {
         "line": 1,
@@ -122,7 +122,7 @@
                   },
                   "extra": {
                     "rawValue": "projects",
-                    "raw": "'projects'"
+                    "raw": "\"projects\""
                   },
                   "value": "projects"
                 }
@@ -491,7 +491,7 @@
                       },
                       "extra": {
                         "rawValue": "Please insert name of project (use camelcase):",
-                        "raw": "'Please insert name of project (use camelcase):'"
+                        "raw": "\"Please insert name of project (use camelcase):\""
                       },
                       "value": "Please insert name of project (use camelcase):"
                     }
@@ -905,7 +905,7 @@
                           },
                           "extra": {
                             "rawValue": "Create",
-                            "raw": "'Create'"
+                            "raw": "\"Create\""
                           },
                           "value": "Create"
                         }
@@ -1237,7 +1237,7 @@
                                               },
                                               "extra": {
                                                 "rawValue": "indexeddb",
-                                                "raw": "'indexeddb'"
+                                                "raw": "\"indexeddb\""
                                               },
                                               "value": "indexeddb"
                                             }
@@ -1476,7 +1476,7 @@
                                       },
                                       "extra": {
                                         "rawValue": "#",
-                                        "raw": "'#'"
+                                        "raw": "\"#\""
                                       },
                                       "value": "#"
                                     }
@@ -1499,21 +1499,6 @@
           },
           "leadingComments": [],
           "trailingComments": []
-        }
-      },
-      {
-        "type": "EmptyStatement",
-        "start": 539,
-        "end": 540,
-        "loc": {
-          "start": {
-            "line": 28,
-            "column": 1
-          },
-          "end": {
-            "line": 28,
-            "column": 2
-          }
         }
       }
     ],
@@ -4637,32 +4622,6 @@
     },
     {
       "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 539,
-      "end": 540,
-      "loc": {
-        "start": {
-          "line": 28,
-          "column": 1
-        },
-        "end": {
-          "line": 28,
-          "column": 2
-        }
-      }
-    },
-    {
-      "type": {
         "label": "eof",
         "beforeExpr": false,
         "startsExpr": false,
@@ -4674,8 +4633,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 541,
-      "end": 541,
+      "start": 540,
+      "end": 540,
       "loc": {
         "start": {
           "line": 29,

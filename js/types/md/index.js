@@ -6,9 +6,9 @@
 
 const marked = require("marked");
 
-export const name = "Note";
+const name = "Note";
 
-export function view(container, item, content)
+function view(container, item, content)
 {
 
   let sanitize = true;
@@ -32,7 +32,7 @@ export function view(container, item, content)
   }
 }
 
-export function edit(container, item, content, save)
+function edit(container, item, content, save)
 {
   let editor = container.Textarea(content).Display("inline-block").BoxSizing("border-box").VerticalAlign("top").Width("50%").MinHeight("200px").Resize("vertical");
   let preview = container.Div().Display("inline-block").BoxSizing("border-box").VerticalAlign("top").Width("50%").Padding("0.5em 0.5em 0.5em 0.5em");
@@ -48,7 +48,7 @@ export function edit(container, item, content, save)
   editor.OnInput()();
 }
 
-export const templates = {
+const templates = {
   Blank: "",
   Checklist: `
 
@@ -57,4 +57,11 @@ export const templates = {
 - [ ] Task #3
 
 `,
+};
+
+export const md = {
+  name,
+  view,
+  edit,
+  templates
 };

@@ -4,21 +4,36 @@
 
 "use strict";
 
-import { boolean } from "./boolean";
-import { number } from "./number";
-import { string } from "./string";
-import { array } from "./array";
-import { object } from "./object";
+import { booleanEditor, booleanViewer } from "./boolean";
+import { numberEditor, numberViewer } from "./number";
+import { stringViewer, stringEditor } from "./string";
+import { arrayEditor, arrayViewer } from "./array";
+import { objectEditor, objectViewer } from "./object";
 
-export const typeEditors = {
-  boolean,
-  number,
-  string,
-  array,
-  object
+export const editors = {
+  boolean: booleanEditor,
+  number: numberEditor,
+  string: stringEditor,
+  array: arrayEditor,
+  object: objectEditor
 };
 
-export function edit(container, schema, content, save)
+export const viewers = {
+  boolean: booleanViewer,
+  number: numberViewer,
+  string: stringViewer,
+  array: arrayViewer,
+  object: objectViewer
+};
+
+export function editor(schema)
 {
-  typeEditors[schema.type](schema, container, content, save);
+  return (container, item, content, save) =>
+    editors[schema.type](editors, container, schema, content, save);
+}
+
+export function viewer(schema)
+{
+  return (container, item, content) =>
+    viewers[schema.type](viewers, container, schema, content);
 }

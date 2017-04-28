@@ -108,7 +108,7 @@ function showFile(context, section, project, item)
       analytics.event(item.type, "edit");
       itemToolbar.Display("none");
       let editContainer = itemContent.clear().Div();
-      let changed = item;
+      let changed = contents;
       types[item.type].edit(editContainer, item, contents, update =>
       {
         changed = update;
