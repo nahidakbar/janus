@@ -5,6 +5,8 @@
 
 "use strict";
 
+/* global ga */
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -12,104 +14,32 @@ exports.pageview = pageview;
 exports.event = event;
 window.ga = window.ga || function () {
   (ga.q = ga.q || []).push(arguments);
-};ga.l = +new Date();
+};
+ga.l = +new Date();
 
-ga('create', 'UA-97457188-1', 'auto');
+ga("create", "UA-97457188-1", "auto");
 
 function pageview(page) {
   try {
-    ga('set', 'page', page);
-    ga('send', 'pageview');
-  } catch (e) {}
-};
+    ga("set", "page", page);
+    ga("send", "pageview");
+  } catch (e) {
+    console.error(e.stack);
+  }
+}
 
 function event(category, action) {
-  var extra = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  var extra = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
 
   try {
     console.log(category, action, extra);
-    ga('send', 'event', category, action, extra);
-  } catch (e) {}
-};
+    ga("send", "event", category, action, extra);
+  } catch (e) {
+    console.error(e.stack);
+  }
+}
 
 },{}],2:[function(require,module,exports){
-/**
- * Janus Copyright (C) 2017 Nahid Akbar
- */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.request = request;
-exports.Create = Create;
-exports.Read = Read;
-exports.Update = Update;
-exports.Delete = Delete;
-var d3 = require("d3-request");
-
-/**
- * Make a http request.
- * @return {Promise}
- */
-function request(method, url) {
-  var body = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  var transform = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function (x) {
-    return x;
-  };
-
-  var start = Date.now();
-  return new Promise(function (resolve, reject) {
-    d3.request(url).header("Content-Type", "application/json").send(method, JSON.stringify(body), function (err, xhr) {
-      console.log(method, url, 'took', Date.now() - start, 'ms');
-      if (err) {
-        xhr = err.srcElement;
-        reject(xhr && (xhr.response || xhr.responseText) || err);
-      } else {
-        resolve(transform(JSON.parse(xhr.responseText)));
-      }
-    });
-  });
-};
-
-function Create(url) {
-  var body = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var transform = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (x) {
-    return x;
-  };
-
-  return request.apply(null, ['post'].concat(arguments));
-}
-
-function Read(url) {
-  var body = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var transform = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (x) {
-    return x;
-  };
-
-  return request.apply(null, ['get'].concat(arguments));
-}
-
-function Update(url) {
-  var body = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var transform = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (x) {
-    return x;
-  };
-
-  return request.apply(null, ['put'].concat(arguments));
-}
-
-function Delete(url) {
-  var body = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var transform = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (x) {
-    return x;
-  };
-
-  return request.apply(null, ['delete'].concat(arguments));
-}
-
-},{"d3-request":20}],3:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -131,12 +61,10 @@ window.onload = function () {
   var parent = d3.select("body");
   var context = {
     pages: {
-      '': require('pages/index').default,
-      'project': require('pages/project').default,
-      'github': require('pages/github').default,
-      'dropbox': require('pages/dropbox').default,
-      'localstorage': require('pages/localstorage').default,
-      'indexeddb': require('pages/indexeddb').default
+      "": require("pages/index").default,
+      "project": require("pages/project").default,
+      "localstorage": require("pages/localstorage").default,
+      "indexeddb": require("pages/indexeddb").default
     }
   };
 
@@ -144,7 +72,7 @@ window.onload = function () {
   // LAYOUT
   // ================
   // heading
-  context.head = parent.Div().Class('head').H1().Class("container").A("Janus - Heavily Under Construction").Href('#');
+  context.head = parent.Div().Class("head").H1().Class("container").A("Janus - Heavily Under Construction").Href("#");
 
   // body
   context.body = parent.Div().Class("body").Div().Class("container");
@@ -166,230 +94,23 @@ window.onload = function () {
 };
 
 d3.selection.prototype.Loader = function () {
-  return this.html("<div style=\"text-align: center;\"><svg style=\"max-width: 100%;\" width='200px' height='200px' xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" preserveAspectRatio=\"xMidYMid\" class=\"uil-gears\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" class=\"bk\"></rect><g transform=\"translate(-20,-20)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#336699\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"90 50 50\" to=\"0 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g><g transform=\"translate(20,20) rotate(15 50 50)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#6699bb\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"0 50 50\" to=\"90 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g></svg></div>");
+  return this.html("<div style=\"text-align: center;\"><svg style=\"max-width: 100%;\" width=\"200px\" height=\"200px\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" preserveAspectRatio=\"xMidYMid\" class=\"uil-gears\"><rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" class=\"bk\"></rect><g transform=\"translate(-20,-20)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#336699\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"90 50 50\" to=\"0 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g><g transform=\"translate(20,20) rotate(15 50 50)\"><path d=\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\" fill=\"#6699bb\"><animateTransform attributeName=\"transform\" type=\"rotate\" from=\"0 50 50\" to=\"90 50 50\" dur=\"1s\" repeatCount=\"indefinite\"></animateTransform></path></g></svg></div>");
 };
 
 d3.selection.prototype.Markdown = function (content, options) {
-  var marked = require('marked');
+  var marked = require("marked");
   return this.html(marked(content, options));
 };
 
 String.prototype.toUncamelCase = function () {
-  return this.replace(/([A-Z]+)/g, ' $1').trim();
+  return this.replace(/([A-Z]+)/g, " $1").trim();
 };
 
 String.prototype.trim = function () {
-  return this.replace(/(^\s+|\s+$)/g, '');
+  return this.replace(/(^\s+|\s+$)/g, "");
 };
 
-},{"common/analytics":1,"d3-html":19,"d3-selection":21,"marked":23,"pages/dropbox":4,"pages/github":5,"pages/index":6,"pages/indexeddb":7,"pages/localstorage":8,"pages/project":9}],4:[function(require,module,exports){
-/**
- * Janus Copyright (C) 2017 Nahid Akbar
- */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (context) {
-  var parent = context.contents.clear();
-
-  parent.Markdown("TODO");
-};
-
-;
-
-},{}],5:[function(require,module,exports){
-/**
- * Janus Copyright (C) 2017 Nahid Akbar
- */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (context) {
-  var parent = context.contents.clear();
-
-  var title = parent.H2('New Github Project');
-
-  var form = parent.Div();
-
-  form.Label('API Endpoint:').Display('block');
-  var endpointInput = form.Text().Value('https://api.github.com').Display('block');
-
-  form.Label('Personal Access Token:').Display('block');
-  var accessTokenInput = form.Text().Display('block');
-
-  var output = parent.Div();
-
-  form.Button("Next").OnClick(function () {
-    var endpoint = endpointInput.Value();
-    var accessToken = accessTokenInput.Value();
-    getRepositories(endpoint, accessToken).then(function (repos) {
-      form.clear();
-      form.Label('Repository:').Display('block');
-      var repositoryInput = form.Select().Options(repos).Display('block');
-      form.Button("Next").OnClick(function () {
-        var repository = repositoryInput.Value();
-        getBranches(endpoint, accessToken, repository).then(function (repos) {
-          form.clear();
-          form.Label('Branch:').Display('block');
-          var branchInput = form.Select().Options(repos).Display('block');
-          form.Button("Next").OnClick(function () {
-            var name = repository;
-            var type = 'github';
-            addNewProject({
-              name: name,
-              type: type,
-              endpoint: endpoint,
-              accessToken: accessToken,
-              repository: repository,
-              branch: branch
-            });
-          });
-        }, function (err) {
-          output.html(JSON.stringify(err, null, 2));
-        });
-      });
-    }, function (err) {
-      output.html(JSON.stringify(err, null, 2));
-    });
-  });
-};
-
-var request = require("common/request");
-/*
-function getAccessToken(context)
-{
-  const parent = context.contents.clear();
-  
-  parent.Markdown(`
-  ## Setp 1: Set Up Github Access
-  
-  Janus will not store or manage any secrets and keys outside an your browser.
-  
-  You will be required generate a personal access token for janus and fill it in.
-  
-  To get started, create a new Personal Access Token from your github settings page.
-
-  Be sure to select the following scopes:
-  
-  * "repo" for using both private and public repos or just "public_repo".
-  
-  Nothing else is necessary.
-  
-  Once done, fill in the following details: `);
-
-  parent.Br();
-
-  parent.Label('Access Token:');
-  const token = parent.Text();
-  
-  parent.Br();
-  
-  parent.Button('Set').OnClick(() =>
-  {
-    localStorage.githubToken = token.Value();
-    context.Reload();
-  });
-}
-
-function getRepository(context)
-{
-  request.read(`https://api.github.com/user/repos?access_token=${localStorage.githubToken}`).then(repos =>
-  {
-    const parent = context.contents.clear();
-    parent.H2('Please select a repository:');
-    repos.forEach(repo =>
-    {
-      parent.Button(repo.full_name).OnClick(() =>
-      {
-        window.githubRepopsitory = repo;
-        console.log(repo);
-        context.Reload();
-      }).Class('big').Display('block');
-    });
-  });
-}
-
-function getBranch(context)
-{
-  request.read(window.githubRepopsitory.branches_url.replace('{/branch}', `?access_token=${localStorage.githubToken}`)).then(branches =>
-  {
-    const parent = context.contents.clear();
-    parent.H2('Please select a branch:');
-    branches.forEach(branch =>
-    {
-      parent.Button(branch.name).OnClick(() =>
-      {
-        window.githubBranch = branch;
-        console.log(branch);
-        context.Reload();
-      }).Class('big').Display('block');
-    });
-    if (branches.length === 1)
-    {
-      window.githubBranch = branches[0];
-      console.log(branches[0]);
-      context.Reload();
-    }
-  });
-}
-
-function getFolder(context, path='', parent=null)
-{
-  parent = parent || window.githubBranch.commit;
-  request.read(window.githubRepopsitory.trees_url.replace('{/sha}', `/${parent.sha}?access_token=${localStorage.githubToken}`)).then(tree =>
-  {
-    console.log(tree);
-    const parent = context.contents.clear();
-    parent.H2(`Please select a folder: ${path}`);
-    tree.tree.filter(xx => xx.type === "tree").forEach(tree =>
-    {
-      parent.Button(tree.path).OnClick(() =>
-      {
-        getFolder(context, (path? path + '/' : '') + tree.path, tree);
-      }).Class('big').Display('block');
-    });
-    parent.Button('Select This Folder').OnClick(() =>
-    {
-      parent.path = path;
-      window.githubFolder = parent;
-      console.log(parent);
-      context.Reload();
-    }).Class('big').Display('block');
-  });
-}
-*/
-
-function getRepositories(endpoint, accessToken) {
-  return new Promise(function (resolve, reject) {
-    request.read(endpoint + "/user/repos?access_token=" + accessToken).then(function (repos) {
-      resolve(repos.map(function (repo) {
-        return repo.full_name;
-      }));
-    }, reject);
-  });
-}
-
-function getBranches(endpoint, accessToken, repository) {
-  return new Promise(function (resolve, reject) {
-    request.read(endpoint + "/user/repos?access_token=" + accessToken).then(function (repos) {
-      resolve(repos.map(function (repo) {
-        return repo.full_name;
-      }));
-    }, reject);
-  });
-}
-
-;
-
-},{"common/request":2}],6:[function(require,module,exports){
+},{"common/analytics":1,"d3-html":13,"d3-selection":14,"marked":16,"pages/index":3,"pages/indexeddb":4,"pages/localstorage":5,"pages/project":6}],3:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -406,48 +127,46 @@ exports.default = function (context) {
   showStorage(parent, context);
 };
 
-var projects = require('projects');
-
-;
+var projects = require("projects");
 
 function showProjects(parent, context) {
-  parent.H2('Current Projects');
+  parent.H2("Current Projects");
 
   projects.list().forEach(function (project) {
     parent.Button(project.name).OnClick(function () {
       window.location.hash = context.Link({
-        page: 'project',
+        page: "project",
         name: project.name
       });
-    }).Display('block');
+    }).Display("block");
   });
   if (projects.list().length === 0) {
-    parent.P('No projects');
+    parent.P("No projects");
   }
 }
 
 function showStorage(parent, context) {
   var storageModules = [{
-    page: 'localstorage',
-    label: 'Local Storage (offline)'
+    page: "localstorage",
+    label: "Local Storage (offline)"
   }, {
-    page: 'indexeddb',
-    label: 'IndexedDB (offline)'
+    page: "indexeddb",
+    label: "IndexedDB (offline)"
   }];
 
-  parent.H2('Start A New Project');
+  parent.H2("Start A New Project");
 
   var buttons = parent.P();
   storageModules.forEach(function (module) {
-    buttons.Button('In ' + module.label).OnClick(function () {
+    buttons.Button("In " + module.label).OnClick(function () {
       window.location = context.Link({
         page: module.page
       });
-    }).Class('big').Display('block');
+    }).Class("big").Display("block");
   });
 }
 
-},{"projects":13}],7:[function(require,module,exports){
+},{"projects":10}],4:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -461,26 +180,24 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (context) {
   var parent = context.body.clear();
 
-  parent.Div().Label('Please insert name of project (use camelcase):');
+  parent.Div().Label("Please insert name of project (use camelcase):");
 
   var name = parent.Div().Text().Pattern("^[a-zA-Z0-9]+$");
 
-  parent.Div().Button('Create').OnClick(function () {
+  parent.Div().Button("Create").OnClick(function () {
     if (name.Validity().valid) {
       projects.add({
-        type: 'indexeddb',
+        type: "indexeddb",
         name: name.Value()
       });
-      window.location.hash = '#';
+      window.location.hash = "#";
     }
   });
 };
 
-var projects = require('projects');
+var projects = require("projects");
 
-;
-
-},{"projects":13}],8:[function(require,module,exports){
+},{"projects":10}],5:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -492,19 +209,18 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (context) {
-  var parent = context.body.clear();
   projects.add({
-    type: 'localstorage',
-    name: 'LocalStorage'
+    type: "localstorage",
+    name: "LocalStorage"
   });
-  window.location.hash = '#';
+  window.location.hash = "#";
 };
 
-var projects = require('projects');
+var projects = require("projects");
 
 ;
 
-},{"projects":13}],9:[function(require,module,exports){
+},{"projects":10}],6:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -516,22 +232,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (context) {
-  context.head.text(context.State('name').toUncamelCase());
-  showFiles(context, projects.get(context.State('name')));
+  context.head.text(context.State("name").toUncamelCase());
+  showFiles(context, projects.get(context.State("name")));
 };
 
-var _analytics = require('common/analytics');
+var _analytics = require("common/analytics");
 
 var analytics = _interopRequireWildcard(_analytics);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var projects = require('projects');
-var types = require('types');
-var pluralise = require('pluralize');
-var naturalSort = require('javascript-natural-sort');
-
-;
+var projects = require("projects");
+var types = require("types");
+var naturalSort = require("javascript-natural-sort");
 
 function showFiles(context, project) {
   project.listFiles().then(function (list) {
@@ -540,116 +253,117 @@ function showFiles(context, project) {
       var item = list[key];
       showFile(context, parent.Div(), project, item);
     });
-    newFile(context, parent.Div().Class('noprint'), project);
+    newFile(context, parent.Div().Class("noprint"), project);
   });
 }
 
 function newFile(context, parent, project) {
-  parent.H2('Create New File');
-  parent.Label('Name: ').Display('block');
-  var nameInput = parent.Text().Pattern('^[A-Za-z0-9\-_]+$').Display('block');
-  parent.Label('Type: ').Display('block');
-  var typeInput = parent.Select().Options(getTypes()).Display('block');
-  parent.Label('Template: ').Display('block');
-  var templateInput = parent.Select().Options(getTypeDefaults(typeInput.Value())).Display('block');
+  parent.H2("Create New File");
+  parent.Label("Name: ").Display("block");
+  var nameInput = parent.Text().Pattern("^[A-Za-z0-9\-_]+$").Display("block");
+  parent.Label("Type: ").Display("block");
+  var typeInput = parent.Select().Options(getTypes()).Display("block");
+  parent.Label("Template: ").Display("block");
+  var templateInput = parent.Select().Options(getTypeDefaults(typeInput.Value())).Display("block");
   typeInput.OnChange(function () {
-    analytics.event(typeInput.Value(), 'select');
+    analytics.event(typeInput.Value(), "select");
     templateInput.Options(getTypeDefaults(typeInput.Value()));
   });
   templateInput.OnChange(function () {
-    analytics.event(typeInput.Value(), 'select', templateInput.Value());
+    analytics.event(typeInput.Value(), "select", templateInput.Value());
   });
-  parent.Button('Create').OnClick(function () {
+  parent.Button("Create").OnClick(function () {
     var name = nameInput.Value();
     var type = typeInput.Value();
     var template = templateInput.Value();
-    analytics.event(type, 'create', template);
+    analytics.event(type, "create", template);
     if (name && nameInput.Validity().valid) {
       project.setFile(project.makeKey(name, type), types[type].templates[template]).then(function () {
-        analytics.event(type, 'create-success', template);
+        analytics.event(type, "create-success", template);
         showFiles(context, project);
       });
     }
-  }).Display('block');
+  }).Display("block");
 }
 
 function showFile(context, section, project, item) {
   section.H1(item.name.toUncamelCase());
-  var itemContainer = section.Div().Class('item');
-  var itemContent = itemContainer.Div().Class('content');
-  var itemToolbar = itemContainer.Div().Class('toolbar');
+  var itemContainer = section.Div().Class("item");
+  var itemContent = itemContainer.Div().Class("content");
+  var itemToolbar = itemContainer.Div().Class("toolbar");
   var module = types[item.type];
   itemContent.Loader();
   project.getFile(item.key).then(function (contents) {
     module.view(itemContent.clear(), item, contents);
-    itemToolbar.Button('Rename').OnClick(function () {
-      analytics.event(item.type, 'rename', 'attempt');
-      var newName = prompt('Please enter a new name for ' + item.name, item.name);
+    itemToolbar.Button("Rename").OnClick(function () {
+      analytics.event(item.type, "rename", "attempt");
+      var newName = prompt("Please enter a new name for " + item.name, item.name);
       if (newName) {
-        newName = newName.replace(/[^A-Z0-9a-z\-_]/g, '');
+        newName = newName.replace(/[^A-Z0-9a-z\-_]/g, "");
         if (newName && newName !== item.name) {
           var newKey = project.makeKey(newName, item.type);
           project.renameFile(item.key, newKey).then(function () {
-            analytics.event(item.type, 'rename', 'success');
+            analytics.event(item.type, "rename", "success");
             item.key = newKey;
             showFiles(context, project);
           }, function (err) {
             alert(err);
-            analytics.event(item.type, 'rename', 'failure');
+            analytics.event(item.type, "rename", "failure");
           });
         }
       }
     });
-    itemToolbar.Button('Edit').OnClick(function () {
-      analytics.event(item.type, 'edit');
-      itemToolbar.Display('none');
+    itemToolbar.Button("Edit").OnClick(function () {
+      analytics.event(item.type, "edit");
+      itemToolbar.Display("none");
       var editContainer = itemContent.clear().Div();
       var changed = item;
       types[item.type].edit(editContainer, item, contents, function (update) {
         changed = update;
       });
       var editToolbar = itemContent.Div();
-      editToolbar.Button('Save').OnClick(function () {
-        analytics.event(item.type, 'save', 'attempt');
+      editToolbar.Button("Save").OnClick(function () {
+        analytics.event(item.type, "save", "attempt");
         project.setFile(item.key, changed).then(function () {
-          alert('Saved');
+          alert("Saved");
           contents = changed;
-          analytics.event(item.type, 'save', 'success');
+          analytics.event(item.type, "save", "success");
         }, function (err) {
           alert(err);
-          analytics.event(item.type, 'save', 'failure');
+          analytics.event(item.type, "save", "failure");
         });
       });
-      editToolbar.Button('Done').OnClick(function () {
-        itemToolbar.Display('');
+      editToolbar.Button("Done").OnClick(function () {
+        itemToolbar.Display("");
         if (JSON.stringify(contents) !== JSON.stringify(changed) && confirm("Save changes?")) {
-          analytics.event(item.type, 'done', 'attempt');
+          analytics.event(item.type, "done", "attempt");
           project.setFile(item.key, changed).then(function () {
-            analytics.event(item.type, 'done', 'success');
+            analytics.event(item.type, "done", "success");
             contents = changed;
             module.view(itemContent.clear(), item, contents);
           }, function (err) {
-            analytics.event(item.type, 'done', 'failure');
+            console.error(err);
+            analytics.event(item.type, "done", "failure");
           });
         } else {
-          analytics.event(item.type, 'done', 'nochange');
+          analytics.event(item.type, "done", "nochange");
           module.view(itemContent.clear(), item, contents);
         }
       });
     });
-    itemToolbar.Button('Delete').OnClick(function () {
-      analytics.event(item.type, 'delete', 'click');
-      if (confirm('Are you sure you want to delete ' + item.name + '?')) {
-        analytics.event(item.type, 'delete', 'attempt');
+    itemToolbar.Button("Delete").OnClick(function () {
+      analytics.event(item.type, "delete", "click");
+      if (confirm("Are you sure you want to delete " + item.name + "?")) {
+        analytics.event(item.type, "delete", "attempt");
         project.deleteFile(item.key).then(function () {
-          analytics.event(item.type, 'delete', 'success');
+          analytics.event(item.type, "delete", "success");
           showFiles(context, project);
         }, function (err) {
-          analytics.event(item.type, 'delete', 'failure');
+          analytics.event(item.type, "delete", "failure");
           alert(err);
         });
       } else {
-        analytics.event(item.type, 'delete', 'cancel');
+        analytics.event(item.type, "delete", "cancel");
       }
     });
   });
@@ -671,7 +385,7 @@ function getTypeDefaults(type) {
   return output;
 }
 
-},{"common/analytics":1,"javascript-natural-sort":22,"pluralize":24,"projects":13,"types":14}],10:[function(require,module,exports){
+},{"common/analytics":1,"javascript-natural-sort":15,"projects":10,"types":11}],7:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -705,11 +419,11 @@ var IndexedDBStorage = exports.IndexedDBStorage = function (_Storage) {
 
     _this.db = new Promise(function (resolve, reject) {
       var request = IndexedDB.open(state.name, 1);
-      request.onupgradeneeded = function (event) {
-        request.result.createObjectStore("data");
+      request.onupgradeneeded = function () {
+        return request.result.createObjectStore("data");
       };
       request.onsuccess = function () {
-        resolve(request.result);
+        return resolve(request.result);
       };
       request.onerror = function (e) {
         return reject(e);
@@ -741,7 +455,7 @@ var IndexedDBStorage = exports.IndexedDBStorage = function (_Storage) {
       return new Promise(function (resolve, reject) {
         _this3._store().then(function (store) {
           var request = store.getAllKeys();
-          request.onsuccess = function (event) {
+          request.onsuccess = function () {
             var output = {};
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
@@ -784,7 +498,7 @@ var IndexedDBStorage = exports.IndexedDBStorage = function (_Storage) {
       return new Promise(function (resolve, reject) {
         _this4._store().then(function (store) {
           var request = store.get(key);
-          request.onsuccess = function (event) {
+          request.onsuccess = function () {
             resolve(request.result);
           };
           request.onerror = reject;
@@ -799,7 +513,7 @@ var IndexedDBStorage = exports.IndexedDBStorage = function (_Storage) {
       return new Promise(function (resolve, reject) {
         _this5._store().then(function (store) {
           var request = store.put(contents, key);
-          request.onsuccess = function (event) {
+          request.onsuccess = function () {
             resolve(request.result);
           };
           request.onerror = reject;
@@ -814,7 +528,7 @@ var IndexedDBStorage = exports.IndexedDBStorage = function (_Storage) {
       return new Promise(function (resolve, reject) {
         _this6._store().then(function (store) {
           var request = store.delete(key);
-          request.onsuccess = function (event) {
+          request.onsuccess = function () {
             resolve(request.result);
           };
           request.onerror = reject;
@@ -826,7 +540,7 @@ var IndexedDBStorage = exports.IndexedDBStorage = function (_Storage) {
   return IndexedDBStorage;
 }(_Storage2.Storage);
 
-},{"./Storage":12}],11:[function(require,module,exports){
+},{"./Storage":9}],8:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -918,32 +632,12 @@ var LocalStorage = exports.LocalStorage = function (_Storage) {
         return resolve();
       });
     }
-
-    /**
-     * @param {String} oldKey Name of file to rename.
-     * @param {String} newKey New name of file.
-     * @return {Promise} Will resolve when file is renamed.
-     */
-
-  }, {
-    key: "renameFile",
-    value: function renameFile(oldKey, newKey) {
-      return new Promise(function (resolve, reject) {
-        if (localStorage[newKey]) {
-          reject("New file already exists.");
-        } else {
-          localStorage[newKey] = localStorage[oldKey];
-          delete localStorage[oldKey];
-          resolve();
-        }
-      });
-    }
   }]);
 
   return LocalStorage;
 }(_Storage2.Storage);
 
-},{"./Storage":12}],12:[function(require,module,exports){
+},{"./Storage":9}],9:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -1007,7 +701,7 @@ var Storage = exports.Storage = function () {
   return Storage;
 }();
 
-},{}],13:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -1025,48 +719,51 @@ var _LocalStorage = require("./LocalStorage");
 
 var _IndexedDB = require("./IndexedDB");
 
-var projects = JSON.parse(localStorage.janus || '{}');
+var projects = JSON.parse(localStorage.janus || "{}");
 
 var types = {
-  'localstorage': _LocalStorage.LocalStorage,
-  'indexeddb': _IndexedDB.IndexedDBStorage
+  "localstorage": _LocalStorage.LocalStorage,
+  "indexeddb": _IndexedDB.IndexedDBStorage
 };
 
 function add(spec) {
   projects[spec.name] = spec;
   localStorage.janus = JSON.stringify(projects);
-};
+}
 
 function get(name) {
   var project = projects[name];
   var class_ = types[project.type];
   return new class_(project);
-};
+}
 
 function list() {
   return Object.keys(projects).map(function (name) {
     return projects[name];
   });
-};
+}
 
-},{"./IndexedDB":10,"./LocalStorage":11}],14:[function(require,module,exports){
+},{"./IndexedDB":7,"./LocalStorage":8}],11:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _md = require("./md");
 
-var md = _interopRequireWildcard(_md);
+Object.defineProperty(exports, "md", {
+  enumerable: true,
+  get: function get() {
+    return _md.edit;
+  }
+});
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-module.exports = {
-  md: md
-};
-
-},{"./md":15}],15:[function(require,module,exports){
+},{"./md":12}],12:[function(require,module,exports){
 /**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
@@ -1078,9 +775,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.view = view;
 exports.edit = edit;
-var marked = require('marked');
+var marked = require("marked");
 
-var name = exports.name = 'Note';
+var name = exports.name = "Note";
 
 function view(container, item, content) {
 
@@ -1090,17 +787,17 @@ function view(container, item, content) {
 
   var progress = content.match(/\[[x ]\]/g);
 
-  //content = content.replace(/\[ ]/g, '<input type="checkbox" onclick="return false;" />');
-  //content = content.replace(/\[x\]/g, '<input type="checkbox" checked onclick="return false;" />');
+  //content = content.replace(/\[ ]/g, "<input type="checkbox" onclick="return false;" />");
+  //content = content.replace(/\[x\]/g, "<input type="checkbox" checked onclick="return false;" />");
 
   container.html(content);
 
   if (progress) {
     var width = Math.floor(progress.filter(function (x) {
-      return x === '[x]';
-    }).length / progress.length * 100) + '%';
-    if (width !== '0%') {
-      container.Div().Class('progress').Div('Progress ' + width).Width(width).Class('bar');
+      return x === "[x]";
+    }).length / progress.length * 100) + "%";
+    if (width !== "0%") {
+      container.Div().Class("progress").Div("Progress " + width).Width(width).Class("bar");
     }
   }
 }
@@ -1108,8 +805,8 @@ function view(container, item, content) {
 function edit(container, item, content, save) {
   var _this = this;
 
-  var editor = container.Textarea(content).Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').MinHeight('200px').Resize('vertical');
-  var preview = container.Div().Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').Padding('0.5em 0.5em 0.5em 0.5em');
+  var editor = container.Textarea(content).Display("inline-block").BoxSizing("border-box").VerticalAlign("top").Width("50%").MinHeight("200px").Resize("vertical");
+  var preview = container.Div().Display("inline-block").BoxSizing("border-box").VerticalAlign("top").Width("50%").Padding("0.5em 0.5em 0.5em 0.5em");
   editor.OnInput(function () {
     _this.view(preview, item, editor.Value());
     save(editor.Value());
@@ -1121,498 +818,11 @@ function edit(container, item, content, save) {
 }
 
 var templates = exports.templates = {
-  Blank: '',
-  Checklist: '\n\n- [x] Task #1\n- [ ] Task #2\n- [ ] Task #3\n\n'
+  Blank: "",
+  Checklist: "\n\n- [x] Task #1\n- [ ] Task #2\n- [ ] Task #3\n\n"
 };
 
-},{"marked":23}],16:[function(require,module,exports){
-// https://d3js.org/d3-collection/ Version 1.0.3. Copyright 2017 Mike Bostock.
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.d3 = global.d3 || {})));
-}(this, (function (exports) { 'use strict';
-
-var prefix = "$";
-
-function Map() {}
-
-Map.prototype = map.prototype = {
-  constructor: Map,
-  has: function(key) {
-    return (prefix + key) in this;
-  },
-  get: function(key) {
-    return this[prefix + key];
-  },
-  set: function(key, value) {
-    this[prefix + key] = value;
-    return this;
-  },
-  remove: function(key) {
-    var property = prefix + key;
-    return property in this && delete this[property];
-  },
-  clear: function() {
-    for (var property in this) if (property[0] === prefix) delete this[property];
-  },
-  keys: function() {
-    var keys = [];
-    for (var property in this) if (property[0] === prefix) keys.push(property.slice(1));
-    return keys;
-  },
-  values: function() {
-    var values = [];
-    for (var property in this) if (property[0] === prefix) values.push(this[property]);
-    return values;
-  },
-  entries: function() {
-    var entries = [];
-    for (var property in this) if (property[0] === prefix) entries.push({key: property.slice(1), value: this[property]});
-    return entries;
-  },
-  size: function() {
-    var size = 0;
-    for (var property in this) if (property[0] === prefix) ++size;
-    return size;
-  },
-  empty: function() {
-    for (var property in this) if (property[0] === prefix) return false;
-    return true;
-  },
-  each: function(f) {
-    for (var property in this) if (property[0] === prefix) f(this[property], property.slice(1), this);
-  }
-};
-
-function map(object, f) {
-  var map = new Map;
-
-  // Copy constructor.
-  if (object instanceof Map) object.each(function(value, key) { map.set(key, value); });
-
-  // Index array by numeric index or specified key function.
-  else if (Array.isArray(object)) {
-    var i = -1,
-        n = object.length,
-        o;
-
-    if (f == null) while (++i < n) map.set(i, object[i]);
-    else while (++i < n) map.set(f(o = object[i], i, object), o);
-  }
-
-  // Convert object to map.
-  else if (object) for (var key in object) map.set(key, object[key]);
-
-  return map;
-}
-
-var nest = function() {
-  var keys = [],
-      sortKeys = [],
-      sortValues,
-      rollup,
-      nest;
-
-  function apply(array, depth, createResult, setResult) {
-    if (depth >= keys.length) return rollup != null
-        ? rollup(array) : (sortValues != null
-        ? array.sort(sortValues)
-        : array);
-
-    var i = -1,
-        n = array.length,
-        key = keys[depth++],
-        keyValue,
-        value,
-        valuesByKey = map(),
-        values,
-        result = createResult();
-
-    while (++i < n) {
-      if (values = valuesByKey.get(keyValue = key(value = array[i]) + "")) {
-        values.push(value);
-      } else {
-        valuesByKey.set(keyValue, [value]);
-      }
-    }
-
-    valuesByKey.each(function(values, key) {
-      setResult(result, key, apply(values, depth, createResult, setResult));
-    });
-
-    return result;
-  }
-
-  function entries(map$$1, depth) {
-    if (++depth > keys.length) return map$$1;
-    var array, sortKey = sortKeys[depth - 1];
-    if (rollup != null && depth >= keys.length) array = map$$1.entries();
-    else array = [], map$$1.each(function(v, k) { array.push({key: k, values: entries(v, depth)}); });
-    return sortKey != null ? array.sort(function(a, b) { return sortKey(a.key, b.key); }) : array;
-  }
-
-  return nest = {
-    object: function(array) { return apply(array, 0, createObject, setObject); },
-    map: function(array) { return apply(array, 0, createMap, setMap); },
-    entries: function(array) { return entries(apply(array, 0, createMap, setMap), 0); },
-    key: function(d) { keys.push(d); return nest; },
-    sortKeys: function(order) { sortKeys[keys.length - 1] = order; return nest; },
-    sortValues: function(order) { sortValues = order; return nest; },
-    rollup: function(f) { rollup = f; return nest; }
-  };
-};
-
-function createObject() {
-  return {};
-}
-
-function setObject(object, key, value) {
-  object[key] = value;
-}
-
-function createMap() {
-  return map();
-}
-
-function setMap(map$$1, key, value) {
-  map$$1.set(key, value);
-}
-
-function Set() {}
-
-var proto = map.prototype;
-
-Set.prototype = set.prototype = {
-  constructor: Set,
-  has: proto.has,
-  add: function(value) {
-    value += "";
-    this[prefix + value] = value;
-    return this;
-  },
-  remove: proto.remove,
-  clear: proto.clear,
-  values: proto.keys,
-  size: proto.size,
-  empty: proto.empty,
-  each: proto.each
-};
-
-function set(object, f) {
-  var set = new Set;
-
-  // Copy constructor.
-  if (object instanceof Set) object.each(function(value) { set.add(value); });
-
-  // Otherwise, assume it’s an array.
-  else if (object) {
-    var i = -1, n = object.length;
-    if (f == null) while (++i < n) set.add(object[i]);
-    else while (++i < n) set.add(f(object[i], i, object));
-  }
-
-  return set;
-}
-
-var keys = function(map) {
-  var keys = [];
-  for (var key in map) keys.push(key);
-  return keys;
-};
-
-var values = function(map) {
-  var values = [];
-  for (var key in map) values.push(map[key]);
-  return values;
-};
-
-var entries = function(map) {
-  var entries = [];
-  for (var key in map) entries.push({key: key, value: map[key]});
-  return entries;
-};
-
-exports.nest = nest;
-exports.set = set;
-exports.map = map;
-exports.keys = keys;
-exports.values = values;
-exports.entries = entries;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-},{}],17:[function(require,module,exports){
-// https://d3js.org/d3-dispatch/ Version 1.0.3. Copyright 2017 Mike Bostock.
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.d3 = global.d3 || {})));
-}(this, (function (exports) { 'use strict';
-
-var noop = {value: function() {}};
-
-function dispatch() {
-  for (var i = 0, n = arguments.length, _ = {}, t; i < n; ++i) {
-    if (!(t = arguments[i] + "") || (t in _)) throw new Error("illegal type: " + t);
-    _[t] = [];
-  }
-  return new Dispatch(_);
-}
-
-function Dispatch(_) {
-  this._ = _;
-}
-
-function parseTypenames(typenames, types) {
-  return typenames.trim().split(/^|\s+/).map(function(t) {
-    var name = "", i = t.indexOf(".");
-    if (i >= 0) name = t.slice(i + 1), t = t.slice(0, i);
-    if (t && !types.hasOwnProperty(t)) throw new Error("unknown type: " + t);
-    return {type: t, name: name};
-  });
-}
-
-Dispatch.prototype = dispatch.prototype = {
-  constructor: Dispatch,
-  on: function(typename, callback) {
-    var _ = this._,
-        T = parseTypenames(typename + "", _),
-        t,
-        i = -1,
-        n = T.length;
-
-    // If no callback was specified, return the callback of the given type and name.
-    if (arguments.length < 2) {
-      while (++i < n) if ((t = (typename = T[i]).type) && (t = get(_[t], typename.name))) return t;
-      return;
-    }
-
-    // If a type was specified, set the callback for the given type and name.
-    // Otherwise, if a null callback was specified, remove callbacks of the given name.
-    if (callback != null && typeof callback !== "function") throw new Error("invalid callback: " + callback);
-    while (++i < n) {
-      if (t = (typename = T[i]).type) _[t] = set(_[t], typename.name, callback);
-      else if (callback == null) for (t in _) _[t] = set(_[t], typename.name, null);
-    }
-
-    return this;
-  },
-  copy: function() {
-    var copy = {}, _ = this._;
-    for (var t in _) copy[t] = _[t].slice();
-    return new Dispatch(copy);
-  },
-  call: function(type, that) {
-    if ((n = arguments.length - 2) > 0) for (var args = new Array(n), i = 0, n, t; i < n; ++i) args[i] = arguments[i + 2];
-    if (!this._.hasOwnProperty(type)) throw new Error("unknown type: " + type);
-    for (t = this._[type], i = 0, n = t.length; i < n; ++i) t[i].value.apply(that, args);
-  },
-  apply: function(type, that, args) {
-    if (!this._.hasOwnProperty(type)) throw new Error("unknown type: " + type);
-    for (var t = this._[type], i = 0, n = t.length; i < n; ++i) t[i].value.apply(that, args);
-  }
-};
-
-function get(type, name) {
-  for (var i = 0, n = type.length, c; i < n; ++i) {
-    if ((c = type[i]).name === name) {
-      return c.value;
-    }
-  }
-}
-
-function set(type, name, callback) {
-  for (var i = 0, n = type.length; i < n; ++i) {
-    if (type[i].name === name) {
-      type[i] = noop, type = type.slice(0, i).concat(type.slice(i + 1));
-      break;
-    }
-  }
-  if (callback != null) type.push({name: name, value: callback});
-  return type;
-}
-
-exports.dispatch = dispatch;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-},{}],18:[function(require,module,exports){
-// https://d3js.org/d3-dsv/ Version 1.0.5. Copyright 2017 Mike Bostock.
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.d3 = global.d3 || {})));
-}(this, (function (exports) { 'use strict';
-
-function objectConverter(columns) {
-  return new Function("d", "return {" + columns.map(function(name, i) {
-    return JSON.stringify(name) + ": d[" + i + "]";
-  }).join(",") + "}");
-}
-
-function customConverter(columns, f) {
-  var object = objectConverter(columns);
-  return function(row, i) {
-    return f(object(row), i, columns);
-  };
-}
-
-// Compute unique columns in order of discovery.
-function inferColumns(rows) {
-  var columnSet = Object.create(null),
-      columns = [];
-
-  rows.forEach(function(row) {
-    for (var column in row) {
-      if (!(column in columnSet)) {
-        columns.push(columnSet[column] = column);
-      }
-    }
-  });
-
-  return columns;
-}
-
-var dsv = function(delimiter) {
-  var reFormat = new RegExp("[\"" + delimiter + "\n\r]"),
-      delimiterCode = delimiter.charCodeAt(0);
-
-  function parse(text, f) {
-    var convert, columns, rows = parseRows(text, function(row, i) {
-      if (convert) return convert(row, i - 1);
-      columns = row, convert = f ? customConverter(row, f) : objectConverter(row);
-    });
-    rows.columns = columns;
-    return rows;
-  }
-
-  function parseRows(text, f) {
-    var EOL = {}, // sentinel value for end-of-line
-        EOF = {}, // sentinel value for end-of-file
-        rows = [], // output rows
-        N = text.length,
-        I = 0, // current character index
-        n = 0, // the current line number
-        t, // the current token
-        eol; // is the current token followed by EOL?
-
-    function token() {
-      if (I >= N) return EOF; // special case: end of file
-      if (eol) return eol = false, EOL; // special case: end of line
-
-      // special case: quotes
-      var j = I, c;
-      if (text.charCodeAt(j) === 34) {
-        var i = j;
-        while (i++ < N) {
-          if (text.charCodeAt(i) === 34) {
-            if (text.charCodeAt(i + 1) !== 34) break;
-            ++i;
-          }
-        }
-        I = i + 2;
-        c = text.charCodeAt(i + 1);
-        if (c === 13) {
-          eol = true;
-          if (text.charCodeAt(i + 2) === 10) ++I;
-        } else if (c === 10) {
-          eol = true;
-        }
-        return text.slice(j + 1, i).replace(/""/g, "\"");
-      }
-
-      // common case: find next delimiter or newline
-      while (I < N) {
-        var k = 1;
-        c = text.charCodeAt(I++);
-        if (c === 10) eol = true; // \n
-        else if (c === 13) { eol = true; if (text.charCodeAt(I) === 10) ++I, ++k; } // \r|\r\n
-        else if (c !== delimiterCode) continue;
-        return text.slice(j, I - k);
-      }
-
-      // special case: last token before EOF
-      return text.slice(j);
-    }
-
-    while ((t = token()) !== EOF) {
-      var a = [];
-      while (t !== EOL && t !== EOF) {
-        a.push(t);
-        t = token();
-      }
-      if (f && (a = f(a, n++)) == null) continue;
-      rows.push(a);
-    }
-
-    return rows;
-  }
-
-  function format(rows, columns) {
-    if (columns == null) columns = inferColumns(rows);
-    return [columns.map(formatValue).join(delimiter)].concat(rows.map(function(row) {
-      return columns.map(function(column) {
-        return formatValue(row[column]);
-      }).join(delimiter);
-    })).join("\n");
-  }
-
-  function formatRows(rows) {
-    return rows.map(formatRow).join("\n");
-  }
-
-  function formatRow(row) {
-    return row.map(formatValue).join(delimiter);
-  }
-
-  function formatValue(text) {
-    return text == null ? ""
-        : reFormat.test(text += "") ? "\"" + text.replace(/\"/g, "\"\"") + "\""
-        : text;
-  }
-
-  return {
-    parse: parse,
-    parseRows: parseRows,
-    format: format,
-    formatRows: formatRows
-  };
-};
-
-var csv = dsv(",");
-
-var csvParse = csv.parse;
-var csvParseRows = csv.parseRows;
-var csvFormat = csv.format;
-var csvFormatRows = csv.formatRows;
-
-var tsv = dsv("\t");
-
-var tsvParse = tsv.parse;
-var tsvParseRows = tsv.parseRows;
-var tsvFormat = tsv.format;
-var tsvFormatRows = tsv.formatRows;
-
-exports.dsvFormat = dsv;
-exports.csvParse = csvParse;
-exports.csvParseRows = csvParseRows;
-exports.csvFormat = csvFormat;
-exports.csvFormatRows = csvFormatRows;
-exports.tsvParse = tsvParse;
-exports.tsvParseRows = tsvParseRows;
-exports.tsvFormat = tsvFormat;
-exports.tsvFormatRows = tsvFormatRows;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-},{}],19:[function(require,module,exports){
+},{"marked":16}],13:[function(require,module,exports){
 "use strict";
 
 var d3 = window.d3 || require("d3-selection");
@@ -2236,225 +1446,7 @@ d3.HashStateRouter = function(context)
   context.Reload();
 };
 
-},{"d3-selection":21}],20:[function(require,module,exports){
-// https://d3js.org/d3-request/ Version 1.0.5. Copyright 2017 Mike Bostock.
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-collection'), require('d3-dispatch'), require('d3-dsv')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'd3-collection', 'd3-dispatch', 'd3-dsv'], factory) :
-	(factory((global.d3 = global.d3 || {}),global.d3,global.d3,global.d3));
-}(this, (function (exports,d3Collection,d3Dispatch,d3Dsv) { 'use strict';
-
-var request = function(url, callback) {
-  var request,
-      event = d3Dispatch.dispatch("beforesend", "progress", "load", "error"),
-      mimeType,
-      headers = d3Collection.map(),
-      xhr = new XMLHttpRequest,
-      user = null,
-      password = null,
-      response,
-      responseType,
-      timeout = 0;
-
-  // If IE does not support CORS, use XDomainRequest.
-  if (typeof XDomainRequest !== "undefined"
-      && !("withCredentials" in xhr)
-      && /^(http(s)?:)?\/\//.test(url)) xhr = new XDomainRequest;
-
-  "onload" in xhr
-      ? xhr.onload = xhr.onerror = xhr.ontimeout = respond
-      : xhr.onreadystatechange = function(o) { xhr.readyState > 3 && respond(o); };
-
-  function respond(o) {
-    var status = xhr.status, result;
-    if (!status && hasResponse(xhr)
-        || status >= 200 && status < 300
-        || status === 304) {
-      if (response) {
-        try {
-          result = response.call(request, xhr);
-        } catch (e) {
-          event.call("error", request, e);
-          return;
-        }
-      } else {
-        result = xhr;
-      }
-      event.call("load", request, result);
-    } else {
-      event.call("error", request, o);
-    }
-  }
-
-  xhr.onprogress = function(e) {
-    event.call("progress", request, e);
-  };
-
-  request = {
-    header: function(name, value) {
-      name = (name + "").toLowerCase();
-      if (arguments.length < 2) return headers.get(name);
-      if (value == null) headers.remove(name);
-      else headers.set(name, value + "");
-      return request;
-    },
-
-    // If mimeType is non-null and no Accept header is set, a default is used.
-    mimeType: function(value) {
-      if (!arguments.length) return mimeType;
-      mimeType = value == null ? null : value + "";
-      return request;
-    },
-
-    // Specifies what type the response value should take;
-    // for instance, arraybuffer, blob, document, or text.
-    responseType: function(value) {
-      if (!arguments.length) return responseType;
-      responseType = value;
-      return request;
-    },
-
-    timeout: function(value) {
-      if (!arguments.length) return timeout;
-      timeout = +value;
-      return request;
-    },
-
-    user: function(value) {
-      return arguments.length < 1 ? user : (user = value == null ? null : value + "", request);
-    },
-
-    password: function(value) {
-      return arguments.length < 1 ? password : (password = value == null ? null : value + "", request);
-    },
-
-    // Specify how to convert the response content to a specific type;
-    // changes the callback value on "load" events.
-    response: function(value) {
-      response = value;
-      return request;
-    },
-
-    // Alias for send("GET", …).
-    get: function(data, callback) {
-      return request.send("GET", data, callback);
-    },
-
-    // Alias for send("POST", …).
-    post: function(data, callback) {
-      return request.send("POST", data, callback);
-    },
-
-    // If callback is non-null, it will be used for error and load events.
-    send: function(method, data, callback) {
-      xhr.open(method, url, true, user, password);
-      if (mimeType != null && !headers.has("accept")) headers.set("accept", mimeType + ",*/*");
-      if (xhr.setRequestHeader) headers.each(function(value, name) { xhr.setRequestHeader(name, value); });
-      if (mimeType != null && xhr.overrideMimeType) xhr.overrideMimeType(mimeType);
-      if (responseType != null) xhr.responseType = responseType;
-      if (timeout > 0) xhr.timeout = timeout;
-      if (callback == null && typeof data === "function") callback = data, data = null;
-      if (callback != null && callback.length === 1) callback = fixCallback(callback);
-      if (callback != null) request.on("error", callback).on("load", function(xhr) { callback(null, xhr); });
-      event.call("beforesend", request, xhr);
-      xhr.send(data == null ? null : data);
-      return request;
-    },
-
-    abort: function() {
-      xhr.abort();
-      return request;
-    },
-
-    on: function() {
-      var value = event.on.apply(event, arguments);
-      return value === event ? request : value;
-    }
-  };
-
-  if (callback != null) {
-    if (typeof callback !== "function") throw new Error("invalid callback: " + callback);
-    return request.get(callback);
-  }
-
-  return request;
-};
-
-function fixCallback(callback) {
-  return function(error, xhr) {
-    callback(error == null ? xhr : null);
-  };
-}
-
-function hasResponse(xhr) {
-  var type = xhr.responseType;
-  return type && type !== "text"
-      ? xhr.response // null on error
-      : xhr.responseText; // "" on error
-}
-
-var type = function(defaultMimeType, response) {
-  return function(url, callback) {
-    var r = request(url).mimeType(defaultMimeType).response(response);
-    if (callback != null) {
-      if (typeof callback !== "function") throw new Error("invalid callback: " + callback);
-      return r.get(callback);
-    }
-    return r;
-  };
-};
-
-var html = type("text/html", function(xhr) {
-  return document.createRange().createContextualFragment(xhr.responseText);
-});
-
-var json = type("application/json", function(xhr) {
-  return JSON.parse(xhr.responseText);
-});
-
-var text = type("text/plain", function(xhr) {
-  return xhr.responseText;
-});
-
-var xml = type("application/xml", function(xhr) {
-  var xml = xhr.responseXML;
-  if (!xml) throw new Error("parse error");
-  return xml;
-});
-
-var dsv = function(defaultMimeType, parse) {
-  return function(url, row, callback) {
-    if (arguments.length < 3) callback = row, row = null;
-    var r = request(url).mimeType(defaultMimeType);
-    r.row = function(_) { return arguments.length ? r.response(responseOf(parse, row = _)) : row; };
-    r.row(row);
-    return callback ? r.get(callback) : r;
-  };
-};
-
-function responseOf(parse, row) {
-  return function(request$$1) {
-    return parse(request$$1.responseText, row);
-  };
-}
-
-var csv = dsv("text/csv", d3Dsv.csvParse);
-
-var tsv = dsv("text/tab-separated-values", d3Dsv.tsvParse);
-
-exports.request = request;
-exports.html = html;
-exports.json = json;
-exports.text = text;
-exports.xml = xml;
-exports.csv = csv;
-exports.tsv = tsv;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-},{"d3-collection":16,"d3-dispatch":17,"d3-dsv":18}],21:[function(require,module,exports){
+},{"d3-selection":14}],14:[function(require,module,exports){
 // https://d3js.org/d3-selection/ Version 1.0.5. Copyright 2017 Mike Bostock.
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -3429,7 +2421,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
-},{}],22:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /*
  * Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT license
  * Author: Jim Palmer (based on chunking idea from Dave Koelle)
@@ -3476,7 +2468,7 @@ module.exports = function naturalSort (a, b) {
 	return 0;
 };
 
-},{}],23:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function (global){
 /**
  * marked - a markdown parser
@@ -4766,468 +3758,4 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],24:[function(require,module,exports){
-/* global define */
-
-(function (root, pluralize) {
-  /* istanbul ignore else */
-  if (typeof require === 'function' && typeof exports === 'object' && typeof module === 'object') {
-    // Node.
-    module.exports = pluralize();
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD, registers as an anonymous module.
-    define(function () {
-      return pluralize();
-    });
-  } else {
-    // Browser global.
-    root.pluralize = pluralize();
-  }
-})(this, function () {
-  // Rule storage - pluralize and singularize need to be run sequentially,
-  // while other rules can be optimized using an object for instant lookups.
-  var pluralRules = [];
-  var singularRules = [];
-  var uncountables = {};
-  var irregularPlurals = {};
-  var irregularSingles = {};
-
-  /**
-   * Title case a string.
-   *
-   * @param  {string} str
-   * @return {string}
-   */
-  function toTitleCase (str) {
-    return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
-  }
-
-  /**
-   * Sanitize a pluralization rule to a usable regular expression.
-   *
-   * @param  {(RegExp|string)} rule
-   * @return {RegExp}
-   */
-  function sanitizeRule (rule) {
-    if (typeof rule === 'string') {
-      return new RegExp('^' + rule + '$', 'i');
-    }
-
-    return rule;
-  }
-
-  /**
-   * Pass in a word token to produce a function that can replicate the case on
-   * another word.
-   *
-   * @param  {string}   word
-   * @param  {string}   token
-   * @return {Function}
-   */
-  function restoreCase (word, token) {
-    // Tokens are an exact match.
-    if (word === token) {
-      return token;
-    }
-
-    // Upper cased words. E.g. "HELLO".
-    if (word === word.toUpperCase()) {
-      return token.toUpperCase();
-    }
-
-    // Title cased words. E.g. "Title".
-    if (word[0] === word[0].toUpperCase()) {
-      return toTitleCase(token);
-    }
-
-    // Lower cased words. E.g. "test".
-    return token.toLowerCase();
-  }
-
-  /**
-   * Interpolate a regexp string.
-   *
-   * @param  {string} str
-   * @param  {Array}  args
-   * @return {string}
-   */
-  function interpolate (str, args) {
-    return str.replace(/\$(\d{1,2})/g, function (match, index) {
-      return args[index] || '';
-    });
-  }
-
-  /**
-   * Sanitize a word by passing in the word and sanitization rules.
-   *
-   * @param  {string}   token
-   * @param  {string}   word
-   * @param  {Array}    collection
-   * @return {string}
-   */
-  function sanitizeWord (token, word, collection) {
-    // Empty string or doesn't need fixing.
-    if (!token.length || uncountables.hasOwnProperty(token)) {
-      return word;
-    }
-
-    var len = collection.length;
-
-    // Iterate over the sanitization rules and use the first one to match.
-    while (len--) {
-      var rule = collection[len];
-
-      // If the rule passes, return the replacement.
-      if (rule[0].test(word)) {
-        return word.replace(rule[0], function (match, index, word) {
-          var result = interpolate(rule[1], arguments);
-
-          if (match === '') {
-            return restoreCase(word[index - 1], result);
-          }
-
-          return restoreCase(match, result);
-        });
-      }
-    }
-
-    return word;
-  }
-
-  /**
-   * Replace a word with the updated word.
-   *
-   * @param  {Object}   replaceMap
-   * @param  {Object}   keepMap
-   * @param  {Array}    rules
-   * @return {Function}
-   */
-  function replaceWord (replaceMap, keepMap, rules) {
-    return function (word) {
-      // Get the correct token and case restoration functions.
-      var token = word.toLowerCase();
-
-      // Check against the keep object map.
-      if (keepMap.hasOwnProperty(token)) {
-        return restoreCase(word, token);
-      }
-
-      // Check against the replacement map for a direct word replacement.
-      if (replaceMap.hasOwnProperty(token)) {
-        return restoreCase(word, replaceMap[token]);
-      }
-
-      // Run all the rules against the word.
-      return sanitizeWord(token, word, rules);
-    };
-  }
-
-  /**
-   * Pluralize or singularize a word based on the passed in count.
-   *
-   * @param  {string}  word
-   * @param  {number}  count
-   * @param  {boolean} inclusive
-   * @return {string}
-   */
-  function pluralize (word, count, inclusive) {
-    var pluralized = count === 1
-      ? pluralize.singular(word) : pluralize.plural(word);
-
-    return (inclusive ? count + ' ' : '') + pluralized;
-  }
-
-  /**
-   * Pluralize a word.
-   *
-   * @type {Function}
-   */
-  pluralize.plural = replaceWord(
-    irregularSingles, irregularPlurals, pluralRules
-  );
-
-  /**
-   * Singularize a word.
-   *
-   * @type {Function}
-   */
-  pluralize.singular = replaceWord(
-    irregularPlurals, irregularSingles, singularRules
-  );
-
-  /**
-   * Add a pluralization rule to the collection.
-   *
-   * @param {(string|RegExp)} rule
-   * @param {string}          replacement
-   */
-  pluralize.addPluralRule = function (rule, replacement) {
-    pluralRules.push([sanitizeRule(rule), replacement]);
-  };
-
-  /**
-   * Add a singularization rule to the collection.
-   *
-   * @param {(string|RegExp)} rule
-   * @param {string}          replacement
-   */
-  pluralize.addSingularRule = function (rule, replacement) {
-    singularRules.push([sanitizeRule(rule), replacement]);
-  };
-
-  /**
-   * Add an uncountable word rule.
-   *
-   * @param {(string|RegExp)} word
-   */
-  pluralize.addUncountableRule = function (word) {
-    if (typeof word === 'string') {
-      uncountables[word.toLowerCase()] = true;
-      return;
-    }
-
-    // Set singular and plural references for the word.
-    pluralize.addPluralRule(word, '$0');
-    pluralize.addSingularRule(word, '$0');
-  };
-
-  /**
-   * Add an irregular word definition.
-   *
-   * @param {string} single
-   * @param {string} plural
-   */
-  pluralize.addIrregularRule = function (single, plural) {
-    plural = plural.toLowerCase();
-    single = single.toLowerCase();
-
-    irregularSingles[single] = plural;
-    irregularPlurals[plural] = single;
-  };
-
-  /**
-   * Irregular rules.
-   */
-  [
-    // Pronouns.
-    ['I', 'we'],
-    ['me', 'us'],
-    ['he', 'they'],
-    ['she', 'they'],
-    ['them', 'them'],
-    ['myself', 'ourselves'],
-    ['yourself', 'yourselves'],
-    ['itself', 'themselves'],
-    ['herself', 'themselves'],
-    ['himself', 'themselves'],
-    ['themself', 'themselves'],
-    ['is', 'are'],
-    ['was', 'were'],
-    ['has', 'have'],
-    ['this', 'these'],
-    ['that', 'those'],
-    // Words ending in with a consonant and `o`.
-    ['echo', 'echoes'],
-    ['dingo', 'dingoes'],
-    ['volcano', 'volcanoes'],
-    ['tornado', 'tornadoes'],
-    ['torpedo', 'torpedoes'],
-    // Ends with `us`.
-    ['genus', 'genera'],
-    ['viscus', 'viscera'],
-    // Ends with `ma`.
-    ['stigma', 'stigmata'],
-    ['stoma', 'stomata'],
-    ['dogma', 'dogmata'],
-    ['lemma', 'lemmata'],
-    ['schema', 'schemata'],
-    ['anathema', 'anathemata'],
-    // Other irregular rules.
-    ['ox', 'oxen'],
-    ['axe', 'axes'],
-    ['die', 'dice'],
-    ['yes', 'yeses'],
-    ['foot', 'feet'],
-    ['eave', 'eaves'],
-    ['goose', 'geese'],
-    ['tooth', 'teeth'],
-    ['quiz', 'quizzes'],
-    ['human', 'humans'],
-    ['proof', 'proofs'],
-    ['carve', 'carves'],
-    ['valve', 'valves'],
-    ['looey', 'looies'],
-    ['thief', 'thieves'],
-    ['groove', 'grooves'],
-    ['pickaxe', 'pickaxes'],
-    ['whiskey', 'whiskies']
-  ].forEach(function (rule) {
-    return pluralize.addIrregularRule(rule[0], rule[1]);
-  });
-
-  /**
-   * Pluralization rules.
-   */
-  [
-    [/s?$/i, 's'],
-    [/[^\u0000-\u007F]$/i, '$0'],
-    [/([^aeiou]ese)$/i, '$1'],
-    [/(ax|test)is$/i, '$1es'],
-    [/(alias|[^aou]us|tlas|gas|ris)$/i, '$1es'],
-    [/(e[mn]u)s?$/i, '$1s'],
-    [/([^l]ias|[aeiou]las|[emjzr]as|[iu]am)$/i, '$1'],
-    [/(alumn|syllab|octop|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1i'],
-    [/(alumn|alg|vertebr)(?:a|ae)$/i, '$1ae'],
-    [/(seraph|cherub)(?:im)?$/i, '$1im'],
-    [/(her|at|gr)o$/i, '$1oes'],
-    [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|automat|quor)(?:a|um)$/i, '$1a'],
-    [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)(?:a|on)$/i, '$1a'],
-    [/sis$/i, 'ses'],
-    [/(?:(kni|wi|li)fe|(ar|l|ea|eo|oa|hoo)f)$/i, '$1$2ves'],
-    [/([^aeiouy]|qu)y$/i, '$1ies'],
-    [/([^ch][ieo][ln])ey$/i, '$1ies'],
-    [/(x|ch|ss|sh|zz)$/i, '$1es'],
-    [/(matr|cod|mur|sil|vert|ind|append)(?:ix|ex)$/i, '$1ices'],
-    [/(m|l)(?:ice|ouse)$/i, '$1ice'],
-    [/(pe)(?:rson|ople)$/i, '$1ople'],
-    [/(child)(?:ren)?$/i, '$1ren'],
-    [/eaux$/i, '$0'],
-    [/m[ae]n$/i, 'men'],
-    ['thou', 'you']
-  ].forEach(function (rule) {
-    return pluralize.addPluralRule(rule[0], rule[1]);
-  });
-
-  /**
-   * Singularization rules.
-   */
-  [
-    [/s$/i, ''],
-    [/(ss)$/i, '$1'],
-    [/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)(?:sis|ses)$/i, '$1sis'],
-    [/(^analy)(?:sis|ses)$/i, '$1sis'],
-    [/(wi|kni|(?:after|half|high|low|mid|non|night|[^\w]|^)li)ves$/i, '$1fe'],
-    [/(ar|(?:wo|[ae])l|[eo][ao])ves$/i, '$1f'],
-    [/ies$/i, 'y'],
-    [/\b([pl]|zomb|(?:neck|cross)?t|coll|faer|food|gen|goon|group|lass|talk|goal|cut)ies$/i, '$1ie'],
-    [/\b(mon|smil)ies$/i, '$1ey'],
-    [/(m|l)ice$/i, '$1ouse'],
-    [/(seraph|cherub)im$/i, '$1'],
-    [/(x|ch|ss|sh|zz|tto|go|cho|alias|[^aou]us|tlas|gas|(?:her|at|gr)o|ris)(?:es)?$/i, '$1'],
-    [/(e[mn]u)s?$/i, '$1'],
-    [/(movie|twelve)s$/i, '$1'],
-    [/(cris|test|diagnos)(?:is|es)$/i, '$1is'],
-    [/(alumn|syllab|octop|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1us'],
-    [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|quor)a$/i, '$1um'],
-    [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)a$/i, '$1on'],
-    [/(alumn|alg|vertebr)ae$/i, '$1a'],
-    [/(cod|mur|sil|vert|ind)ices$/i, '$1ex'],
-    [/(matr|append)ices$/i, '$1ix'],
-    [/(pe)(rson|ople)$/i, '$1rson'],
-    [/(child)ren$/i, '$1'],
-    [/(eau)x?$/i, '$1'],
-    [/men$/i, 'man']
-  ].forEach(function (rule) {
-    return pluralize.addSingularRule(rule[0], rule[1]);
-  });
-
-  /**
-   * Uncountable rules.
-   */
-  [
-    // Singular words with no plurals.
-    'advice',
-    'adulthood',
-    'agenda',
-    'aid',
-    'alcohol',
-    'ammo',
-    'athletics',
-    'bison',
-    'blood',
-    'bream',
-    'buffalo',
-    'butter',
-    'carp',
-    'cash',
-    'chassis',
-    'chess',
-    'clothing',
-    'commerce',
-    'cod',
-    'cooperation',
-    'corps',
-    'digestion',
-    'debris',
-    'diabetes',
-    'energy',
-    'equipment',
-    'elk',
-    'excretion',
-    'expertise',
-    'flounder',
-    'fun',
-    'gallows',
-    'garbage',
-    'graffiti',
-    'headquarters',
-    'health',
-    'herpes',
-    'highjinks',
-    'homework',
-    'housework',
-    'information',
-    'jeans',
-    'justice',
-    'kudos',
-    'labour',
-    'literature',
-    'machinery',
-    'mackerel',
-    'mail',
-    'media',
-    'mews',
-    'moose',
-    'music',
-    'news',
-    'pike',
-    'plankton',
-    'pliers',
-    'pollution',
-    'premises',
-    'rain',
-    'research',
-    'rice',
-    'salmon',
-    'scissors',
-    'series',
-    'sewage',
-    'shambles',
-    'shrimp',
-    'species',
-    'staff',
-    'swine',
-    'trout',
-    'traffic',
-    'transporation',
-    'tuna',
-    'wealth',
-    'welfare',
-    'whiting',
-    'wildebeest',
-    'wildlife',
-    'you',
-    // Regexes.
-    /pox$/i, // "chickpox", "smallpox"
-    /ois$/i,
-    /deer$/i, // "deer", "reindeer"
-    /fish$/i, // "fish", "blowfish", "angelfish"
-    /sheep$/i,
-    /measles$/i,
-    /[^aeiou]ese$/i // "chinese", "japanese"
-  ].forEach(pluralize.addUncountableRule);
-
-  return pluralize;
-});
-
-},{}]},{},[3]);
+},{}]},{},[2]);
