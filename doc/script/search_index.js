@@ -12,12 +12,6 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "janus/js/projects/github.js~github",
-    "class/js/projects/GitHub.js~Github.html",
-    "<span>Github</span> <span class=\"search-result-import-path\">janus/js/projects/GitHub.js</span>",
-    "class"
-  ],
-  [
     "janus/js/projects/indexeddb.js~indexeddbstorage",
     "class/js/projects/IndexedDB.js~IndexedDBStorage.html",
     "<span>IndexedDBStorage</span> <span class=\"search-result-import-path\">janus/js/projects/IndexedDB.js</span>",
@@ -54,16 +48,46 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "janus/js/pages/dropbox.js~dropbox",
-    "function/index.html#static-function-dropbox",
-    "<span>dropbox</span> <span class=\"search-result-import-path\">janus/js/pages/dropbox.js</span>",
+    "janus/js/common/schema/array.js~arrayeditor",
+    "function/index.html#static-function-arrayEditor",
+    "<span>arrayEditor</span> <span class=\"search-result-import-path\">janus/js/common/schema/array.js</span>",
     "function"
   ],
   [
-    "janus/js/types/md/index.js~edit",
-    "function/index.html#static-function-edit",
-    "<span>edit</span> <span class=\"search-result-import-path\">janus/js/types/md/index.js</span>",
+    "janus/js/common/schema/array.js~arrayeditors",
+    "variable/index.html#static-variable-arrayEditors",
+    "<span>arrayEditors</span> <span class=\"search-result-import-path\">janus/js/common/schema/array.js</span>",
+    "variable"
+  ],
+  [
+    "janus/js/common/schema/array.js~arrayviewer",
+    "function/index.html#static-function-arrayViewer",
+    "<span>arrayViewer</span> <span class=\"search-result-import-path\">janus/js/common/schema/array.js</span>",
     "function"
+  ],
+  [
+    "janus/js/common/schema/boolean.js~booleaneditor",
+    "function/index.html#static-function-booleanEditor",
+    "<span>booleanEditor</span> <span class=\"search-result-import-path\">janus/js/common/schema/boolean.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/boolean.js~booleanviewer",
+    "function/index.html#static-function-booleanViewer",
+    "<span>booleanViewer</span> <span class=\"search-result-import-path\">janus/js/common/schema/boolean.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/index.js~editor",
+    "function/index.html#static-function-editor",
+    "<span>editor</span> <span class=\"search-result-import-path\">janus/js/common/schema/index.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/index.js~editors",
+    "variable/index.html#static-variable-editors",
+    "<span>editors</span> <span class=\"search-result-import-path\">janus/js/common/schema/index.js</span>",
+    "variable"
   ],
   [
     "janus/js/common/analytics.js~event",
@@ -75,12 +99,6 @@ window.esdocSearchIndex = [
     "janus/js/projects/index.js~get",
     "function/index.html#static-function-get",
     "<span>get</span> <span class=\"search-result-import-path\">janus/js/projects/index.js</span>",
-    "function"
-  ],
-  [
-    "janus/js/pages/github.js~github",
-    "function/index.html#static-function-github",
-    "<span>github</span> <span class=\"search-result-import-path\">janus/js/pages/github.js</span>",
     "function"
   ],
   [
@@ -108,10 +126,34 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "janus/js/types/md/index.js~name",
-    "variable/index.html#static-variable-name",
-    "<span>name</span> <span class=\"search-result-import-path\">janus/js/types/md/index.js</span>",
+    "janus/js/types/md/index.js~md",
+    "variable/index.html#static-variable-md",
+    "<span>md</span> <span class=\"search-result-import-path\">janus/js/types/md/index.js</span>",
     "variable"
+  ],
+  [
+    "janus/js/common/schema/number.js~numbereditor",
+    "function/index.html#static-function-numberEditor",
+    "<span>numberEditor</span> <span class=\"search-result-import-path\">janus/js/common/schema/number.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/number.js~numberviewer",
+    "function/index.html#static-function-numberViewer",
+    "<span>numberViewer</span> <span class=\"search-result-import-path\">janus/js/common/schema/number.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/object.js~objecteditor",
+    "function/index.html#static-function-objectEditor",
+    "<span>objectEditor</span> <span class=\"search-result-import-path\">janus/js/common/schema/object.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/object.js~objectviewer",
+    "function/index.html#static-function-objectViewer",
+    "<span>objectViewer</span> <span class=\"search-result-import-path\">janus/js/common/schema/object.js</span>",
+    "function"
   ],
   [
     "janus/js/common/analytics.js~pageview",
@@ -132,16 +174,58 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "janus/js/types/md/index.js~templates",
-    "variable/index.html#static-variable-templates",
-    "<span>templates</span> <span class=\"search-result-import-path\">janus/js/types/md/index.js</span>",
+    "janus/js/common/schema/string.js~stringeditor",
+    "function/index.html#static-function-stringEditor",
+    "<span>stringEditor</span> <span class=\"search-result-import-path\">janus/js/common/schema/string.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/string.js~stringeditors",
+    "variable/index.html#static-variable-stringEditors",
+    "<span>stringEditors</span> <span class=\"search-result-import-path\">janus/js/common/schema/string.js</span>",
     "variable"
   ],
   [
-    "janus/js/types/md/index.js~view",
-    "function/index.html#static-function-view",
-    "<span>view</span> <span class=\"search-result-import-path\">janus/js/types/md/index.js</span>",
+    "janus/js/common/schema/string.js~stringviewer",
+    "function/index.html#static-function-stringViewer",
+    "<span>stringViewer</span> <span class=\"search-result-import-path\">janus/js/common/schema/string.js</span>",
     "function"
+  ],
+  [
+    "janus/js/common/schema/string.js~stringviewerdefault",
+    "function/index.html#static-function-stringViewerDefault",
+    "<span>stringViewerDefault</span> <span class=\"search-result-import-path\">janus/js/common/schema/string.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/string.js~stringviewerimage",
+    "function/index.html#static-function-stringViewerImage",
+    "<span>stringViewerImage</span> <span class=\"search-result-import-path\">janus/js/common/schema/string.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/string.js~stringviewers",
+    "variable/index.html#static-variable-stringViewers",
+    "<span>stringViewers</span> <span class=\"search-result-import-path\">janus/js/common/schema/string.js</span>",
+    "variable"
+  ],
+  [
+    "janus/js/types/user/index.js~user",
+    "variable/index.html#static-variable-user",
+    "<span>user</span> <span class=\"search-result-import-path\">janus/js/types/user/index.js</span>",
+    "variable"
+  ],
+  [
+    "janus/js/common/schema/index.js~viewer",
+    "function/index.html#static-function-viewer",
+    "<span>viewer</span> <span class=\"search-result-import-path\">janus/js/common/schema/index.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/common/schema/index.js~viewers",
+    "variable/index.html#static-variable-viewers",
+    "<span>viewers</span> <span class=\"search-result-import-path\">janus/js/common/schema/index.js</span>",
+    "variable"
   ],
   [
     "builtinexternal/ecmascriptexternal.js~array",
@@ -486,21 +570,45 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "js/common/schema/array.js",
+    "file/js/common/schema/array.js.html",
+    "js/common/schema/array.js",
+    "file"
+  ],
+  [
+    "js/common/schema/boolean.js",
+    "file/js/common/schema/boolean.js.html",
+    "js/common/schema/boolean.js",
+    "file"
+  ],
+  [
+    "js/common/schema/index.js",
+    "file/js/common/schema/index.js.html",
+    "js/common/schema/index.js",
+    "file"
+  ],
+  [
+    "js/common/schema/number.js",
+    "file/js/common/schema/number.js.html",
+    "js/common/schema/number.js",
+    "file"
+  ],
+  [
+    "js/common/schema/object.js",
+    "file/js/common/schema/object.js.html",
+    "js/common/schema/object.js",
+    "file"
+  ],
+  [
+    "js/common/schema/string.js",
+    "file/js/common/schema/string.js.html",
+    "js/common/schema/string.js",
+    "file"
+  ],
+  [
     "js/index.js",
     "file/js/index.js.html",
     "js/index.js",
-    "file"
-  ],
-  [
-    "js/pages/dropbox.js",
-    "file/js/pages/dropbox.js.html",
-    "js/pages/dropbox.js",
-    "file"
-  ],
-  [
-    "js/pages/github.js",
-    "file/js/pages/github.js.html",
-    "js/pages/github.js",
     "file"
   ],
   [
@@ -526,24 +634,6 @@ window.esdocSearchIndex = [
     "file/js/pages/project.js.html",
     "js/pages/project.js",
     "file"
-  ],
-  [
-    "js/projects/github.js",
-    "file/js/projects/GitHub.js.html",
-    "js/projects/GitHub.js",
-    "file"
-  ],
-  [
-    "js/projects/github.js~github#constructor",
-    "class/js/projects/GitHub.js~Github.html#instance-constructor-constructor",
-    "js/projects/GitHub.js~Github#constructor",
-    "method"
-  ],
-  [
-    "js/projects/github.js~github#state",
-    "class/js/projects/GitHub.js~Github.html#instance-member-state",
-    "js/projects/GitHub.js~Github#state",
-    "member"
   ],
   [
     "js/projects/indexeddb.js",
@@ -612,12 +702,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "js/projects/localstorage.js~localstorage#renamefile",
-    "class/js/projects/LocalStorage.js~LocalStorage.html#instance-method-renameFile",
-    "js/projects/LocalStorage.js~LocalStorage#renameFile",
-    "method"
-  ],
-  [
     "js/projects/localstorage.js~localstorage#setfile",
     "class/js/projects/LocalStorage.js~LocalStorage.html#instance-method-setFile",
     "js/projects/LocalStorage.js~LocalStorage#setFile",
@@ -681,6 +765,12 @@ window.esdocSearchIndex = [
     "js/types/md/index.js",
     "file/js/types/md/index.js.html",
     "js/types/md/index.js",
+    "file"
+  ],
+  [
+    "js/types/user/index.js",
+    "file/js/types/user/index.js.html",
+    "js/types/user/index.js",
     "file"
   ]
 ]

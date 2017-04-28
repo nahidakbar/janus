@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">js/projects/index.js | API Document</title>
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">js/common/schema/array.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -74,40 +74,59 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">js/projects/index.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">js/common/schema/array.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
 
 &quot;use strict&quot;;
 
-let projects = JSON.parse(localStorage.janus || &quot;{}&quot;);
+export function arrayEditor(editors, container, schema, content, save)
+{
+  if (!schema.format || !arrayEditors[schema.format])
+  {
+    schema.format = &apos;default&apos;;
+  }
+  arrayEditors[schema.format](editors, container, schema, content, save);
+}
 
-import { LocalStorage } from &quot;./LocalStorage&quot;;
-import { IndexedDBStorage } from &quot;./IndexedDB&quot;;
+export function arrayViewer(viewers, container, schema, content)
+{
+  content.forEach(row =&gt;
+  {
+    viewers[schema.items.type](viewers, container.Div(), schema.items, row);
+  });
+}
 
-let types = {
-  &quot;localstorage&quot;: LocalStorage,
-  &quot;indexeddb&quot;: IndexedDBStorage,
+function arrayEditorDefault(editors, container, schema, content, save)
+{
+  console.error(&apos;TODO&apos;);
+}
+
+function arrayEditorOnePerLineString(editors, container, schema, content, save)
+{
+  const control = container.Textarea()
+    .text((content || []).join(&apos;\n&apos;))
+    .Placeholder(&apos;one item per line&apos;);
+  control.OnChange(() =&gt;
+  {
+    const value = control.Value().split(&apos;\n&apos;).filter(x =&gt; x);
+    if (value.length &gt; 0)
+    {
+      save(value);
+    }
+    else
+    {
+      save(undefined);
+    }
+  });
+  control.OnInput(control.OnChange());
+}
+
+export const arrayEditors = {
+  default: arrayEditorDefault,
+  onePerLineString: arrayEditorOnePerLineString
 };
-
-export function add(spec)
-{
-  projects[spec.name] = spec;
-  localStorage.janus = JSON.stringify(projects);
-}
-
-export function get(name)
-{
-  let project = projects[name];
-  let class_ = types[project.type];
-  return new class_(project);
-}
-
-export function list()
-{
-  return Object.keys(projects).map(name =&gt; projects[name]);
-}
 </code></pre>
 
 </div>

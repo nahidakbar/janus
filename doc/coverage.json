@@ -1,25 +1,16 @@
 {
-  "coverage": "16.27%",
-  "expectCount": 43,
-  "actualCount": 7,
+  "coverage": "11.11%",
+  "expectCount": 54,
+  "actualCount": 6,
   "files": {
     "js/common/request.js": {
       "expectCount": 5,
       "actualCount": 1,
       "undocumentLines": [
         36,
-        48,
-        40,
-        44
-      ]
-    },
-    "js/projects/GitHub.js": {
-      "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        9,
-        11,
-        13
+        51,
+        41,
+        46
       ]
     },
     "js/projects/IndexedDB.js": {
@@ -29,15 +20,15 @@
         11,
         13,
         16,
-        103,
-        71,
-        47,
-        87
+        99,
+        67,
+        43,
+        83
       ]
     },
     "js/projects/LocalStorage.js": {
-      "expectCount": 6,
-      "actualCount": 5,
+      "expectCount": 5,
+      "actualCount": 4,
       "undocumentLines": [
         9
       ]
@@ -46,12 +37,12 @@
       "expectCount": 7,
       "actualCount": 1,
       "undocumentLines": [
-        12,
-        27,
-        22,
-        17,
-        37,
-        14
+        14,
+        30,
+        24,
+        19,
+        40,
+        16
       ]
     },
     "js/projects/index.js": {
@@ -63,36 +54,39 @@
         30
       ]
     },
-    "js/pages/dropbox.js": {
-      "expectCount": 1,
+    "js/common/schema/array.js": {
+      "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        7
+        7,
+        49,
+        16
       ]
     },
-    "js/types/md/index.js": {
+    "js/common/schema/boolean.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        7,
+        17
+      ]
+    },
+    "js/common/schema/index.js": {
       "expectCount": 4,
       "actualCount": 0,
       "undocumentLines": [
+        29,
+        13,
         35,
-        9,
-        51,
-        11
+        21
       ]
     },
     "js/common/analytics.js": {
       "expectCount": 2,
       "actualCount": 0,
       "undocumentLines": [
-        24,
-        11
-      ]
-    },
-    "js/pages/github.js": {
-      "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        134
+        30,
+        17
       ]
     },
     "js/pages/index.js": {
@@ -116,11 +110,53 @@
         9
       ]
     },
+    "js/types/md/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        62
+      ]
+    },
+    "js/common/schema/number.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        7,
+        25
+      ]
+    },
+    "js/common/schema/object.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        7,
+        54
+      ]
+    },
     "js/pages/project.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
-        14
+        13
+      ]
+    },
+    "js/common/schema/string.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        7,
+        81,
+        98,
+        107,
+        112,
+        117
+      ]
+    },
+    "js/types/user/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        651
       ]
     }
   }

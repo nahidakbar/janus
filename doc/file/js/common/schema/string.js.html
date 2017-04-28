@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">js/projects/index.js | API Document</title>
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">js/common/schema/string.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -74,40 +74,128 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">js/projects/index.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">js/common/schema/string.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
 
 &quot;use strict&quot;;
 
-let projects = JSON.parse(localStorage.janus || &quot;{}&quot;);
+export function stringEditor(editors, container, schema, content, save)
+{
+  if (!schema.format || !stringEditors[schema.format])
+  {
+    schema.format = &apos;default&apos;;
+  }
+  stringEditors[schema.format](editors, container, schema, content, save);
+}
 
-import { LocalStorage } from &quot;./LocalStorage&quot;;
-import { IndexedDBStorage } from &quot;./IndexedDB&quot;;
+function stringEditorDefault(editors, container, schema, content, save)
+{
+  const control = container.Textarea().text(content || &apos;&apos;);
+  control.OnChange(() =&gt;
+  {
+    const value = control.Value();
+    if (value.length &gt; 0)
+    {
+      save(value);
+    }
+    else
+    {
+      save(undefined);
+    }
+  });
+  control.OnInput(control.OnChange());
+}
 
-let types = {
-  &quot;localstorage&quot;: LocalStorage,
-  &quot;indexeddb&quot;: IndexedDBStorage,
+function stringEditorImage(editors, container, schema, content, save)
+{
+  const current = container.Img().MaxWidth(&apos;90%&apos;).Src(content);
+  const control = container.File();
+  control.OnChange(() =&gt;
+  {
+    const reader = new FileReader();
+    reader.onload = function(e)
+    {
+      const value = reader.result;
+      current.Src(value);
+      if (value.length &gt; 0)
+      {
+        save(value);
+      }
+      else
+      {
+        save(undefined);
+      }
+    }
+    reader.readAsDataURL(control.property(&apos;files&apos;)[0]);
+  });
+  container.Button(&apos;Delete&apos;).OnClick(() =&gt;
+  {
+    current.Src(&apos;&apos;);
+    save(undefined);
+  });
+}
+
+function stringEditorControl(editors, container, schema, content, save)
+{
+  const control = container.Input().Type(schema.type).Value(content || &apos;&apos;);
+  control.OnChange(() =&gt;
+  {
+    const value = control.Value();
+    if (value.length &gt; 0)
+    {
+      save(value);
+    }
+    else
+    {
+      save(undefined);
+    }
+  });
+  control.OnInput(control.OnChange());  
+}
+
+export const stringEditors = {
+  default: stringEditorDefault,
+  image: stringEditorImage,
+  color: stringEditorControl,
+  date: stringEditorControl,
+  &quot;datetime-local&quot;: stringEditorControl,
+  email: stringEditorControl,
+  month: stringEditorControl,
+  number: stringEditorControl,
+  range: stringEditorControl,
+  search: stringEditorControl,
+  tel: stringEditorControl,
+  time: stringEditorControl,
+  url: stringEditorControl,
+  week: stringEditorControl,
 };
 
-export function add(spec)
+export function stringViewer(viewers, container, schema, content)
 {
-  projects[spec.name] = spec;
-  localStorage.janus = JSON.stringify(projects);
+  if (!schema.format || !stringViewers[schema.format])
+  {
+    schema.format = &apos;default&apos;;
+  }
+  stringViewers[schema.format](viewers, container, schema, content);
 }
 
-export function get(name)
+export function stringViewerDefault(viewers, container, schema, content)
 {
-  let project = projects[name];
-  let class_ = types[project.type];
-  return new class_(project);
+  container.P(content)
 }
 
-export function list()
+export function stringViewerImage(viewers, container, schema, content)
 {
-  return Object.keys(projects).map(name =&gt; projects[name]);
+  container.Img().Src(content);
 }
+
+export const stringViewers = {
+  default: stringViewerDefault,
+  image: stringViewerImage,
+};
+
 </code></pre>
 
 </div>

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">js/projects/index.js | API Document</title>
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">js/common/schema/boolean.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -74,39 +74,26 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">js/projects/index.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">js/common/schema/boolean.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
 
 &quot;use strict&quot;;
 
-let projects = JSON.parse(localStorage.janus || &quot;{}&quot;);
-
-import { LocalStorage } from &quot;./LocalStorage&quot;;
-import { IndexedDBStorage } from &quot;./IndexedDB&quot;;
-
-let types = {
-  &quot;localstorage&quot;: LocalStorage,
-  &quot;indexeddb&quot;: IndexedDBStorage,
-};
-
-export function add(spec)
+export function booleanEditor(editors, container, schema, content, save)
 {
-  projects[spec.name] = spec;
-  localStorage.janus = JSON.stringify(projects);
+  const editor = container.Checkbox();
+  editor.Checked(content);
+  editor.OnChange(() =&gt;
+  {
+    save(editor.Checked() || undefined);
+  });
 }
 
-export function get(name)
+export function booleanViewer(viewers, container, schema, content)
 {
-  let project = projects[name];
-  let class_ = types[project.type];
-  return new class_(project);
-}
-
-export function list()
-{
-  return Object.keys(projects).map(name =&gt; projects[name]);
+  
 }
 </code></pre>
 
