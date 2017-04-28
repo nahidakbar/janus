@@ -7,9 +7,11 @@
 let projects = JSON.parse(localStorage.janus || '{}');
 
 import { LocalStorage } from "./LocalStorage";
+import { IndexedDBStorage } from "./IndexedDB";
 
 let types = {
   'localstorage': LocalStorage,
+  'indexeddb': IndexedDBStorage,
 };
 
 export function add(spec)

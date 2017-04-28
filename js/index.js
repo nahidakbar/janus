@@ -21,6 +21,7 @@ window.onload = function()
       'github': require('pages/github').default,
       'dropbox': require('pages/dropbox').default,
       'localstorage': require('pages/localstorage').default,
+      'indexeddb': require('pages/indexeddb').default,
     }
   };
 
@@ -46,9 +47,8 @@ window.onload = function()
     context.body.Loader();
     context.Reload();
   };
-  
-  analytics.pageview(context.params.page) 
 
+  analytics.pageview(context.params.page) 
 };
 
 d3.selection.prototype.Loader = function()

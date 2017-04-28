@@ -29,9 +29,23 @@ export class Storage
     let match = name.match(/^([A-Za-z0-9\-_]+)\.(\w+)$/);
     return {
       key: name,
-      type: 'file',
+      type: match[2],
       name: match[1],
-      module: match[2],
     };
   }
+  
+  renameFile(oldKey, newKey)
+  {
+    return new Promise((resolve, reject) =>
+    {
+      this.getFile(oldKey).then(contents =>
+      {
+        this.setFile(newKey, contents).then(() =>
+        {
+          this.deleteFile(oldKey).then(resolve, reject);
+        }, reject);
+      }, reject)
+    });
+  }
+  
 }

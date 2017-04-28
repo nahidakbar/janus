@@ -14,29 +14,24 @@ import * as analytics from "common/analytics";
 export default function(context)
 {
   context.head.text(context.State('name').toUncamelCase());
-  showFolder(context, projects.get(context.State('name')), context.State('folder'));
+  showFiles(context, projects.get(context.State('name')));
 };
 
-function showFolder(context, project, folder)
+function showFiles(context, project)
 {
-  project.listFolder(folder).then(list =>
+  project.listFiles().then(list =>
   {
     let parent = context.body.clear();
-    if (folder)
-    {
-      parent.H2(folder);
-    }
     Object.keys(list).sort(naturalSort).forEach(key =>
     {
       let item = list[key]
-      showFile(context, parent.Div(), project, folder, item);
+      showFile(context, parent.Div(), project, item);
     });
-    
-    newFile(context, parent.Div().Class('noprint'), project, folder);
+    newFile(context, parent.Div().Class('noprint'), project);
   });
 }
 
-function newFile(context, parent, project, folder)
+function newFile(context, parent, project)
 {
   parent.H2('Create New File');
   parent.Label('Name: ').Display('block');
@@ -62,74 +57,74 @@ function newFile(context, parent, project, folder)
     analytics.event(type, 'create', template);
     if (name && nameInput.Validity().valid)
     {
-      project.setFile(folder, project.makeKey(name, type), types[type].templates[template])
+      project.setFile(project.makeKey(name, type), types[type].templates[template])
         .then(() =>
       {
         analytics.event(type, 'create-success', template);
-        showFolder(context, project, folder)
+        showFiles(context, project)
       });
     }
   }).Display('block');
 }
 
-function showFile(context, section, project, folder, item)
+function showFile(context, section, project, item)
 {
   section.H1(item.name.toUncamelCase());
   let itemContainer = section.Div().Class('item');
   let itemContent = itemContainer.Div().Class('content');
   let itemToolbar = itemContainer.Div().Class('toolbar');
-  let module = types[item.module];
+  let module = types[item.type];
   itemContent.Loader();
-  project.getFile(folder, item.key).then(contents =>
+  project.getFile(item.key).then(contents =>
   {
     module.view(itemContent.clear(), item, contents);
     itemToolbar.Button('Rename').OnClick(() =>
     {
-      analytics.event(item.module, 'rename', 'attempt');
+      analytics.event(item.type, 'rename', 'attempt');
       let newName = prompt(`Please enter a new name for ${item.name}`, item.name);
       if (newName)
       {
         newName = newName.replace(/[^A-Z0-9a-z\-_]/g, '');
         if (newName && newName !== item.name)
         {
-          let newKey = project.makeKey(newName, item.module);
-          project.renameFile(folder, item.key, newKey)
+          let newKey = project.makeKey(newName, item.type);
+          project.renameFile(item.key, newKey)
             .then(() =>
             {
-              analytics.event(item.module, 'rename', 'success');
+              analytics.event(item.type, 'rename', 'success');
               item.key = newKey;
-              showFolder(context, project, folder);
+              showFiles(context, project);
             }, err =>
             {
               alert(err);
-              analytics.event(item.module, 'rename', 'failure');
+              analytics.event(item.type, 'rename', 'failure');
             });
         }
       }
     });
     itemToolbar.Button('Edit').OnClick(() =>
     {
-      analytics.event(item.module, 'edit');
+      analytics.event(item.type, 'edit');
       itemToolbar.Display('none');
       let editContainer = itemContent.clear().Div();
       let changed = item;
-      types[item.module].edit(editContainer, item, contents, update =>
+      types[item.type].edit(editContainer, item, contents, update =>
       {
         changed = update;
       });  
       let editToolbar = itemContent.Div();
       editToolbar.Button('Save').OnClick(() =>
       {
-        analytics.event(item.module, 'save', 'attempt');
-        project.setFile(folder, item.key, changed).then(() =>
+        analytics.event(item.type, 'save', 'attempt');
+        project.setFile(item.key, changed).then(() =>
         {
           alert('Saved');
           contents = changed;
-          analytics.event(item.module, 'save', 'success');
+          analytics.event(item.type, 'save', 'success');
         }, err =>
         {
           alert(err);
-          analytics.event(item.module, 'save', 'failure');
+          analytics.event(item.type, 'save', 'failure');
         });
       });
       editToolbar.Button('Done').OnClick(() =>
@@ -137,44 +132,44 @@ function showFile(context, section, project, folder, item)
         itemToolbar.Display('');
         if (JSON.stringify(contents) !== JSON.stringify(changed) && confirm("Save changes?"))
         {
-          analytics.event(item.module, 'done', 'attempt');
-          project.setFile(folder, item.key, changed).then(() =>
+          analytics.event(item.type, 'done', 'attempt');
+          project.setFile(item.key, changed).then(() =>
           {
-            analytics.event(item.module, 'done', 'success');
+            analytics.event(item.type, 'done', 'success');
             contents = changed;
             module.view(itemContent.clear(), item, contents);
           }, err =>
           {
-            analytics.event(item.module, 'done', 'failure');
+            analytics.event(item.type, 'done', 'failure');
           });
         }
         else
         {
-          analytics.event(item.module, 'done', 'nochange');
+          analytics.event(item.type, 'done', 'nochange');
           module.view(itemContent.clear(), item, contents);
         }
       });
     });
     itemToolbar.Button('Delete').OnClick(() =>
     {
-      analytics.event(item.module, 'delete', 'click');
+      analytics.event(item.type, 'delete', 'click');
       if (confirm(`Are you sure you want to delete ${item.name}?`))
       {
-        analytics.event(item.module, 'delete', 'attempt');
-        project.deleteFile(folder, item.key)
+        analytics.event(item.type, 'delete', 'attempt');
+        project.deleteFile(item.key)
           .then(() =>
         {
-          analytics.event(item.module, 'delete', 'success');
-          showFolder(context, project, folder);
+          analytics.event(item.type, 'delete', 'success');
+          showFiles(context, project);
         }, err =>
         {
-          analytics.event(item.module, 'delete', 'failure');
+          analytics.event(item.type, 'delete', 'failure');
           alert(err);
         });
       }
       else
       {
-        analytics.event(item.module, 'delete', 'cancel');
+        analytics.event(item.type, 'delete', 'cancel');
       }
     });
   });

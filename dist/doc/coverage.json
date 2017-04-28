@@ -1,6 +1,6 @@
 {
-  "coverage": "20.58%",
-  "expectCount": 34,
+  "coverage": "16.27%",
+  "expectCount": 43,
   "actualCount": 7,
   "files": {
     "js/common/request.js": {
@@ -22,6 +22,19 @@
         13
       ]
     },
+    "js/projects/IndexedDB.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        11,
+        13,
+        16,
+        103,
+        71,
+        47,
+        87
+      ]
+    },
     "js/projects/LocalStorage.js": {
       "expectCount": 6,
       "actualCount": 5,
@@ -30,13 +43,14 @@
       ]
     },
     "js/projects/Storage.js": {
-      "expectCount": 6,
+      "expectCount": 7,
       "actualCount": 1,
       "undocumentLines": [
         12,
         27,
         22,
         17,
+        37,
         14
       ]
     },
@@ -44,9 +58,9 @@
       "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        15,
-        21,
-        28
+        17,
+        23,
+        30
       ]
     },
     "js/pages/dropbox.js": {
@@ -82,6 +96,13 @@
       ]
     },
     "js/pages/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        9
+      ]
+    },
+    "js/pages/indexeddb.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [

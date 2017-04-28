@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">Storage | API Document</title>
+  <title data-ice="title">IndexedDBStorage | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -61,24 +61,24 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Storage} from &apos;<span><a href="file/js/projects/Storage.js.html#lineNumber10">janus/js/projects/Storage.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {IndexedDBStorage} from &apos;<span><a href="file/js/projects/IndexedDB.js.html#lineNumber11">janus/js/projects/IndexedDB.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/js/projects/Storage.js.html#lineNumber10">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/js/projects/IndexedDB.js.html#lineNumber11">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
-  <h1 data-ice="name">Storage</h1>
+  <h1 data-ice="name">IndexedDBStorage</h1>
 
   
 
   
   
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/js/projects/Storage.js~Storage.html">Storage</a></span> &#x2192; IndexedDBStorage</div></div>
   
-  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/js/projects/GitHub.js~Github.html">Github</a></span>, <span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html">IndexedDBStorage</a></span>, <span><a href="class/js/projects/LocalStorage.js~LocalStorage.html">LocalStorage</a></span></div></div>
   
   
   
@@ -87,8 +87,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>Parent class of all storage elements.</p>
-</div>
+  
   
 
   
@@ -119,7 +118,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(state: <span>*</span>)</span>
+          <span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(state: <span>*</span>)</span>
         </p>
       </div>
       <div>
@@ -153,7 +152,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html#instance-member-state">state</a></span></span><span data-ice="signature">: <span>*</span></span>
+          <span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-member-db">db</a></span></span><span data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -175,6 +174,149 @@
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-deleteFile">deleteFile</a></span></span><span data-ice="signature">(key: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-getFile">getFile</a></span></span><span data-ice="signature">(key: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-listFiles">listFiles</a></span></span><span data-ice="signature">(): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-setFile">setFile</a></span></span><span data-ice="signature">(key: <span>*</span>, contents: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="inherited-summary" data-ice="inheritedSummary"><h2>Inherited Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/js/projects/Storage.js~Storage.html">Storage</a></span></td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html#instance-member-state">state</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -288,8 +430,6 @@
 
 
 
-
-
 <div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
 
 <div class="detail" data-ice="detail">
@@ -304,7 +444,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/js/projects/Storage.js.html#lineNumber12">source</a></span></span>
+      <span data-ice="source"><span><a href="file/js/projects/IndexedDB.js.html#lineNumber13">source</a></span></span>
     </span>
   </h3>
 
@@ -313,7 +453,7 @@
   
   
 
-  
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/js/projects/Storage.js~Storage.html#instance-constructor-constructor">Storage#constructor</a></span></div>
 
   <div data-ice="properties"><div data-ice="properties">
   <h4 data-ice="title">Params:</h4>
@@ -355,18 +495,18 @@
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-state">
+  <h3 data-ice="anchor" id="instance-member-db">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span data-ice="name">state</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">db</span><span data-ice="signature">: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/js/projects/Storage.js.html#lineNumber14">source</a></span></span>
+      <span data-ice="source"><span><a href="file/js/projects/IndexedDB.js.html#lineNumber16">source</a></span></span>
     </span>
   </h3>
 
@@ -401,18 +541,18 @@
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-getKeyItem">
+  <h3 data-ice="anchor" id="instance-method-deleteFile">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span data-ice="name">getKeyItem</span><span data-ice="signature">(name: <span>*</span>): {&quot;key&quot;: <span>*</span>, &quot;type&quot;: <span>*</span>, &quot;name&quot;: <span>*</span>}</span>
+    <span data-ice="name">deleteFile</span><span data-ice="signature">(key: <span>*</span>): <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/js/projects/Storage.js.html#lineNumber27">source</a></span></span>
+      <span data-ice="source"><span><a href="file/js/projects/IndexedDB.js.html#lineNumber103">source</a></span></span>
     </span>
   </h3>
 
@@ -432,78 +572,7 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">name</td>
-      <td data-ice="type"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type" data-ice="returnType">{&quot;key&quot;: <span>*</span>, &quot;type&quot;: <span>*</span>, &quot;name&quot;: <span>*</span>}</td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-isKey">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span data-ice="name">isKey</span><span data-ice="signature">(name: <span>*</span>): <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/js/projects/Storage.js.html#lineNumber22">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">name</td>
+      <td data-ice="name" data-depth="0">key</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
@@ -543,18 +612,18 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-makeKey">
+  <h3 data-ice="anchor" id="instance-method-getFile">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span data-ice="name">makeKey</span><span data-ice="signature">(name: <span>*</span>, type: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span data-ice="name">getFile</span><span data-ice="signature">(key: <span>*</span>): <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/js/projects/Storage.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/js/projects/IndexedDB.js.html#lineNumber71">source</a></span></span>
     </span>
   </h3>
 
@@ -574,13 +643,7 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">name</td>
-      <td data-ice="type"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">type</td>
+      <td data-ice="name" data-depth="0">key</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
@@ -595,7 +658,7 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+          <td class="return-type" data-ice="returnType"><span>*</span></td>
           
         </tr>
       </tbody>
@@ -620,18 +683,73 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-renameFile">
+  <h3 data-ice="anchor" id="instance-method-listFiles">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span data-ice="name">renameFile</span><span data-ice="signature">(oldKey: <span>*</span>, newKey: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">listFiles</span><span data-ice="signature">(): <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/js/projects/Storage.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/js/projects/IndexedDB.js.html#lineNumber47">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setFile">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">setFile</span><span data-ice="signature">(key: <span>*</span>, contents: <span>*</span>): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/js/projects/IndexedDB.js.html#lineNumber87">source</a></span></span>
     </span>
   </h3>
 
@@ -651,13 +769,13 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">oldKey</td>
+      <td data-ice="name" data-depth="0">key</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">newKey</td>
+      <td data-ice="name" data-depth="0">contents</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>

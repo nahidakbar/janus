@@ -1,5 +1,10 @@
 # Changelog
 
+* [ ] v0.0.3 JSON schema based diagrams
+  * [x] plan
+  * [ ] User Profile
+  * [ ] Use Cases
+
 * [x] v0.0.2 More boilerplate 2017-04-16
   * [x] plan
   * [x] Fix wiki editor height
@@ -19,11 +24,7 @@
 
 ## Backlog
 
-* [ ] v0.0.3 JSON schema based diagrams
-  * [ ] plan
 
-* User Profile
-* Use Cases
 * Quickcheck
 * SWOT
 * GAPS

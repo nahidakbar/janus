@@ -38,7 +38,11 @@ function showStorage(parent, context)
   const storageModules = [
     {
       page: 'localstorage',
-      label: 'Local Storage'
+      label: 'Local Storage (offline)'
+    },
+    {
+      page: 'indexeddb',
+      label: 'IndexedDB (offline)'
     }
   ];
 
