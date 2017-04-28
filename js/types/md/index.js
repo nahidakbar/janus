@@ -4,9 +4,9 @@
 
 "use strict";
 
-const marked = require('marked');
+const marked = require("marked");
 
-export const name = 'Note';
+export const name = "Note";
 
 export function view(container, item, content)
 {
@@ -17,25 +17,25 @@ export function view(container, item, content)
   
   let progress = content.match(/\[[x ]\]/g);
   
-  //content = content.replace(/\[ ]/g, '<input type="checkbox" onclick="return false;" />');
-  //content = content.replace(/\[x\]/g, '<input type="checkbox" checked onclick="return false;" />');
+  //content = content.replace(/\[ ]/g, "<input type="checkbox" onclick="return false;" />");
+  //content = content.replace(/\[x\]/g, "<input type="checkbox" checked onclick="return false;" />");
   
   container.html(content);
   
   if (progress)
   {
-    let width = Math.floor(progress.filter(x => x === '[x]').length / progress.length * 100) + '%';
-    if (width !== '0%')
+    let width = Math.floor(progress.filter(x => x === "[x]").length / progress.length * 100) + "%";
+    if (width !== "0%")
     {
-      container.Div().Class('progress').Div('Progress ' + width).Width(width).Class('bar');
+      container.Div().Class("progress").Div("Progress " + width).Width(width).Class("bar");
     }
   }
 }
 
 export function edit(container, item, content, save)
 {
-  let editor = container.Textarea(content).Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').MinHeight('200px').Resize('vertical');
-  let preview = container.Div().Display('inline-block').BoxSizing('border-box').VerticalAlign('top').Width('50%').Padding('0.5em 0.5em 0.5em 0.5em');
+  let editor = container.Textarea(content).Display("inline-block").BoxSizing("border-box").VerticalAlign("top").Width("50%").MinHeight("200px").Resize("vertical");
+  let preview = container.Div().Display("inline-block").BoxSizing("border-box").VerticalAlign("top").Width("50%").Padding("0.5em 0.5em 0.5em 0.5em");
   editor.OnInput(() =>
   {
     this.view(preview, item, editor.Value());
@@ -49,7 +49,7 @@ export function edit(container, item, content, save)
 }
 
 export const templates = {
-  Blank: ``,
+  Blank: "",
   Checklist: `
 
 - [x] Task #1

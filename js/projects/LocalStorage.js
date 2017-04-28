@@ -4,7 +4,7 @@
 
 "use strict";
 
-import { Storage } from './Storage';
+import { Storage } from "./Storage";
 
 export class LocalStorage extends Storage
 {
@@ -55,27 +55,5 @@ export class LocalStorage extends Storage
   {
     delete localStorage[key];
     return new Promise(resolve => resolve());
-  }
-  
-  /**
-   * @param {String} oldKey Name of file to rename.
-   * @param {String} newKey New name of file.
-   * @return {Promise} Will resolve when file is renamed.
-   */
-  renameFile(oldKey, newKey)
-  {
-    return new Promise((resolve, reject) =>
-    {
-      if (localStorage[newKey])
-      {
-        reject(`New file already exists.`);
-      }
-      else
-      {
-        localStorage[newKey] = localStorage[oldKey];
-        delete localStorage[oldKey];
-        resolve();
-      }
-    });
   }
 }

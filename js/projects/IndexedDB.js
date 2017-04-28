@@ -4,7 +4,7 @@
 
 "use strict";
 
-import { Storage } from './Storage';
+import { Storage } from "./Storage";
 
 const IndexedDB = self.indexedDB || self.webkitIndexedDB || self.mozIndexedDB || self.msIndexedDB;
 
@@ -16,12 +16,8 @@ export class IndexedDBStorage extends Storage
     this.db = new Promise((resolve, reject) =>
     {
       const request = IndexedDB.open(state.name, 1);
-      request.onupgradeneeded = function(event) {
-        request.result.createObjectStore("data");
-      };
-      request.onsuccess = () => {
-        resolve(request.result);
-      };
+      request.onupgradeneeded = () => request.result.createObjectStore("data");
+      request.onsuccess = () => resolve(request.result);
       request.onerror = e => reject(e);
     });
   }
@@ -51,7 +47,7 @@ export class IndexedDBStorage extends Storage
       this._store().then(store =>
       {
         const request = store.getAllKeys();
-        request.onsuccess = event =>
+        request.onsuccess = () =>
         {
           let output = {};
           for (let key of request.result)
@@ -75,7 +71,7 @@ export class IndexedDBStorage extends Storage
       this._store().then(store =>
       {
         const request = store.get(key);
-        request.onsuccess = event =>
+        request.onsuccess = () =>
         {
           resolve(request.result);
         };
@@ -91,7 +87,7 @@ export class IndexedDBStorage extends Storage
       this._store().then(store =>
       {
         const request = store.put(contents, key);
-        request.onsuccess = event =>
+        request.onsuccess = () =>
         {
           resolve(request.result);
         };
@@ -107,7 +103,7 @@ export class IndexedDBStorage extends Storage
       this._store().then(store =>
       {
         const request = store.delete(key);
-        request.onsuccess = event =>
+        request.onsuccess = () =>
         {
           resolve(request.result);
         };

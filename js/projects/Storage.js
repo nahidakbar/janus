@@ -21,7 +21,7 @@ export class Storage
   
   isKey(name)
   {
-    return name.match(/^([A-Za-z0-9\-_]+)\.(md)$/)
+    return name.match(/^([A-Za-z0-9\-_]+)\.(md)$/);
   }
   
   getKeyItem(name)
@@ -44,7 +44,7 @@ export class Storage
         {
           this.deleteFile(oldKey).then(resolve, reject);
         }, reject);
-      }, reject)
+      }, reject);
     });
   }
   

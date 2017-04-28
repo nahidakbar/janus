@@ -19,7 +19,7 @@ export function request(method, url, body=null, transform=x=>x)
     .header("Content-Type", "application/json")
     .send(method, JSON.stringify(body), function(err, xhr)
     {
-      console.log(method, url, 'took', Date.now() - start, 'ms');
+      console.log(method, url, "took", Date.now() - start, "ms");
       if (err)
       {
         xhr = err.srcElement;
@@ -31,20 +31,24 @@ export function request(method, url, body=null, transform=x=>x)
       }
     });
   });
-};
-
-export function Create (url, body=null, transform=x=>x) {
-  return request.apply(null, ['post'].concat(arguments));
 }
 
-export function Read (url, body=null, transform=x=>x) {
-  return request.apply(null, ['get'].concat(arguments));
+export function Create()
+{
+  return request.apply(null, ["post"].concat(arguments));
 }
 
-export function Update (url, body=null, transform=x=>x) {
-  return request.apply(null, ['put'].concat(arguments));
+export function Read()
+{
+  return request.apply(null, ["get"].concat(arguments));
 }
 
-export function Delete (url, body=null, transform=x=>x) {
-  return request.apply(null, ['delete'].concat(arguments));
+export function Update()
+{
+  return request.apply(null, ["put"].concat(arguments));
+}
+
+export function Delete()
+{
+  return request.apply(null, ["delete"].concat(arguments));
 }

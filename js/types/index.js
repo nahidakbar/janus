@@ -4,8 +4,4 @@
 
 "use strict";
 
-import * as md from "./md";
-
-module.exports = {
-  md,
-}
+export { edit as md } from "./md";

@@ -4,32 +4,38 @@
 
 "use strict";
 
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+/* global ga */
 
-ga('create', 'UA-97457188-1', 'auto');
+window.ga=window.ga || function()
+{
+  (ga.q=ga.q||[]).push(arguments);
+};
+ga.l=+new Date;
+
+ga("create", "UA-97457188-1", "auto");
 
 export function pageview(page)
 {
   try
   {
-    ga('set', 'page', page);
-    ga('send', 'pageview');
+    ga("set", "page", page);
+    ga("send", "pageview");
   }
   catch(e)
   {
-    
+    console.error(e.stack);
   }
-};
+}
 
-export function event(category, action, extra='')
+export function event(category, action, extra="")
 {
   try
   {
     console.log(category, action, extra);
-    ga('send', 'event', category, action, extra);
+    ga("send", "event", category, action, extra);
   }
   catch(e)
   {
-    
+    console.error(e.stack);
   }
-};
+}
