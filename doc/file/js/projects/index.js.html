@@ -42,9 +42,11 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">pages</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dropbox">dropbox</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-github">github</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-index">index</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-indexeddb">indexeddb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-localstorage">localstorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-project">project</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">projects</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/GitHub.js~Github.html">Github</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html">IndexedDBStorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/LocalStorage.js~LocalStorage.html">LocalStorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html">Storage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
@@ -68,9 +70,11 @@
 let projects = JSON.parse(localStorage.janus || &apos;{}&apos;);
 
 import { LocalStorage } from &quot;./LocalStorage&quot;;
+import { IndexedDBStorage } from &quot;./IndexedDB&quot;;
 
 let types = {
   &apos;localstorage&apos;: LocalStorage,
+  &apos;indexeddb&apos;: IndexedDBStorage,
 };
 
 export function add(spec)

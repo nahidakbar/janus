@@ -42,9 +42,11 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">pages</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dropbox">dropbox</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-github">github</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-index">index</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-indexeddb">indexeddb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-localstorage">localstorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-project">project</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">projects</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/GitHub.js~Github.html">Github</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html">IndexedDBStorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/LocalStorage.js~LocalStorage.html">LocalStorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html">Storage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
@@ -75,29 +77,24 @@ import * as analytics from &quot;common/analytics&quot;;
 export default function(context)
 {
   context.head.text(context.State(&apos;name&apos;).toUncamelCase());
-  showFolder(context, projects.get(context.State(&apos;name&apos;)), context.State(&apos;folder&apos;));
+  showFiles(context, projects.get(context.State(&apos;name&apos;)));
 };
 
-function showFolder(context, project, folder)
+function showFiles(context, project)
 {
-  project.listFolder(folder).then(list =&gt;
+  project.listFiles().then(list =&gt;
   {
     let parent = context.body.clear();
-    if (folder)
-    {
-      parent.H2(folder);
-    }
     Object.keys(list).sort(naturalSort).forEach(key =&gt;
     {
       let item = list[key]
-      showFile(context, parent.Div(), project, folder, item);
+      showFile(context, parent.Div(), project, item);
     });
-    
-    newFile(context, parent.Div().Class(&apos;noprint&apos;), project, folder);
+    newFile(context, parent.Div().Class(&apos;noprint&apos;), project);
   });
 }
 
-function newFile(context, parent, project, folder)
+function newFile(context, parent, project)
 {
   parent.H2(&apos;Create New File&apos;);
   parent.Label(&apos;Name: &apos;).Display(&apos;block&apos;);
@@ -123,74 +120,74 @@ function newFile(context, parent, project, folder)
     analytics.event(type, &apos;create&apos;, template);
     if (name &amp;&amp; nameInput.Validity().valid)
     {
-      project.setFile(folder, project.makeKey(name, type), types[type].templates[template])
+      project.setFile(project.makeKey(name, type), types[type].templates[template])
         .then(() =&gt;
       {
         analytics.event(type, &apos;create-success&apos;, template);
-        showFolder(context, project, folder)
+        showFiles(context, project)
       });
     }
   }).Display(&apos;block&apos;);
 }
 
-function showFile(context, section, project, folder, item)
+function showFile(context, section, project, item)
 {
   section.H1(item.name.toUncamelCase());
   let itemContainer = section.Div().Class(&apos;item&apos;);
   let itemContent = itemContainer.Div().Class(&apos;content&apos;);
   let itemToolbar = itemContainer.Div().Class(&apos;toolbar&apos;);
-  let module = types[item.module];
+  let module = types[item.type];
   itemContent.Loader();
-  project.getFile(folder, item.key).then(contents =&gt;
+  project.getFile(item.key).then(contents =&gt;
   {
     module.view(itemContent.clear(), item, contents);
     itemToolbar.Button(&apos;Rename&apos;).OnClick(() =&gt;
     {
-      analytics.event(item.module, &apos;rename&apos;, &apos;attempt&apos;);
+      analytics.event(item.type, &apos;rename&apos;, &apos;attempt&apos;);
       let newName = prompt(`Please enter a new name for ${item.name}`, item.name);
       if (newName)
       {
         newName = newName.replace(/[^A-Z0-9a-z\-_]/g, &apos;&apos;);
         if (newName &amp;&amp; newName !== item.name)
         {
-          let newKey = project.makeKey(newName, item.module);
-          project.renameFile(folder, item.key, newKey)
+          let newKey = project.makeKey(newName, item.type);
+          project.renameFile(item.key, newKey)
             .then(() =&gt;
             {
-              analytics.event(item.module, &apos;rename&apos;, &apos;success&apos;);
+              analytics.event(item.type, &apos;rename&apos;, &apos;success&apos;);
               item.key = newKey;
-              showFolder(context, project, folder);
+              showFiles(context, project);
             }, err =&gt;
             {
               alert(err);
-              analytics.event(item.module, &apos;rename&apos;, &apos;failure&apos;);
+              analytics.event(item.type, &apos;rename&apos;, &apos;failure&apos;);
             });
         }
       }
     });
     itemToolbar.Button(&apos;Edit&apos;).OnClick(() =&gt;
     {
-      analytics.event(item.module, &apos;edit&apos;);
+      analytics.event(item.type, &apos;edit&apos;);
       itemToolbar.Display(&apos;none&apos;);
       let editContainer = itemContent.clear().Div();
       let changed = item;
-      types[item.module].edit(editContainer, item, contents, update =&gt;
+      types[item.type].edit(editContainer, item, contents, update =&gt;
       {
         changed = update;
       });  
       let editToolbar = itemContent.Div();
       editToolbar.Button(&apos;Save&apos;).OnClick(() =&gt;
       {
-        analytics.event(item.module, &apos;save&apos;, &apos;attempt&apos;);
-        project.setFile(folder, item.key, changed).then(() =&gt;
+        analytics.event(item.type, &apos;save&apos;, &apos;attempt&apos;);
+        project.setFile(item.key, changed).then(() =&gt;
         {
           alert(&apos;Saved&apos;);
           contents = changed;
-          analytics.event(item.module, &apos;save&apos;, &apos;success&apos;);
+          analytics.event(item.type, &apos;save&apos;, &apos;success&apos;);
         }, err =&gt;
         {
           alert(err);
-          analytics.event(item.module, &apos;save&apos;, &apos;failure&apos;);
+          analytics.event(item.type, &apos;save&apos;, &apos;failure&apos;);
         });
       });
       editToolbar.Button(&apos;Done&apos;).OnClick(() =&gt;
@@ -198,44 +195,44 @@ function showFile(context, section, project, folder, item)
         itemToolbar.Display(&apos;&apos;);
         if (JSON.stringify(contents) !== JSON.stringify(changed) &amp;&amp; confirm(&quot;Save changes?&quot;))
         {
-          analytics.event(item.module, &apos;done&apos;, &apos;attempt&apos;);
-          project.setFile(folder, item.key, changed).then(() =&gt;
+          analytics.event(item.type, &apos;done&apos;, &apos;attempt&apos;);
+          project.setFile(item.key, changed).then(() =&gt;
           {
-            analytics.event(item.module, &apos;done&apos;, &apos;success&apos;);
+            analytics.event(item.type, &apos;done&apos;, &apos;success&apos;);
             contents = changed;
             module.view(itemContent.clear(), item, contents);
           }, err =&gt;
           {
-            analytics.event(item.module, &apos;done&apos;, &apos;failure&apos;);
+            analytics.event(item.type, &apos;done&apos;, &apos;failure&apos;);
           });
         }
         else
         {
-          analytics.event(item.module, &apos;done&apos;, &apos;nochange&apos;);
+          analytics.event(item.type, &apos;done&apos;, &apos;nochange&apos;);
           module.view(itemContent.clear(), item, contents);
         }
       });
     });
     itemToolbar.Button(&apos;Delete&apos;).OnClick(() =&gt;
     {
-      analytics.event(item.module, &apos;delete&apos;, &apos;click&apos;);
+      analytics.event(item.type, &apos;delete&apos;, &apos;click&apos;);
       if (confirm(`Are you sure you want to delete ${item.name}?`))
       {
-        analytics.event(item.module, &apos;delete&apos;, &apos;attempt&apos;);
-        project.deleteFile(folder, item.key)
+        analytics.event(item.type, &apos;delete&apos;, &apos;attempt&apos;);
+        project.deleteFile(item.key)
           .then(() =&gt;
         {
-          analytics.event(item.module, &apos;delete&apos;, &apos;success&apos;);
-          showFolder(context, project, folder);
+          analytics.event(item.type, &apos;delete&apos;, &apos;success&apos;);
+          showFiles(context, project);
         }, err =&gt;
         {
-          analytics.event(item.module, &apos;delete&apos;, &apos;failure&apos;);
+          analytics.event(item.type, &apos;delete&apos;, &apos;failure&apos;);
           alert(err);
         });
       }
       else
       {
-        analytics.event(item.module, &apos;delete&apos;, &apos;cancel&apos;);
+        analytics.event(item.type, &apos;delete&apos;, &apos;cancel&apos;);
       }
     });
   });

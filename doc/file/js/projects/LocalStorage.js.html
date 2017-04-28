@@ -42,9 +42,11 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">pages</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dropbox">dropbox</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-github">github</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-index">index</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-indexeddb">indexeddb</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-localstorage">localstorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-project">project</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">projects</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/GitHub.js~Github.html">Github</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html">IndexedDBStorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/LocalStorage.js~LocalStorage.html">LocalStorage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html">Storage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
@@ -70,10 +72,9 @@ import { Storage } from &apos;./Storage&apos;;
 export class LocalStorage extends Storage
 {
   /**
-   * @param {String} folder Folder to list dir of.
    * @return {Promise} Will resolve with map[filekey]FileDetails
    */
-  listFolder(folder)
+  listFiles()
   {
     return new Promise(resolve =&gt;
     {
@@ -90,45 +91,41 @@ export class LocalStorage extends Storage
   }
   
   /**
-   * @param {String} folder Folder where file exists.
    * @param {String} key Name of file to read.
    * @return {Promise} Will resolve with content of file (string).
    */
-  getFile(folder, key)
+  getFile(key)
   {
     return new Promise(resolve =&gt; resolve(localStorage[key]));
   }
   
   /**
-   * @param {String} folder Folder where file should be.
    * @param {String} key Name of file to write.
    * @param {String} contents Contents of file.
    * @return {Promise} Will resolve when file is saved.
    */
-  setFile(folder, key, contents)
+  setFile(key, contents)
   {
     localStorage[key] = contents;
     return new Promise(resolve =&gt; resolve());
   }
   
   /**
-   * @param {String} folder Folder where file exists.
    * @param {String} key Name of file to delete.
    * @return {Promise} Will resolve when file is deleted.
    */
-  deleteFile(folder, key)
+  deleteFile(key)
   {
     delete localStorage[key];
     return new Promise(resolve =&gt; resolve());
   }
   
   /**
-   * @param {String} folder Folder where file exists.
    * @param {String} oldKey Name of file to rename.
    * @param {String} newKey New name of file.
    * @return {Promise} Will resolve when file is renamed.
    */
-  renameFile(folder, oldKey, newKey)
+  renameFile(oldKey, newKey)
   {
     return new Promise((resolve, reject) =&gt;
     {

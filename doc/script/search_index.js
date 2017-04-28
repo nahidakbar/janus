@@ -18,6 +18,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "janus/js/projects/indexeddb.js~indexeddbstorage",
+    "class/js/projects/IndexedDB.js~IndexedDBStorage.html",
+    "<span>IndexedDBStorage</span> <span class=\"search-result-import-path\">janus/js/projects/IndexedDB.js</span>",
+    "class"
+  ],
+  [
     "janus/js/projects/localstorage.js~localstorage",
     "class/js/projects/LocalStorage.js~LocalStorage.html",
     "<span>LocalStorage</span> <span class=\"search-result-import-path\">janus/js/projects/LocalStorage.js</span>",
@@ -81,6 +87,12 @@ window.esdocSearchIndex = [
     "janus/js/pages/index.js~index",
     "function/index.html#static-function-index",
     "<span>index</span> <span class=\"search-result-import-path\">janus/js/pages/index.js</span>",
+    "function"
+  ],
+  [
+    "janus/js/pages/indexeddb.js~indexeddb",
+    "function/index.html#static-function-indexeddb",
+    "<span>indexeddb</span> <span class=\"search-result-import-path\">janus/js/pages/indexeddb.js</span>",
     "function"
   ],
   [
@@ -498,6 +510,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "js/pages/indexeddb.js",
+    "file/js/pages/indexeddb.js.html",
+    "js/pages/indexeddb.js",
+    "file"
+  ],
+  [
     "js/pages/localstorage.js",
     "file/js/pages/localstorage.js.html",
     "js/pages/localstorage.js",
@@ -528,6 +546,48 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "js/projects/indexeddb.js",
+    "file/js/projects/IndexedDB.js.html",
+    "js/projects/IndexedDB.js",
+    "file"
+  ],
+  [
+    "js/projects/indexeddb.js~indexeddbstorage#constructor",
+    "class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-constructor-constructor",
+    "js/projects/IndexedDB.js~IndexedDBStorage#constructor",
+    "method"
+  ],
+  [
+    "js/projects/indexeddb.js~indexeddbstorage#db",
+    "class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-member-db",
+    "js/projects/IndexedDB.js~IndexedDBStorage#db",
+    "member"
+  ],
+  [
+    "js/projects/indexeddb.js~indexeddbstorage#deletefile",
+    "class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-deleteFile",
+    "js/projects/IndexedDB.js~IndexedDBStorage#deleteFile",
+    "method"
+  ],
+  [
+    "js/projects/indexeddb.js~indexeddbstorage#getfile",
+    "class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-getFile",
+    "js/projects/IndexedDB.js~IndexedDBStorage#getFile",
+    "method"
+  ],
+  [
+    "js/projects/indexeddb.js~indexeddbstorage#listfiles",
+    "class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-listFiles",
+    "js/projects/IndexedDB.js~IndexedDBStorage#listFiles",
+    "method"
+  ],
+  [
+    "js/projects/indexeddb.js~indexeddbstorage#setfile",
+    "class/js/projects/IndexedDB.js~IndexedDBStorage.html#instance-method-setFile",
+    "js/projects/IndexedDB.js~IndexedDBStorage#setFile",
+    "method"
+  ],
+  [
     "js/projects/localstorage.js",
     "file/js/projects/LocalStorage.js.html",
     "js/projects/LocalStorage.js",
@@ -546,9 +606,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "js/projects/localstorage.js~localstorage#listfolder",
-    "class/js/projects/LocalStorage.js~LocalStorage.html#instance-method-listFolder",
-    "js/projects/LocalStorage.js~LocalStorage#listFolder",
+    "js/projects/localstorage.js~localstorage#listfiles",
+    "class/js/projects/LocalStorage.js~LocalStorage.html#instance-method-listFiles",
+    "js/projects/LocalStorage.js~LocalStorage#listFiles",
     "method"
   ],
   [
@@ -591,6 +651,12 @@ window.esdocSearchIndex = [
     "js/projects/storage.js~storage#makekey",
     "class/js/projects/Storage.js~Storage.html#instance-method-makeKey",
     "js/projects/Storage.js~Storage#makeKey",
+    "method"
+  ],
+  [
+    "js/projects/storage.js~storage#renamefile",
+    "class/js/projects/Storage.js~Storage.html#instance-method-renameFile",
+    "js/projects/Storage.js~Storage#renameFile",
     "method"
   ],
   [
