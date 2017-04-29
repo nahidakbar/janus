@@ -68,8 +68,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/md</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/user</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-swot">swot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-usecase">usecase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -81,7 +83,7 @@
 
 &quot;use strict&quot;;
 
-export function numberEditor(editors, container, schema, content, save)
+export function numberEditor(editors, container, schema, content, save, options)
 {
   const control = container.Number().Value(content || &apos;&apos;);
   control.OnChange(() =&gt;
@@ -99,7 +101,7 @@ export function numberEditor(editors, container, schema, content, save)
   control.OnInput(control.OnChange());
 }
 
-export function numberViewer(viewers, container, schema, content)
+export function numberViewer(viewers, container, schema, content, options)
 {
   container.P(content);
 }

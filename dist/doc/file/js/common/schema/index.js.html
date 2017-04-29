@@ -68,8 +68,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/md</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/user</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-swot">swot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-usecase">usecase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -105,14 +107,14 @@ export const viewers = {
 
 export function editor(schema)
 {
-  return (container, item, content, save) =&gt;
-    editors[schema.type](editors, container, schema, content, save);
+  return (container, options, content, save) =&gt;
+    editors[schema.type](editors, container, schema, content, save, options);
 }
 
 export function viewer(schema)
 {
-  return (container, item, content) =&gt;
-    viewers[schema.type](viewers, container, schema, content);
+  return (container, options, content) =&gt;
+    viewers[schema.type](viewers, container, schema, content, options);
 }
 </code></pre>
 

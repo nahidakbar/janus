@@ -4,7 +4,7 @@
 
 "use strict";
 
-export function numberEditor(editors, container, schema, content, save)
+export function numberEditor(editors, container, schema, content, save, options)
 {
   const control = container.Number().Value(content || '');
   control.OnChange(() =>
@@ -22,7 +22,7 @@ export function numberEditor(editors, container, schema, content, save)
   control.OnInput(control.OnChange());
 }
 
-export function numberViewer(viewers, container, schema, content)
+export function numberViewer(viewers, container, schema, content, options)
 {
   container.P(content);
 }

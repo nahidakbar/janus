@@ -5,4 +5,6 @@
 "use strict";
 
 export * from "./md";
+export * from "./swot";
+export * from "./usecase";
 export * from "./user";

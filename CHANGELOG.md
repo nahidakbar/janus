@@ -2,7 +2,10 @@
 
 * [ ] v0.0.3 JSON schema based diagrams
   * [x] plan
-  * [ ] User Profile
+  * [x] indexedDB storage
+  * [x] User Data
+  * [x] SWOT Analysis
+  * [ ] Stakeholder Profile
   * [ ] Use Cases
 
 * [x] v0.0.2 More boilerplate 2017-04-16
@@ -24,18 +27,15 @@
 
 ## Backlog
 
-
+* Display By Type
 * Quickcheck
-* SWOT
 * GAPS
 * Requirements Register
 * Feature Tree
-* Stakeholder Analysis
 * DFDs
 * State Machines
 * Class diagrams
 * Sketch / Wireframe
 * Scheduling
-* CachedDb storage
 * Github storage
 * Dropbox storage

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">js/types/user.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/nahidakbar/janus" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">common</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-event">event</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-pageview">pageview</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Create">Create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Delete">Delete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Read">Read</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Update">Update</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-request">request</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">common/schema</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-arrayEditor">arrayEditor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-arrayViewer">arrayViewer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-booleanEditor">booleanEditor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-booleanViewer">booleanViewer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-editor">editor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-viewer">viewer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-numberEditor">numberEditor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-numberViewer">numberViewer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-objectEditor">objectEditor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-objectViewer">objectViewer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-stringEditor">stringEditor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-stringViewer">stringViewer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-stringViewerDefault">stringViewerDefault</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-stringViewerImage">stringViewerImage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-arrayEditors">arrayEditors</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-editors">editors</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-viewers">viewers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stringEditors">stringEditors</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stringViewers">stringViewers</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">pages</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-index">index</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-indexeddb">indexeddb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-localstorage">localstorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-project">project</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">projects</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/IndexedDB.js~IndexedDBStorage.html">IndexedDBStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/LocalStorage.js~LocalStorage.html">LocalStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/js/projects/Storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-swot">swot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-usecase">usecase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/types/user.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * Janus Copyright (C) 2017 Nahid Akbar
+ */
+
+&quot;use strict&quot;;
+
+import * as schema from &quot;common/schema&quot;
+
+const name = &quot;User&quot;;
+
+const schemaDefinition = {
+  type: &apos;object&apos;,
+  properties: {
+    Photo: {
+      type: &apos;string&apos;,
+      format: &apos;image&apos;
+    },
+    Summary: {
+      type: &apos;string&apos;,
+    },
+    Needs: {
+      type: &apos;object&apos;,
+      properties: {
+        Stated: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Real: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Unstated: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Delight: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Secret: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        }
+      }
+    },
+    CurrentOptions: {
+      type: &apos;object&apos;,
+      properties: {
+        CompetingProducts: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Other: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        }
+      }
+    },
+    Demographics: {
+      type: &apos;object&apos;,
+      properties: {
+        AgeYears: {
+          type: &apos;object&apos;,
+          properties: {
+            Minimum: {
+              type: &apos;number&apos;
+            },
+            Average: {
+              type: &apos;number&apos;
+            },
+            Actual: {
+              type: &apos;number&apos;
+            },
+            Estimated: {
+              type: &apos;number&apos;
+            },
+            Expected: {
+              type: &apos;number&apos;
+            },
+            Maximum: {
+              type: &apos;number&apos;
+            }
+          }
+        },
+        Income: {
+          type: &apos;object&apos;,
+          properties: {
+            Low: {
+              type: &apos;boolean&apos;
+            },
+            Medium: {
+              type: &apos;boolean&apos;
+            },
+            High: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Gender: {
+          type: &apos;object&apos;,
+          properties: {
+            Male: {
+              type: &apos;boolean&apos;
+            },
+            Female: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        EducationLevel: {
+          type: &apos;object&apos;,
+          properties: {
+            Uneducated: {
+              type: &apos;boolean&apos;
+            },
+            Elementary: {
+              type: &apos;boolean&apos;
+            },
+            HighSchool: {
+              type: &apos;boolean&apos;
+            },
+            Diploma: {
+              type: &apos;boolean&apos;
+            },
+            Bachelors: {
+              type: &apos;boolean&apos;
+            },
+            Masters: {
+              type: &apos;boolean&apos;
+            },
+            Doctorate: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Occupation: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        SocialClass: {
+          type: &apos;object&apos;,
+          properties: {
+            Lower: {
+              type: &apos;boolean&apos;
+            },
+            Middle: {
+              type: &apos;boolean&apos;
+            },
+            Upper: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        SizeOfFamily: {
+          type: &apos;object&apos;,
+          properties: {
+            Small: {
+              type: &apos;boolean&apos;
+            },
+            Medium: {
+              type: &apos;boolean&apos;
+            },
+            Large: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        MaritalStatus: {
+          type: &apos;object&apos;,
+          properties: {
+            Single: {
+              type: &apos;boolean&apos;
+            },
+            Married: {
+              type: &apos;boolean&apos;
+            },
+            Divorced: {
+              type: &apos;boolean&apos;
+            },
+            Widowed: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        FamilyAge: {
+          type: &apos;object&apos;,
+          properties: {
+            Young: {
+              type: &apos;boolean&apos;
+            },
+            MiddleAged: {
+              type: &apos;boolean&apos;
+            },
+            Old: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        FamilyDependants: {
+          type: &apos;object&apos;,
+          properties: {
+            Children: {
+              type: &apos;boolean&apos;
+            },
+            NoChildren: {
+              type: &apos;boolean&apos;
+            },
+            Dependants: {
+              type: &apos;boolean&apos;
+            },
+            NoDependants: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        EthnicBackground: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Other: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        }
+      }
+    },
+    Psychographic: {
+      type: &apos;object&apos;,
+      properties: {
+        Motivation: {
+          type: &apos;object&apos;,
+          properties: {
+            Safety: {
+              type: &apos;boolean&apos;
+            },
+            PersonalAppearance: {
+              type: &apos;boolean&apos;
+            },
+            Health: {
+              type: &apos;boolean&apos;
+            },
+            Status: {
+              type: &apos;boolean&apos;
+            },
+            Affiliation: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        PersonalityType: {
+          type: &apos;object&apos;,
+          properties: {
+            Introverted: {
+              type: &apos;boolean&apos;
+            },
+            Extroverted: {
+              type: &apos;boolean&apos;
+            },
+            Sensing: {
+              type: &apos;boolean&apos;
+            },
+            Intuition: {
+              type: &apos;boolean&apos;
+            },
+            Thinking: {
+              type: &apos;boolean&apos;
+            },
+            Feeling: {
+              type: &apos;boolean&apos;
+            },
+            Judging: {
+              type: &apos;boolean&apos;
+            },
+            Perceiving: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Activities: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Interests: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Opinions: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        BeliefsValues: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Other: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        }
+      }
+    },
+    Geographic: {
+      type: &apos;object&apos;,
+      properties: {
+        Location: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        }
+      }
+    },
+    Behavioural: {
+      type: &apos;object&apos;,
+      properties: {
+        UsageOccation: {
+          type: &apos;object&apos;,
+          properties: {
+            Regular: {
+              type: &apos;boolean&apos;
+            },
+            Special: {
+              type: &apos;boolean&apos;
+            },
+            Festive: {
+              type: &apos;boolean&apos;
+            },
+            GiftGiving: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        UsageRate: {
+          type: &apos;object&apos;,
+          properties: {
+            Light: {
+              type: &apos;boolean&apos;
+            },
+            Moderate: {
+              type: &apos;boolean&apos;
+            },
+            Heavy: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        BenefitSought: {
+          type: &apos;object&apos;,
+          properties: {
+            Economy: {
+              type: &apos;boolean&apos;
+            },
+            Quality: {
+              type: &apos;boolean&apos;
+            },
+            ServiceLevel: {
+              type: &apos;boolean&apos;
+            },
+            Convenience: {
+              type: &apos;boolean&apos;
+            },
+            Access: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        UserType: {
+          type: &apos;object&apos;,
+          properties: {
+            FirstTime: {
+              type: &apos;boolean&apos;
+            },
+            Regular: {
+              type: &apos;boolean&apos;
+            },
+            NonUser: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Loyalty: {
+          type: &apos;object&apos;,
+          properties: {
+            Loyal: {
+              type: &apos;boolean&apos;
+            },
+            Switcher: {
+              type: &apos;boolean&apos;
+            },
+            NonLoyal: {
+              type: &apos;boolean&apos;
+            },
+            Lapsed: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Readiness: {
+          type: &apos;object&apos;,
+          properties: {
+            Unaware: {
+              type: &apos;boolean&apos;
+            },
+            Arare: {
+              type: &apos;boolean&apos;
+            },
+            Intent: {
+              type: &apos;boolean&apos;
+            },
+            NotIntent: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Attitude: {
+          type: &apos;object&apos;,
+          properties: {
+            Enthusiast: {
+              type: &apos;boolean&apos;
+            },
+            Indifferent: {
+              type: &apos;boolean&apos;
+            },
+            Hostile: {
+              type: &apos;boolean&apos;
+            },
+            PriceConscious: {
+              type: &apos;boolean&apos;
+            },
+            QualityConscious: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Adaption: {
+          type: &apos;object&apos;,
+          properties: {
+            Innovator: {
+              type: &apos;boolean&apos;
+            },
+            EarlyAdapter: {
+              type: &apos;boolean&apos;
+            },
+            EarlyMajority: {
+              type: &apos;boolean&apos;
+            },
+            LateMajority: {
+              type: &apos;boolean&apos;
+            },
+            LateAdapter: {
+              type: &apos;boolean&apos;
+            },
+            Laggerd: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        LearningType: {
+          type: &apos;object&apos;,
+          properties: {
+            VisualSpatial: {
+              type: &apos;boolean&apos;
+            },
+            Auditory: {
+              type: &apos;boolean&apos;
+            },
+            VerbalLinguistic: {
+              type: &apos;boolean&apos;
+            },
+            PhysicalKinesthetic: {
+              type: &apos;boolean&apos;
+            },
+            SoliteryIntrapersornal: {
+              type: &apos;boolean&apos;
+            },
+            SocialInterpersonal: {
+              type: &apos;boolean&apos;
+            },
+            LogicalMathematical: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        LearningStage: {
+          type: &apos;object&apos;,
+          properties: {
+            UnconsciousIncompetence: {
+              type: &apos;boolean&apos;
+            },
+            ConsciousIncompetence: {
+              type: &apos;boolean&apos;
+            },
+            ConsciousCompetence: {
+              type: &apos;boolean&apos;
+            },
+            UnconsciousCompetence: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Other: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        }
+      }
+    },
+    Technographic: {
+      type: &apos;object&apos;,
+      properties: {
+        Optimism: {
+          type: &apos;object&apos;,
+          properties: {
+            Optimist: {
+              type: &apos;boolean&apos;
+            },
+            Pessimist: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Career: {
+          type: &apos;object&apos;,
+          properties: {
+            FastForwarder: {
+              type: &apos;boolean&apos;
+            },
+            TechnoStriver: {
+              type: &apos;boolean&apos;
+            },
+            HandShaker: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Family: {
+          type: &apos;object&apos;,
+          properties: {
+            NewAgeNurcherer: {
+              type: &apos;boolean&apos;
+            },
+            DigitalHopeful: {
+              type: &apos;boolean&apos;
+            },
+            Traditionalist: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        Entertainment: {
+          type: &apos;object&apos;,
+          properties: {
+            MousePotato: {
+              type: &apos;boolean&apos;
+            },
+            GadgetGrabber: {
+              type: &apos;boolean&apos;
+            },
+            MediaJunkie: {
+              type: &apos;boolean&apos;
+            }
+          }
+        },
+        OperatingSystem: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Browser: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        TechnologyStack: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        },
+        Other: {
+          type: &apos;array&apos;,
+          format: &apos;onePerLineString&apos;,
+          items: {
+            type: &apos;string&apos;
+          }
+        }
+      }
+    }
+  }
+};
+
+const view = schema.viewer(schemaDefinition);
+
+const edit = schema.editor(schemaDefinition);
+
+const templates = {
+  Blank: {},
+};
+
+export const user = {
+  name,
+  view,
+  edit,
+  templates
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

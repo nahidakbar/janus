@@ -4,7 +4,7 @@
 
 "use strict";
 
-export function objectEditor(editors, container, schema, content, save)
+export function objectEditor(editors, container, schema, content, save, options)
 {
   content = Object.assign({}, content || {});
   const parent = container.clear().Table().Tbody();
@@ -35,7 +35,7 @@ export function objectEditor(editors, container, schema, content, save)
             output = undefined
           }
           save(output);
-        });
+        }, options);
       }
       
       if (!content[propertyName] && propertySchema.type !== 'boolean')
@@ -51,7 +51,7 @@ export function objectEditor(editors, container, schema, content, save)
   
 }
 
-export function objectViewer(viewers, container, schema, content)
+export function objectViewer(viewers, container, schema, content, options)
 {
   const parent = container.Table().Tbody();
   content = Object.assign({}, content || {});
@@ -64,7 +64,7 @@ export function objectViewer(viewers, container, schema, content)
         const propertyLabel = propertyParent.Th(propertyName.toUncamelCase() + ':');
         const propertyContainer = propertyParent.Td();
         const propertySchema = schema.properties[propertyName];        
-        viewers[propertySchema.type](viewers, propertyContainer, propertySchema, content[propertyName]);
+        viewers[propertySchema.type](viewers, propertyContainer, propertySchema, content[propertyName], options);
       }
     });
 }

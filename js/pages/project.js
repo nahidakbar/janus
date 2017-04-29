@@ -20,13 +20,13 @@ function showFiles(context, project)
 {
   project.listFiles().then(list =>
   {
+    let files = {};
     let parent = context.body.clear();
     Object.keys(list)
       .sort(naturalSort)
       .forEach(key =>
       {
-        let item = list[key];
-        showFile(context, parent.Div(), project, item);
+        showFile(context, parent.Div(), project, list[key], files);
       });
     newFile(context, parent.Div().Class("noprint"), project);
   });
@@ -68,7 +68,7 @@ function newFile(context, parent, project)
   }).Display("block");
 }
 
-function showFile(context, section, project, item)
+function showFile(context, section, project, item, items)
 {
   section.H1(item.name.toUncamelCase());
   let itemContainer = section.Div().Class("item");
@@ -76,9 +76,10 @@ function showFile(context, section, project, item)
   let itemToolbar = itemContainer.Div().Class("toolbar");
   let module = types[item.type];
   itemContent.Loader();
-  project.getFile(item.key).then(contents =>
+  items[item.key] = project.getFile(item.key);
+  items[item.key].then(contents =>
   {
-    module.view(itemContent.clear(), item, contents);
+    module.view(itemContent.clear(), {items, item}, contents);
     itemToolbar.Button("Rename").OnClick(() =>
     {
       analytics.event(item.type, "rename", "attempt");
@@ -109,7 +110,7 @@ function showFile(context, section, project, item)
       itemToolbar.Display("none");
       let editContainer = itemContent.clear().Div();
       let changed = contents;
-      types[item.type].edit(editContainer, item, contents, update =>
+      types[item.type].edit(editContainer, {items, item}, contents, update =>
       {
         changed = update;
       });  

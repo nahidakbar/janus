@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">js/common/request.js | API Document</title>
+  <title data-ice="title">js/types/usecase.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -76,61 +76,47 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">js/common/request.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">js/types/usecase.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * Janus Copyright (C) 2017 Nahid Akbar
  */
 
 &quot;use strict&quot;;
 
-const d3 = require(&quot;d3-request&quot;);
+import * as schema from &quot;common/schema&quot;
 
-/**
- * Make a http request.
- * @return {Promise}
- */
-export function request(method, url, body=null, transform=x=&gt;x)
-{
-  let start = Date.now();
-  return new Promise((resolve, reject) =&gt;
-  {
-    d3.request(url)
-    .header(&quot;Content-Type&quot;, &quot;application/json&quot;)
-    .send(method, JSON.stringify(body), function(err, xhr)
-    {
-      console.log(method, url, &quot;took&quot;, Date.now() - start, &quot;ms&quot;);
-      if (err)
-      {
-        xhr = err.srcElement;
-        reject(xhr &amp;&amp; (xhr.response || xhr.responseText) || err);
+const name = &quot;Use Case&quot;;
+
+const schemaDefinition = {
+  type: &quot;object&quot;,
+  properties: {
+    Description: {
+      type: &quot;string&quot;,
+    },
+    ApplicablleTo: {
+      type: &quot;array&quot;,
+      format: &quot;fileLinksString&quot;,
+      linkageType: &quot;user&quot;,
+      items: {
+        type: &quot;string&quot;
       }
-      else
-      {
-        resolve(transform(JSON.parse(xhr.responseText)));
-      }
-    });
-  });
-}
+    }
+  }
+};
 
-export function Create()
-{
-  return request.apply(null, [&quot;post&quot;].concat(arguments));
-}
+const view = schema.viewer(schemaDefinition);
+const edit = schema.editor(schemaDefinition);
 
-export function Read()
-{
-  return request.apply(null, [&quot;get&quot;].concat(arguments));
-}
+const templates = {
+  Blank: {},
+};
 
-export function Update()
-{
-  return request.apply(null, [&quot;put&quot;].concat(arguments));
-}
-
-export function Delete()
-{
-  return request.apply(null, [&quot;delete&quot;].concat(arguments));
-}
+export const usecase = {
+  name,
+  view,
+  edit,
+  templates
+};
 </code></pre>
 
 </div>

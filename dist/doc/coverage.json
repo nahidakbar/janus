@@ -1,6 +1,6 @@
 {
-  "coverage": "11.11%",
-  "expectCount": 54,
+  "coverage": "10.71%",
+  "expectCount": 56,
   "actualCount": 6,
   "files": {
     "js/common/request.js": {
@@ -58,9 +58,9 @@
       "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        7,
-        49,
-        16
+        9,
+        105,
+        26
       ]
     },
     "js/common/schema/boolean.js": {
@@ -110,7 +110,7 @@
         9
       ]
     },
-    "js/types/md/index.js": {
+    "js/types/md.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
@@ -152,7 +152,21 @@
         117
       ]
     },
-    "js/types/user/index.js": {
+    "js/types/swot.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        72
+      ]
+    },
+    "js/types/usecase.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        35
+      ]
+    },
+    "js/types/user.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [

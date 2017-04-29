@@ -4,16 +4,16 @@
 
 "use strict";
 
-export function stringEditor(editors, container, schema, content, save)
+export function stringEditor(editors, container, schema, content, save, options)
 {
   if (!schema.format || !stringEditors[schema.format])
   {
     schema.format = 'default';
   }
-  stringEditors[schema.format](editors, container, schema, content, save);
+  stringEditors[schema.format](editors, container, schema, content, save, options);
 }
 
-function stringEditorDefault(editors, container, schema, content, save)
+function stringEditorDefault(editors, container, schema, content, save, options)
 {
   const control = container.Textarea().text(content || '');
   control.OnChange(() =>
@@ -31,7 +31,7 @@ function stringEditorDefault(editors, container, schema, content, save)
   control.OnInput(control.OnChange());
 }
 
-function stringEditorImage(editors, container, schema, content, save)
+function stringEditorImage(editors, container, schema, content, save, options)
 {
   const current = container.Img().MaxWidth('90%').Src(content);
   const control = container.File();
@@ -60,7 +60,7 @@ function stringEditorImage(editors, container, schema, content, save)
   });
 }
 
-function stringEditorControl(editors, container, schema, content, save)
+function stringEditorControl(editors, container, schema, content, save, options)
 {
   const control = container.Input().Type(schema.type).Value(content || '');
   control.OnChange(() =>
@@ -95,21 +95,21 @@ export const stringEditors = {
   week: stringEditorControl,
 };
 
-export function stringViewer(viewers, container, schema, content)
+export function stringViewer(viewers, container, schema, content, options)
 {
   if (!schema.format || !stringViewers[schema.format])
   {
     schema.format = 'default';
   }
-  stringViewers[schema.format](viewers, container, schema, content);
+  stringViewers[schema.format](viewers, container, schema, content, options);
 }
 
-export function stringViewerDefault(viewers, container, schema, content)
+export function stringViewerDefault(viewers, container, schema, content, options)
 {
   container.P(content)
 }
 
-export function stringViewerImage(viewers, container, schema, content)
+export function stringViewerImage(viewers, container, schema, content, options)
 {
   container.Img().Src(content);
 }
@@ -118,4 +118,3 @@ export const stringViewers = {
   default: stringViewerDefault,
   image: stringViewerImage,
 };
-

@@ -68,8 +68,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/md</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/user</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-swot">swot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-usecase">usecase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -81,16 +83,16 @@
 
 &quot;use strict&quot;;
 
-export function stringEditor(editors, container, schema, content, save)
+export function stringEditor(editors, container, schema, content, save, options)
 {
   if (!schema.format || !stringEditors[schema.format])
   {
     schema.format = &apos;default&apos;;
   }
-  stringEditors[schema.format](editors, container, schema, content, save);
+  stringEditors[schema.format](editors, container, schema, content, save, options);
 }
 
-function stringEditorDefault(editors, container, schema, content, save)
+function stringEditorDefault(editors, container, schema, content, save, options)
 {
   const control = container.Textarea().text(content || &apos;&apos;);
   control.OnChange(() =&gt;
@@ -108,7 +110,7 @@ function stringEditorDefault(editors, container, schema, content, save)
   control.OnInput(control.OnChange());
 }
 
-function stringEditorImage(editors, container, schema, content, save)
+function stringEditorImage(editors, container, schema, content, save, options)
 {
   const current = container.Img().MaxWidth(&apos;90%&apos;).Src(content);
   const control = container.File();
@@ -137,7 +139,7 @@ function stringEditorImage(editors, container, schema, content, save)
   });
 }
 
-function stringEditorControl(editors, container, schema, content, save)
+function stringEditorControl(editors, container, schema, content, save, options)
 {
   const control = container.Input().Type(schema.type).Value(content || &apos;&apos;);
   control.OnChange(() =&gt;
@@ -172,21 +174,21 @@ export const stringEditors = {
   week: stringEditorControl,
 };
 
-export function stringViewer(viewers, container, schema, content)
+export function stringViewer(viewers, container, schema, content, options)
 {
   if (!schema.format || !stringViewers[schema.format])
   {
     schema.format = &apos;default&apos;;
   }
-  stringViewers[schema.format](viewers, container, schema, content);
+  stringViewers[schema.format](viewers, container, schema, content, options);
 }
 
-export function stringViewerDefault(viewers, container, schema, content)
+export function stringViewerDefault(viewers, container, schema, content, options)
 {
   container.P(content)
 }
 
-export function stringViewerImage(viewers, container, schema, content)
+export function stringViewerImage(viewers, container, schema, content, options)
 {
   container.Img().Src(content);
 }
@@ -195,7 +197,6 @@ export const stringViewers = {
   default: stringViewerDefault,
   image: stringViewerImage,
 };
-
 </code></pre>
 
 </div>

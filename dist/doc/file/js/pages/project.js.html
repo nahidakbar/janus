@@ -68,8 +68,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/md</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/user</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-swot">swot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-usecase">usecase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -97,13 +99,13 @@ function showFiles(context, project)
 {
   project.listFiles().then(list =&gt;
   {
+    let files = {};
     let parent = context.body.clear();
     Object.keys(list)
       .sort(naturalSort)
       .forEach(key =&gt;
       {
-        let item = list[key];
-        showFile(context, parent.Div(), project, item);
+        showFile(context, parent.Div(), project, list[key], files);
       });
     newFile(context, parent.Div().Class(&quot;noprint&quot;), project);
   });
@@ -145,7 +147,7 @@ function newFile(context, parent, project)
   }).Display(&quot;block&quot;);
 }
 
-function showFile(context, section, project, item)
+function showFile(context, section, project, item, items)
 {
   section.H1(item.name.toUncamelCase());
   let itemContainer = section.Div().Class(&quot;item&quot;);
@@ -153,9 +155,10 @@ function showFile(context, section, project, item)
   let itemToolbar = itemContainer.Div().Class(&quot;toolbar&quot;);
   let module = types[item.type];
   itemContent.Loader();
-  project.getFile(item.key).then(contents =&gt;
+  items[item.key] = project.getFile(item.key);
+  items[item.key].then(contents =&gt;
   {
-    module.view(itemContent.clear(), item, contents);
+    module.view(itemContent.clear(), {items, item}, contents);
     itemToolbar.Button(&quot;Rename&quot;).OnClick(() =&gt;
     {
       analytics.event(item.type, &quot;rename&quot;, &quot;attempt&quot;);
@@ -186,7 +189,7 @@ function showFile(context, section, project, item)
       itemToolbar.Display(&quot;none&quot;);
       let editContainer = itemContent.clear().Div();
       let changed = contents;
-      types[item.type].edit(editContainer, item, contents, update =&gt;
+      types[item.type].edit(editContainer, {items, item}, contents, update =&gt;
       {
         changed = update;
       });  

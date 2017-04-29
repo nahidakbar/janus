@@ -28,12 +28,12 @@ export const viewers = {
 
 export function editor(schema)
 {
-  return (container, item, content, save) =>
-    editors[schema.type](editors, container, schema, content, save);
+  return (container, options, content, save) =>
+    editors[schema.type](editors, container, schema, content, save, options);
 }
 
 export function viewer(schema)
 {
-  return (container, item, content) =>
-    viewers[schema.type](viewers, container, schema, content);
+  return (container, options, content) =>
+    viewers[schema.type](viewers, container, schema, content, options);
 }
