@@ -126,9 +126,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "janus/js/types/md/index.js~md",
+    "janus/js/types/md.js~md",
     "variable/index.html#static-variable-md",
-    "<span>md</span> <span class=\"search-result-import-path\">janus/js/types/md/index.js</span>",
+    "<span>md</span> <span class=\"search-result-import-path\">janus/js/types/md.js</span>",
     "variable"
   ],
   [
@@ -210,9 +210,21 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "janus/js/types/user/index.js~user",
+    "janus/js/types/swot.js~swot",
+    "variable/index.html#static-variable-swot",
+    "<span>swot</span> <span class=\"search-result-import-path\">janus/js/types/swot.js</span>",
+    "variable"
+  ],
+  [
+    "janus/js/types/usecase.js~usecase",
+    "variable/index.html#static-variable-usecase",
+    "<span>usecase</span> <span class=\"search-result-import-path\">janus/js/types/usecase.js</span>",
+    "variable"
+  ],
+  [
+    "janus/js/types/user.js~user",
     "variable/index.html#static-variable-user",
-    "<span>user</span> <span class=\"search-result-import-path\">janus/js/types/user/index.js</span>",
+    "<span>user</span> <span class=\"search-result-import-path\">janus/js/types/user.js</span>",
     "variable"
   ],
   [
@@ -762,15 +774,27 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "js/types/md/index.js",
-    "file/js/types/md/index.js.html",
-    "js/types/md/index.js",
+    "js/types/md.js",
+    "file/js/types/md.js.html",
+    "js/types/md.js",
     "file"
   ],
   [
-    "js/types/user/index.js",
-    "file/js/types/user/index.js.html",
-    "js/types/user/index.js",
+    "js/types/swot.js",
+    "file/js/types/swot.js.html",
+    "js/types/swot.js",
+    "file"
+  ],
+  [
+    "js/types/usecase.js",
+    "file/js/types/usecase.js.html",
+    "js/types/usecase.js",
+    "file"
+  ],
+  [
+    "js/types/user.js",
+    "file/js/types/user.js.html",
+    "js/types/user.js",
     "file"
   ]
 ]

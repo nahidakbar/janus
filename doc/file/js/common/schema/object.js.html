@@ -68,8 +68,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add">add</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/md</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types/user</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-swot">swot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-usecase">usecase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -81,7 +83,7 @@
 
 &quot;use strict&quot;;
 
-export function objectEditor(editors, container, schema, content, save)
+export function objectEditor(editors, container, schema, content, save, options)
 {
   content = Object.assign({}, content || {});
   const parent = container.clear().Table().Tbody();
@@ -112,7 +114,7 @@ export function objectEditor(editors, container, schema, content, save)
             output = undefined
           }
           save(output);
-        });
+        }, options);
       }
       
       if (!content[propertyName] &amp;&amp; propertySchema.type !== &apos;boolean&apos;)
@@ -128,7 +130,7 @@ export function objectEditor(editors, container, schema, content, save)
   
 }
 
-export function objectViewer(viewers, container, schema, content)
+export function objectViewer(viewers, container, schema, content, options)
 {
   const parent = container.Table().Tbody();
   content = Object.assign({}, content || {});
@@ -141,7 +143,7 @@ export function objectViewer(viewers, container, schema, content)
         const propertyLabel = propertyParent.Th(propertyName.toUncamelCase() + &apos;:&apos;);
         const propertyContainer = propertyParent.Td();
         const propertySchema = schema.properties[propertyName];        
-        viewers[propertySchema.type](viewers, propertyContainer, propertySchema, content[propertyName]);
+        viewers[propertySchema.type](viewers, propertyContainer, propertySchema, content[propertyName], options);
       }
     });
 }
