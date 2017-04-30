@@ -85,7 +85,7 @@ function showFile(context, section, project, item, items)
     }
     catch(e)
     {
-      console.errlr(e);
+      console.error(e);
     }
     itemToolbar.Button("Rename").OnClick(() =>
     {
