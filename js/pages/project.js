@@ -79,7 +79,14 @@ function showFile(context, section, project, item, items)
   items[item.key] = project.getFile(item.key);
   items[item.key].then(contents =>
   {
-    module.view(itemContent.clear(), {items, item}, contents);
+    try
+    {
+      module.view(itemContent.clear(), {items, item}, contents);
+    }
+    catch(e)
+    {
+      console.errlr(e);
+    }
     itemToolbar.Button("Rename").OnClick(() =>
     {
       analytics.event(item.type, "rename", "attempt");
@@ -110,10 +117,17 @@ function showFile(context, section, project, item, items)
       itemToolbar.Display("none");
       let editContainer = itemContent.clear().Div();
       let changed = contents;
-      types[item.type].edit(editContainer, {items, item}, contents, update =>
+      try
       {
-        changed = update;
-      });  
+        types[item.type].edit(editContainer, {items, item}, contents, update =>
+        {
+          changed = update;
+        });  
+      }
+      catch(e)
+      {
+        console.error(e);
+      }
       let editToolbar = itemContent.Div();
       editToolbar.Button("Save").OnClick(() =>
       {
