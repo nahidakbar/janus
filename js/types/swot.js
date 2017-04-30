@@ -51,16 +51,16 @@ function view(container, item, content)
   const lowerBody = board.Tr();
   
   upperHead.Th('Strengths');
-  upperBody.Td().Children(content.Strengths, 'li', point => point.text(text => text))
+  upperBody.Td().Children(content.Strengths || [], 'li', point => point.text(text => text))
   
   upperHead.Th('Weaknesses');
-  upperBody.Td().Children(content.Weaknesses, 'li', point => point.text(text => text))
+  upperBody.Td().Children(content.Weaknesses || [], 'li', point => point.text(text => text))
   
   lowerHead.Th('Opportunities');
-  lowerBody.Td().Children(content.Opportunities, 'li', point => point.text(text => text))
+  lowerBody.Td().Children(content.Opportunities || [], 'li', point => point.text(text => text))
   
   lowerHead.Th('Threats');
-  lowerBody.Td().Children(content.Threats, 'li', point => point.text(text => text))
+  lowerBody.Td().Children(content.Threats || [], 'li', point => point.text(text => text))
   
 }
 const edit = schema.editor(schemaDefinition);

@@ -90,6 +90,17 @@
   {
     "__docId__": 3,
     "kind": "file",
+    "name": "js/common/graph/index.js",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\n",
+    "static": true,
+    "longname": "js/common/graph/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 4,
+    "kind": "file",
     "name": "js/common/request.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst d3 = require(\"d3-request\");\n\n/**\n * Make a http request.\n * @return {Promise}\n */\nexport function request(method, url, body=null, transform=x=>x)\n{\n  let start = Date.now();\n  return new Promise((resolve, reject) =>\n  {\n    d3.request(url)\n    .header(\"Content-Type\", \"application/json\")\n    .send(method, JSON.stringify(body), function(err, xhr)\n    {\n      console.log(method, url, \"took\", Date.now() - start, \"ms\");\n      if (err)\n      {\n        xhr = err.srcElement;\n        reject(xhr && (xhr.response || xhr.responseText) || err);\n      }\n      else\n      {\n        resolve(transform(JSON.parse(xhr.responseText)));\n      }\n    });\n  });\n}\n\nexport function Create()\n{\n  return request.apply(null, [\"post\"].concat(arguments));\n}\n\nexport function Read()\n{\n  return request.apply(null, [\"get\"].concat(arguments));\n}\n\nexport function Update()\n{\n  return request.apply(null, [\"put\"].concat(arguments));\n}\n\nexport function Delete()\n{\n  return request.apply(null, [\"delete\"].concat(arguments));\n}\n",
     "static": true,
@@ -99,7 +110,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 4,
+    "__docId__": 5,
     "kind": "variable",
     "name": "d3",
     "memberof": "js/common/request.js",
@@ -125,7 +136,7 @@
     }
   },
   {
-    "__docId__": 5,
+    "__docId__": 6,
     "kind": "function",
     "name": "request",
     "memberof": "js/common/request.js",
@@ -178,7 +189,7 @@
     }
   },
   {
-    "__docId__": 6,
+    "__docId__": 7,
     "kind": "function",
     "name": "Create",
     "memberof": "js/common/request.js",
@@ -207,7 +218,7 @@
     }
   },
   {
-    "__docId__": 7,
+    "__docId__": 8,
     "kind": "function",
     "name": "Read",
     "memberof": "js/common/request.js",
@@ -236,7 +247,7 @@
     }
   },
   {
-    "__docId__": 8,
+    "__docId__": 9,
     "kind": "function",
     "name": "Update",
     "memberof": "js/common/request.js",
@@ -265,7 +276,7 @@
     }
   },
   {
-    "__docId__": 9,
+    "__docId__": 10,
     "kind": "function",
     "name": "Delete",
     "memberof": "js/common/request.js",
@@ -294,7 +305,7 @@
     }
   },
   {
-    "__docId__": 10,
+    "__docId__": 11,
     "kind": "file",
     "name": "js/common/schema/array.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport {default as pluralise} from \"pluralize\";\n\nexport function arrayEditor(editors, container, schema, content, save, options)\n{\n  if (!schema.format || !arrayEditors[schema.format])\n  {\n    console.error('Array editor of type', schema.format, 'not found');\n    schema.format = 'default';\n  }\n  try\n  {\n    arrayEditors[schema.format](editors, container, schema, content, save, options);\n  }\n  catch(e)\n  {\n    console.error(e);\n  }\n}\n\nexport function arrayViewer(viewers, container, schema, content, options)\n{\n  try\n  {\n    content.forEach(row =>\n    {\n      viewers[schema.items.type](viewers, container.Div(), schema.items, row, options);\n    });\n  }\n  catch(e)\n  {\n    console.error(e);\n  }\n}\n\nfunction arrayEditorDefault(editors, container, schema, content, save, options)\n{\n  console.error('TODO');\n}\n\nfunction arrayEditorOnePerLineString(editors, container, schema, content, save, options)\n{\n  const control = container.Textarea()\n    .text((content || []).join('\\n'))\n    .Placeholder('one item per line');\n  control.OnChange(() =>\n  {\n    const value = control.Value().split('\\n').filter(x => x);\n    if (value.length > 0)\n    {\n      save(value);\n    }\n    else\n    {\n      save(undefined);\n    }\n  });\n  control.OnInput(control.OnChange());\n}\n\nfunction arrayEditorFileLinks(editors, container, schema, content, save, options)\n{\n  let links = Object.keys(options.items).filter(item => item.indexOf(\".\" + schema.linkageType) !== -1).map(item => item.substr(0, item.indexOf(\".\")));\n  const linked = {};\n  (content || []).filter(link => links.indexOf(link) !== -1).forEach(link => linked[link] = true);\n  if (links.length === 0)\n  {\n    container.P(`No ${pluralise(schema.linkageType)} Found`);\n  }\n  else\n  {\n    container = container.Table().Tbody();\n    links.forEach(link =>\n    {\n      const row = container.Tr();\n      row.Td(link.toUncamelCase());\n      const control = row.Td().Checkbox().Checked(linked[link]);\n      control.OnChange(() =>\n      {\n        linked[link] = control.Checked();\n        let output = {};\n        for (let prop in linked)\n        {\n          if (linked[prop])\n          {\n            output[prop] = true;\n          }\n        }\n        output = Object.keys(output);\n        if (output.length === 0)\n        {\n          output = undefined\n        }\n        save(output);\n      });\n    });\n  }\n}\n\nexport const arrayEditors = {\n  default: arrayEditorDefault,\n  onePerLineString: arrayEditorOnePerLineString,\n  fileLinksString: arrayEditorFileLinks\n};\n",
@@ -305,7 +316,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 11,
+    "__docId__": 12,
     "kind": "function",
     "name": "arrayEditor",
     "memberof": "js/common/schema/array.js",
@@ -366,7 +377,7 @@
     ]
   },
   {
-    "__docId__": 12,
+    "__docId__": 13,
     "kind": "function",
     "name": "arrayViewer",
     "memberof": "js/common/schema/array.js",
@@ -421,7 +432,7 @@
     ]
   },
   {
-    "__docId__": 13,
+    "__docId__": 14,
     "kind": "function",
     "name": "arrayEditorDefault",
     "memberof": "js/common/schema/array.js",
@@ -482,7 +493,7 @@
     ]
   },
   {
-    "__docId__": 14,
+    "__docId__": 15,
     "kind": "function",
     "name": "arrayEditorOnePerLineString",
     "memberof": "js/common/schema/array.js",
@@ -543,7 +554,7 @@
     ]
   },
   {
-    "__docId__": 15,
+    "__docId__": 16,
     "kind": "function",
     "name": "arrayEditorFileLinks",
     "memberof": "js/common/schema/array.js",
@@ -604,7 +615,7 @@
     ]
   },
   {
-    "__docId__": 16,
+    "__docId__": 17,
     "kind": "variable",
     "name": "arrayEditors",
     "memberof": "js/common/schema/array.js",
@@ -630,7 +641,7 @@
     }
   },
   {
-    "__docId__": 17,
+    "__docId__": 18,
     "kind": "file",
     "name": "js/common/schema/boolean.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport function booleanEditor(editors, container, schema, content, save)\n{\n  const editor = container.Checkbox();\n  editor.Checked(content);\n  editor.OnChange(() =>\n  {\n    save(editor.Checked() || undefined);\n  });\n}\n\nexport function booleanViewer(viewers, container, schema, content)\n{\n  \n}\n",
@@ -641,7 +652,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 18,
+    "__docId__": 19,
     "kind": "function",
     "name": "booleanEditor",
     "memberof": "js/common/schema/boolean.js",
@@ -696,7 +707,7 @@
     ]
   },
   {
-    "__docId__": 19,
+    "__docId__": 20,
     "kind": "function",
     "name": "booleanViewer",
     "memberof": "js/common/schema/boolean.js",
@@ -745,7 +756,7 @@
     ]
   },
   {
-    "__docId__": 20,
+    "__docId__": 21,
     "kind": "file",
     "name": "js/common/schema/index.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport { booleanEditor, booleanViewer } from \"./boolean\";\nimport { numberEditor, numberViewer } from \"./number\";\nimport { stringViewer, stringEditor } from \"./string\";\nimport { arrayEditor, arrayViewer } from \"./array\";\nimport { objectEditor, objectViewer } from \"./object\";\n\nexport const editors = {\n  boolean: booleanEditor,\n  number: numberEditor,\n  string: stringEditor,\n  array: arrayEditor,\n  object: objectEditor\n};\n\nexport const viewers = {\n  boolean: booleanViewer,\n  number: numberViewer,\n  string: stringViewer,\n  array: arrayViewer,\n  object: objectViewer\n};\n\nexport function editor(schema)\n{\n  return (container, options, content, save) =>\n    editors[schema.type](editors, container, schema, content, save, options);\n}\n\nexport function viewer(schema)\n{\n  return (container, options, content) =>\n    viewers[schema.type](viewers, container, schema, content, options);\n}\n",
@@ -756,7 +767,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 21,
+    "__docId__": 22,
     "kind": "variable",
     "name": "editors",
     "memberof": "js/common/schema/index.js",
@@ -782,7 +793,7 @@
     }
   },
   {
-    "__docId__": 22,
+    "__docId__": 23,
     "kind": "variable",
     "name": "viewers",
     "memberof": "js/common/schema/index.js",
@@ -808,7 +819,7 @@
     }
   },
   {
-    "__docId__": 23,
+    "__docId__": 24,
     "kind": "function",
     "name": "editor",
     "memberof": "js/common/schema/index.js",
@@ -844,7 +855,7 @@
     }
   },
   {
-    "__docId__": 24,
+    "__docId__": 25,
     "kind": "function",
     "name": "viewer",
     "memberof": "js/common/schema/index.js",
@@ -880,10 +891,10 @@
     }
   },
   {
-    "__docId__": 25,
+    "__docId__": 26,
     "kind": "file",
     "name": "js/common/schema/number.js",
-    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport function numberEditor(editors, container, schema, content, save, options)\n{\n  const control = container.Number().Value(content || '');\n  control.OnChange(() =>\n  {\n    const value = control.Value();\n    if (value.length > 0)\n    {\n      save(parseFloat(value));\n    }\n    else\n    {\n      save(undefined);\n    }\n  });\n  control.OnInput(control.OnChange());\n}\n\nexport function numberViewer(viewers, container, schema, content, options)\n{\n  container.P(content);\n}\n",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport function numberEditor(editors, container, schema, content, save, options)\n{\n  const control = container.Number().Value(content || 0);\n  if (schema.format)\n  {\n    control.attr('type', schema.format);\n  }\n  if (schema.format === 'range')\n  {\n    control.attr('min', -1);\n    control.attr('max', 1);\n    control.attr('step', 0.1);\n  }\n  control.OnChange(() =>\n  {\n    const value = control.Value();\n    if (value.length > 0)\n    {\n      save(parseFloat(value));\n    }\n    else\n    {\n      save(undefined);\n    }\n  });\n  control.OnInput(control.OnChange());\n}\n\nexport function numberViewer(viewers, container, schema, content, options)\n{\n  container.P(content);\n}\n",
     "static": true,
     "longname": "js/common/schema/number.js",
     "access": null,
@@ -891,7 +902,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 26,
+    "__docId__": 27,
     "kind": "function",
     "name": "numberEditor",
     "memberof": "js/common/schema/number.js",
@@ -952,7 +963,7 @@
     ]
   },
   {
-    "__docId__": 27,
+    "__docId__": 28,
     "kind": "function",
     "name": "numberViewer",
     "memberof": "js/common/schema/number.js",
@@ -965,7 +976,7 @@
     "importPath": "janus/js/common/schema/number.js",
     "importStyle": "{numberViewer}",
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 35,
     "undocument": true,
     "unknown": [
       {
@@ -1007,7 +1018,7 @@
     ]
   },
   {
-    "__docId__": 28,
+    "__docId__": 29,
     "kind": "file",
     "name": "js/common/schema/object.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport function objectEditor(editors, container, schema, content, save, options)\n{\n  content = Object.assign({}, content || {});\n  const parent = container.clear().Table().Tbody();\n  Object.keys(schema.properties)\n    .forEach(propertyName =>\n    {\n      const propertyParent = parent.Tr();\n      const propertyLabel = propertyParent.Th(propertyName.toUncamelCase() + ':');\n      const propertyContainer = propertyParent.Td();\n      const propertySchema = schema.properties[propertyName];\n      \n      function render()\n      {\n        \n        editors[propertySchema.type](editors, propertyContainer.clear(), propertySchema, content[propertyName], propertyValue =>\n        {\n          content[propertyName] = propertyValue;\n          let output = {};\n          for (let prop in content)\n          {\n            if (content[prop])\n            {\n              output[prop] = content[prop];\n            }\n          }\n          if (Object.keys(output).length === 0)\n          {\n            output = undefined\n          }\n          save(output);\n        }, options);\n      }\n      \n      if (!content[propertyName] && propertySchema.type !== 'boolean')\n      {\n        propertyContainer.Button('Edit').OnClick(render);\n      }\n      else\n      {\n        render();\n      }\n      \n    });\n  \n}\n\nexport function objectViewer(viewers, container, schema, content, options)\n{\n  const parent = container.Table().Tbody();\n  content = Object.assign({}, content || {});\n  Object.keys(schema.properties)\n    .forEach(propertyName =>\n    {\n      if (content[propertyName])\n      {\n        const propertyParent = parent.Tr();\n        const propertyLabel = propertyParent.Th(propertyName.toUncamelCase() + ':');\n        const propertyContainer = propertyParent.Td();\n        const propertySchema = schema.properties[propertyName];        \n        viewers[propertySchema.type](viewers, propertyContainer, propertySchema, content[propertyName], options);\n      }\n    });\n}\n",
@@ -1018,7 +1029,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 29,
+    "__docId__": 30,
     "kind": "function",
     "name": "objectEditor",
     "memberof": "js/common/schema/object.js",
@@ -1079,7 +1090,7 @@
     ]
   },
   {
-    "__docId__": 30,
+    "__docId__": 31,
     "kind": "function",
     "name": "objectViewer",
     "memberof": "js/common/schema/object.js",
@@ -1134,7 +1145,7 @@
     ]
   },
   {
-    "__docId__": 31,
+    "__docId__": 32,
     "kind": "file",
     "name": "js/common/schema/string.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport function stringEditor(editors, container, schema, content, save, options)\n{\n  if (!schema.format || !stringEditors[schema.format])\n  {\n    schema.format = 'default';\n  }\n  stringEditors[schema.format](editors, container, schema, content, save, options);\n}\n\nfunction stringEditorDefault(editors, container, schema, content, save, options)\n{\n  const control = container.Textarea().text(content || '');\n  control.OnChange(() =>\n  {\n    const value = control.Value();\n    if (value.length > 0)\n    {\n      save(value);\n    }\n    else\n    {\n      save(undefined);\n    }\n  });\n  control.OnInput(control.OnChange());\n}\n\nfunction stringEditorImage(editors, container, schema, content, save, options)\n{\n  const current = container.Img().MaxWidth('90%').Src(content);\n  const control = container.File();\n  control.OnChange(() =>\n  {\n    const reader = new FileReader();\n    reader.onload = function(e)\n    {\n      const value = reader.result;\n      current.Src(value);\n      if (value.length > 0)\n      {\n        save(value);\n      }\n      else\n      {\n        save(undefined);\n      }\n    }\n    reader.readAsDataURL(control.property('files')[0]);\n  });\n  container.Button('Delete').OnClick(() =>\n  {\n    current.Src('');\n    save(undefined);\n  });\n}\n\nfunction stringEditorControl(editors, container, schema, content, save, options)\n{\n  const control = container.Input().Type(schema.type).Value(content || '');\n  control.OnChange(() =>\n  {\n    const value = control.Value();\n    if (value.length > 0)\n    {\n      save(value);\n    }\n    else\n    {\n      save(undefined);\n    }\n  });\n  control.OnInput(control.OnChange());  \n}\n\nexport const stringEditors = {\n  default: stringEditorDefault,\n  image: stringEditorImage,\n  color: stringEditorControl,\n  date: stringEditorControl,\n  \"datetime-local\": stringEditorControl,\n  email: stringEditorControl,\n  month: stringEditorControl,\n  number: stringEditorControl,\n  range: stringEditorControl,\n  search: stringEditorControl,\n  tel: stringEditorControl,\n  time: stringEditorControl,\n  url: stringEditorControl,\n  week: stringEditorControl,\n};\n\nexport function stringViewer(viewers, container, schema, content, options)\n{\n  if (!schema.format || !stringViewers[schema.format])\n  {\n    schema.format = 'default';\n  }\n  stringViewers[schema.format](viewers, container, schema, content, options);\n}\n\nexport function stringViewerDefault(viewers, container, schema, content, options)\n{\n  container.P(content)\n}\n\nexport function stringViewerImage(viewers, container, schema, content, options)\n{\n  container.Img().Src(content);\n}\n\nexport const stringViewers = {\n  default: stringViewerDefault,\n  image: stringViewerImage,\n};\n",
@@ -1145,7 +1156,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 32,
+    "__docId__": 33,
     "kind": "function",
     "name": "stringEditor",
     "memberof": "js/common/schema/string.js",
@@ -1206,7 +1217,7 @@
     ]
   },
   {
-    "__docId__": 33,
+    "__docId__": 34,
     "kind": "function",
     "name": "stringEditorDefault",
     "memberof": "js/common/schema/string.js",
@@ -1267,7 +1278,7 @@
     ]
   },
   {
-    "__docId__": 34,
+    "__docId__": 35,
     "kind": "function",
     "name": "stringEditorImage",
     "memberof": "js/common/schema/string.js",
@@ -1328,7 +1339,7 @@
     ]
   },
   {
-    "__docId__": 35,
+    "__docId__": 36,
     "kind": "function",
     "name": "stringEditorControl",
     "memberof": "js/common/schema/string.js",
@@ -1389,7 +1400,7 @@
     ]
   },
   {
-    "__docId__": 36,
+    "__docId__": 37,
     "kind": "variable",
     "name": "stringEditors",
     "memberof": "js/common/schema/string.js",
@@ -1415,7 +1426,7 @@
     }
   },
   {
-    "__docId__": 37,
+    "__docId__": 38,
     "kind": "function",
     "name": "stringViewer",
     "memberof": "js/common/schema/string.js",
@@ -1470,7 +1481,7 @@
     ]
   },
   {
-    "__docId__": 38,
+    "__docId__": 39,
     "kind": "function",
     "name": "stringViewerDefault",
     "memberof": "js/common/schema/string.js",
@@ -1525,7 +1536,7 @@
     ]
   },
   {
-    "__docId__": 39,
+    "__docId__": 40,
     "kind": "function",
     "name": "stringViewerImage",
     "memberof": "js/common/schema/string.js",
@@ -1580,7 +1591,7 @@
     ]
   },
   {
-    "__docId__": 40,
+    "__docId__": 41,
     "kind": "variable",
     "name": "stringViewers",
     "memberof": "js/common/schema/string.js",
@@ -1606,10 +1617,10 @@
     }
   },
   {
-    "__docId__": 41,
+    "__docId__": 42,
     "kind": "file",
     "name": "js/index.js",
-    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst d3 = require(\"d3-selection\"); require(\"d3-html\");\n\nimport * as analytics from \"common/analytics\";\n\nwindow.onload = function()\n{\n  // ================\n  // PAGES\n  // ================\n  const parent = d3.select(\"body\");\n  let context = {\n    pages: {\n      \"\": require(\"pages/index\").default,\n      \"project\": require(\"pages/project\").default,\n      \"localstorage\": require(\"pages/localstorage\").default,\n      \"indexeddb\": require(\"pages/indexeddb\").default,\n    }\n  };\n\n  // ================\n  // LAYOUT\n  // ================\n  // heading\n  context.head = parent.Div().Class(\"head\").H1().Class(\"container\").A(\"Janus - Heavily Under Construction\").Href(\"#\");\n\n  // body\n  context.body = parent.Div().Class(\"body\").Div().Class(\"container\");\n\n  // ================\n  // LAYOUT\n  // ================\n\n  d3.HashStateRouter(context);\n\n  window.onhashchange = function()\n  {\n    analytics.pageview(context.params.page);\n    context.head.text(\"Janus - Heavily Under Construction\");\n    context.body.Loader();\n    context.Reload();\n  };\n\n  analytics.pageview(context.params.page);\n};\n\nd3.selection.prototype.Loader = function()\n{\n  return this.html(\"<div style=\\\"text-align: center;\\\"><svg style=\\\"max-width: 100%;\\\" width=\\\"200px\\\" height=\\\"200px\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" viewBox=\\\"0 0 100 100\\\" preserveAspectRatio=\\\"xMidYMid\\\" class=\\\"uil-gears\\\"><rect x=\\\"0\\\" y=\\\"0\\\" width=\\\"100\\\" height=\\\"100\\\" fill=\\\"none\\\" class=\\\"bk\\\"></rect><g transform=\\\"translate(-20,-20)\\\"><path d=\\\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\\\" fill=\\\"#336699\\\"><animateTransform attributeName=\\\"transform\\\" type=\\\"rotate\\\" from=\\\"90 50 50\\\" to=\\\"0 50 50\\\" dur=\\\"1s\\\" repeatCount=\\\"indefinite\\\"></animateTransform></path></g><g transform=\\\"translate(20,20) rotate(15 50 50)\\\"><path d=\\\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\\\" fill=\\\"#6699bb\\\"><animateTransform attributeName=\\\"transform\\\" type=\\\"rotate\\\" from=\\\"0 50 50\\\" to=\\\"90 50 50\\\" dur=\\\"1s\\\" repeatCount=\\\"indefinite\\\"></animateTransform></path></g></svg></div>\");\n};\n\nd3.selection.prototype.Markdown = function(content, options)\n{\n  const marked = require(\"marked\");\n  return this.html(marked(content, options));\n};\n\nString.prototype.toUncamelCase = function()\n{\n  return this.replace(/([A-Z]+)/g, \" $1\").trim();\n};\n\nString.prototype.trim = function()\n{\n  return this.replace(/(^\\s+|\\s+$)/g, \"\");\n};\n",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst d3 = require(\"d3-selection\"); require(\"d3-html\");\n\nimport * as analytics from \"common/analytics\";\n\nwindow.onload = function()\n{\n  // ================\n  // PAGES\n  // ================\n  const parent = d3.select(\"body\");\n  let context = {\n    pages: {\n      \"\": require(\"pages/index\").default,\n      \"project\": require(\"pages/project\").default,\n      \"localstorage\": require(\"pages/localstorage\").default,\n      \"indexeddb\": require(\"pages/indexeddb\").default,\n    }\n  };\n\n  // ================\n  // LAYOUT\n  // ================\n  // heading\n  context.head = parent.Div().Class(\"head\").H1().Class(\"container\").A(\"Janus - Heavily Under Construction\").Href(\"#\");\n\n  // body\n  context.body = parent.Div().Class(\"body\").Div().Class(\"container\");\n\n  // ================\n  // LAYOUT\n  // ================\n\n  d3.HashStateRouter(context);\n\n  window.onhashchange = function()\n  {\n    analytics.pageview(context.params.page);\n    context.head.text(\"Janus - Heavily Under Construction\");\n    context.body.Loader();\n    context.Reload();\n  };\n\n  analytics.pageview(context.params.page);\n};\n\nd3.selection.prototype.Loader = function()\n{\n  return this.html(\"<div style=\\\"text-align: center;\\\"><svg style=\\\"max-width: 100%;\\\" width=\\\"200px\\\" height=\\\"200px\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" viewBox=\\\"0 0 100 100\\\" preserveAspectRatio=\\\"xMidYMid\\\" class=\\\"uil-gears\\\"><rect x=\\\"0\\\" y=\\\"0\\\" width=\\\"100\\\" height=\\\"100\\\" fill=\\\"none\\\" class=\\\"bk\\\"></rect><g transform=\\\"translate(-20,-20)\\\"><path d=\\\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\\\" fill=\\\"#336699\\\"><animateTransform attributeName=\\\"transform\\\" type=\\\"rotate\\\" from=\\\"90 50 50\\\" to=\\\"0 50 50\\\" dur=\\\"1s\\\" repeatCount=\\\"indefinite\\\"></animateTransform></path></g><g transform=\\\"translate(20,20) rotate(15 50 50)\\\"><path d=\\\"M79.9,52.6C80,51.8,80,50.9,80,50s0-1.8-0.1-2.6l-5.1-0.4c-0.3-2.4-0.9-4.6-1.8-6.7l4.2-2.9c-0.7-1.6-1.6-3.1-2.6-4.5 L70,35c-1.4-1.9-3.1-3.5-4.9-4.9l2.2-4.6c-1.4-1-2.9-1.9-4.5-2.6L59.8,27c-2.1-0.9-4.4-1.5-6.7-1.8l-0.4-5.1C51.8,20,50.9,20,50,20 s-1.8,0-2.6,0.1l-0.4,5.1c-2.4,0.3-4.6,0.9-6.7,1.8l-2.9-4.1c-1.6,0.7-3.1,1.6-4.5,2.6l2.1,4.6c-1.9,1.4-3.5,3.1-5,4.9l-4.5-2.1 c-1,1.4-1.9,2.9-2.6,4.5l4.1,2.9c-0.9,2.1-1.5,4.4-1.8,6.8l-5,0.4C20,48.2,20,49.1,20,50s0,1.8,0.1,2.6l5,0.4 c0.3,2.4,0.9,4.7,1.8,6.8l-4.1,2.9c0.7,1.6,1.6,3.1,2.6,4.5l4.5-2.1c1.4,1.9,3.1,3.5,5,4.9l-2.1,4.6c1.4,1,2.9,1.9,4.5,2.6l2.9-4.1 c2.1,0.9,4.4,1.5,6.7,1.8l0.4,5.1C48.2,80,49.1,80,50,80s1.8,0,2.6-0.1l0.4-5.1c2.3-0.3,4.6-0.9,6.7-1.8l2.9,4.2 c1.6-0.7,3.1-1.6,4.5-2.6L65,69.9c1.9-1.4,3.5-3,4.9-4.9l4.6,2.2c1-1.4,1.9-2.9,2.6-4.5L73,59.8c0.9-2.1,1.5-4.4,1.8-6.7L79.9,52.6 z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z\\\" fill=\\\"#6699bb\\\"><animateTransform attributeName=\\\"transform\\\" type=\\\"rotate\\\" from=\\\"0 50 50\\\" to=\\\"90 50 50\\\" dur=\\\"1s\\\" repeatCount=\\\"indefinite\\\"></animateTransform></path></g></svg></div>\");\n};\n\nd3.selection.prototype.Markdown = function(content, options)\n{\n  const marked = require(\"marked\");\n  return this.html(marked(content, options));\n};\n\nString.prototype.toUncamelCase = function()\n{\n  return this.replace(/([A-Z]+)/g, \" $1\").trim();\n};\n\nString.prototype.trim = function()\n{\n  return this.replace(/(^\\s+|\\s+$)/g, \"\");\n};\n\nd3.selection.prototype.UlList = function(...children)\n{\n  this.Ul().Children(children, 'li', x => x.text(i => i));\n};\n",
     "static": true,
     "longname": "js/index.js",
     "access": null,
@@ -1617,7 +1628,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 42,
+    "__docId__": 43,
     "kind": "variable",
     "name": "d3",
     "memberof": "js/index.js",
@@ -1643,7 +1654,7 @@
     }
   },
   {
-    "__docId__": 43,
+    "__docId__": 44,
     "kind": "function",
     "name": "onload",
     "memberof": "js/index.js",
@@ -1667,7 +1678,7 @@
     "params": []
   },
   {
-    "__docId__": 44,
+    "__docId__": 45,
     "kind": "function",
     "name": "Loader",
     "memberof": "js/index.js",
@@ -1696,7 +1707,7 @@
     }
   },
   {
-    "__docId__": 45,
+    "__docId__": 46,
     "kind": "function",
     "name": "Markdown",
     "memberof": "js/index.js",
@@ -1738,7 +1749,7 @@
     }
   },
   {
-    "__docId__": 46,
+    "__docId__": 47,
     "kind": "function",
     "name": "toUncamelCase",
     "memberof": "js/index.js",
@@ -1767,7 +1778,7 @@
     }
   },
   {
-    "__docId__": 47,
+    "__docId__": 48,
     "kind": "function",
     "name": "trim",
     "memberof": "js/index.js",
@@ -1796,7 +1807,39 @@
     }
   },
   {
-    "__docId__": 48,
+    "__docId__": 49,
+    "kind": "function",
+    "name": "UlList",
+    "memberof": "js/index.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "js/index.js~UlList",
+    "access": null,
+    "export": false,
+    "importPath": "janus/js/index.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 73,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "children",
+        "types": [
+          "...*"
+        ],
+        "spread": true
+      }
+    ]
+  },
+  {
+    "__docId__": 50,
     "kind": "file",
     "name": "js/pages/index.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require(\"projects\");\n\nexport default function(context)\n{\n  const parent = context.body.clear();\n  showProjects(parent, context);\n  showStorage(parent, context);\n}\n\nfunction showProjects(parent, context)\n{\n  parent.H2(\"Current Projects\");\n  \n  projects.list().forEach(project =>\n  {\n    parent.Button(project.name).OnClick(() =>\n    {\n      window.location.hash = context.Link({\n        page: \"project\",\n        name: project.name\n      });\n    }).Display(\"block\");\n  });\n  if (projects.list().length === 0)\n  {\n    parent.P(\"No projects\");\n  }\n}\n\nfunction showStorage(parent, context)\n{\n  const storageModules = [\n    {\n      page: \"localstorage\",\n      label: \"Local Storage (offline)\"\n    },\n    {\n      page: \"indexeddb\",\n      label: \"IndexedDB (offline)\"\n    }\n  ];\n\n  parent.H2(\"Start A New Project\");\n  \n  const buttons = parent.P();\n  storageModules.forEach(module =>\n  {\n    buttons.Button(`In ${module.label}`).OnClick(() =>\n    {\n      window.location = context.Link({\n        page: module.page, \n      });\n    }).Class(\"big\").Display(\"block\");\n  });\n\n}\n",
@@ -1807,7 +1850,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 49,
+    "__docId__": 51,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/pages/index.js",
@@ -1833,7 +1876,7 @@
     }
   },
   {
-    "__docId__": 50,
+    "__docId__": 52,
     "kind": "function",
     "name": "index",
     "memberof": "js/pages/index.js",
@@ -1864,7 +1907,7 @@
     ]
   },
   {
-    "__docId__": 51,
+    "__docId__": 53,
     "kind": "function",
     "name": "showProjects",
     "memberof": "js/pages/index.js",
@@ -1901,7 +1944,7 @@
     ]
   },
   {
-    "__docId__": 52,
+    "__docId__": 54,
     "kind": "function",
     "name": "showStorage",
     "memberof": "js/pages/index.js",
@@ -1938,7 +1981,7 @@
     ]
   },
   {
-    "__docId__": 53,
+    "__docId__": 55,
     "kind": "file",
     "name": "js/pages/indexeddb.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require(\"projects\");\n\nexport default function(context)\n{\n  const parent = context.body.clear();\n  \n  parent.Div().Label(\"Please insert name of project (use camelcase):\");\n  \n  const name = parent.Div().Text().Pattern(\"^[a-zA-Z0-9]+$\");\n  \n  parent.Div().Button(\"Create\").OnClick(() =>\n  {\n    if (name.Validity().valid)\n    {\n      projects.add({\n        type: \"indexeddb\",\n        name: name.Value()\n      });\n      window.location.hash = \"#\";\n    }\n  });\n}\n",
@@ -1949,7 +1992,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 54,
+    "__docId__": 56,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/pages/indexeddb.js",
@@ -1975,7 +2018,7 @@
     }
   },
   {
-    "__docId__": 55,
+    "__docId__": 57,
     "kind": "function",
     "name": "indexeddb",
     "memberof": "js/pages/indexeddb.js",
@@ -2006,7 +2049,7 @@
     ]
   },
   {
-    "__docId__": 56,
+    "__docId__": 58,
     "kind": "file",
     "name": "js/pages/localstorage.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require(\"projects\");\n\nexport default function(context)\n{\n  projects.add({\n    type: \"localstorage\",\n    name: \"LocalStorage\"\n  });\n  window.location.hash = \"#\";\n};\n",
@@ -2017,7 +2060,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 57,
+    "__docId__": 59,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/pages/localstorage.js",
@@ -2043,7 +2086,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 60,
     "kind": "function",
     "name": "localstorage",
     "memberof": "js/pages/localstorage.js",
@@ -2074,10 +2117,10 @@
     ]
   },
   {
-    "__docId__": 59,
+    "__docId__": 61,
     "kind": "file",
     "name": "js/pages/project.js",
-    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require(\"projects\");\nconst types = require(\"types\");\nconst naturalSort = require(\"javascript-natural-sort\");\n\nimport * as analytics from \"common/analytics\";\n\nexport default function(context)\n{\n  context.head.text(context.State(\"name\").toUncamelCase());\n  showFiles(context, projects.get(context.State(\"name\")));\n}\n\nfunction showFiles(context, project)\n{\n  project.listFiles().then(list =>\n  {\n    let files = {};\n    let parent = context.body.clear();\n    Object.keys(list)\n      .sort(naturalSort)\n      .forEach(key =>\n      {\n        showFile(context, parent.Div(), project, list[key], files);\n      });\n    newFile(context, parent.Div().Class(\"noprint\"), project);\n  });\n}\n\nfunction newFile(context, parent, project)\n{\n  parent.H2(\"Create New File\");\n  parent.Label(\"Name: \").Display(\"block\");\n  let nameInput = parent.Text().Pattern(\"^[A-Za-z0-9\\-_]+$\").Display(\"block\");\n  parent.Label(\"Type: \").Display(\"block\");\n  let typeInput = parent.Select().Options(getTypes()).Display(\"block\");\n  parent.Label(\"Template: \").Display(\"block\");\n  let templateInput = parent.Select().Options(getTypeDefaults(typeInput.Value())).Display(\"block\");\n  typeInput.OnChange(() =>\n  {\n    analytics.event(typeInput.Value(), \"select\");\n    templateInput.Options(getTypeDefaults(typeInput.Value()));\n  });\n  templateInput.OnChange(() =>\n  {\n    analytics.event(typeInput.Value(), \"select\", templateInput.Value());\n  });\n  parent.Button(\"Create\").OnClick(() =>\n  {\n    let name = nameInput.Value();\n    let type = typeInput.Value();\n    let template = templateInput.Value();\n    analytics.event(type, \"create\", template);\n    if (name && nameInput.Validity().valid)\n    {\n      project.setFile(project.makeKey(name, type), types[type].templates[template])\n        .then(() =>\n        {\n          analytics.event(type, \"create-success\", template);\n          showFiles(context, project);\n        });\n    }\n  }).Display(\"block\");\n}\n\nfunction showFile(context, section, project, item, items)\n{\n  section.H1(item.name.toUncamelCase());\n  let itemContainer = section.Div().Class(\"item\");\n  let itemContent = itemContainer.Div().Class(\"content\");\n  let itemToolbar = itemContainer.Div().Class(\"toolbar\");\n  let module = types[item.type];\n  itemContent.Loader();\n  items[item.key] = project.getFile(item.key);\n  items[item.key].then(contents =>\n  {\n    module.view(itemContent.clear(), {items, item}, contents);\n    itemToolbar.Button(\"Rename\").OnClick(() =>\n    {\n      analytics.event(item.type, \"rename\", \"attempt\");\n      let newName = prompt(`Please enter a new name for ${item.name}`, item.name);\n      if (newName)\n      {\n        newName = newName.replace(/[^A-Z0-9a-z\\-_]/g, \"\");\n        if (newName && newName !== item.name)\n        {\n          let newKey = project.makeKey(newName, item.type);\n          project.renameFile(item.key, newKey)\n            .then(() =>\n            {\n              analytics.event(item.type, \"rename\", \"success\");\n              item.key = newKey;\n              showFiles(context, project);\n            }, err =>\n            {\n              alert(err);\n              analytics.event(item.type, \"rename\", \"failure\");\n            });\n        }\n      }\n    });\n    itemToolbar.Button(\"Edit\").OnClick(() =>\n    {\n      analytics.event(item.type, \"edit\");\n      itemToolbar.Display(\"none\");\n      let editContainer = itemContent.clear().Div();\n      let changed = contents;\n      types[item.type].edit(editContainer, {items, item}, contents, update =>\n      {\n        changed = update;\n      });  \n      let editToolbar = itemContent.Div();\n      editToolbar.Button(\"Save\").OnClick(() =>\n      {\n        analytics.event(item.type, \"save\", \"attempt\");\n        project.setFile(item.key, changed).then(() =>\n        {\n          alert(\"Saved\");\n          contents = changed;\n          analytics.event(item.type, \"save\", \"success\");\n        }, err =>\n        {\n          alert(err);\n          analytics.event(item.type, \"save\", \"failure\");\n        });\n      });\n      editToolbar.Button(\"Done\").OnClick(() =>\n      {\n        itemToolbar.Display(\"\");\n        if (JSON.stringify(contents) !== JSON.stringify(changed) && confirm(\"Save changes?\"))\n        {\n          analytics.event(item.type, \"done\", \"attempt\");\n          project.setFile(item.key, changed).then(() =>\n          {\n            analytics.event(item.type, \"done\", \"success\");\n            contents = changed;\n            module.view(itemContent.clear(), item, contents);\n          }, err =>\n          {\n            console.error(err);\n            analytics.event(item.type, \"done\", \"failure\");\n          });\n        }\n        else\n        {\n          analytics.event(item.type, \"done\", \"nochange\");\n          module.view(itemContent.clear(), item, contents);\n        }\n      });\n    });\n    itemToolbar.Button(\"Delete\").OnClick(() =>\n    {\n      analytics.event(item.type, \"delete\", \"click\");\n      if (confirm(`Are you sure you want to delete ${item.name}?`))\n      {\n        analytics.event(item.type, \"delete\", \"attempt\");\n        project.deleteFile(item.key)\n          .then(() =>\n          {\n            analytics.event(item.type, \"delete\", \"success\");\n            showFiles(context, project);\n          }, err =>\n          {\n            analytics.event(item.type, \"delete\", \"failure\");\n            alert(err);\n          });\n      }\n      else\n      {\n        analytics.event(item.type, \"delete\", \"cancel\");\n      }\n    });\n  });\n}\n\nfunction getTypes()\n{\n  let output = {};\n  Object.keys(types).forEach(type => output[type] = types[type].name);\n  return output;\n}\n\nfunction getTypeDefaults(type)\n{\n  let output = {};\n  Object.keys(types[type].templates).forEach(template => output[template] = template.toUncamelCase());\n  return output;\n}\n",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst projects = require(\"projects\");\nconst types = require(\"types\");\nconst naturalSort = require(\"javascript-natural-sort\");\n\nimport * as analytics from \"common/analytics\";\n\nexport default function(context)\n{\n  context.head.text(context.State(\"name\").toUncamelCase());\n  showFiles(context, projects.get(context.State(\"name\")));\n}\n\nfunction showFiles(context, project)\n{\n  project.listFiles().then(list =>\n  {\n    let files = {};\n    let parent = context.body.clear();\n    Object.keys(list)\n      .sort(naturalSort)\n      .forEach(key =>\n      {\n        showFile(context, parent.Div(), project, list[key], files);\n      });\n    newFile(context, parent.Div().Class(\"noprint\"), project);\n  });\n}\n\nfunction newFile(context, parent, project)\n{\n  parent.H2(\"Create New File\");\n  parent.Label(\"Name: \").Display(\"block\");\n  let nameInput = parent.Text().Pattern(\"^[A-Za-z0-9\\-_]+$\").Display(\"block\");\n  parent.Label(\"Type: \").Display(\"block\");\n  let typeInput = parent.Select().Options(getTypes()).Display(\"block\");\n  parent.Label(\"Template: \").Display(\"block\");\n  let templateInput = parent.Select().Options(getTypeDefaults(typeInput.Value())).Display(\"block\");\n  typeInput.OnChange(() =>\n  {\n    analytics.event(typeInput.Value(), \"select\");\n    templateInput.Options(getTypeDefaults(typeInput.Value()));\n  });\n  templateInput.OnChange(() =>\n  {\n    analytics.event(typeInput.Value(), \"select\", templateInput.Value());\n  });\n  parent.Button(\"Create\").OnClick(() =>\n  {\n    let name = nameInput.Value();\n    let type = typeInput.Value();\n    let template = templateInput.Value();\n    analytics.event(type, \"create\", template);\n    if (name && nameInput.Validity().valid)\n    {\n      project.setFile(project.makeKey(name, type), types[type].templates[template])\n        .then(() =>\n        {\n          analytics.event(type, \"create-success\", template);\n          showFiles(context, project);\n        });\n    }\n  }).Display(\"block\");\n}\n\nfunction showFile(context, section, project, item, items)\n{\n  section.H1(item.name.toUncamelCase());\n  let itemContainer = section.Div().Class(\"item\");\n  let itemContent = itemContainer.Div().Class(\"content\");\n  let itemToolbar = itemContainer.Div().Class(\"toolbar\");\n  let module = types[item.type];\n  itemContent.Loader();\n  items[item.key] = project.getFile(item.key);\n  items[item.key].then(contents =>\n  {\n    try\n    {\n      module.view(itemContent.clear(), {items, item}, contents);\n    }\n    catch(e)\n    {\n      console.error(e);\n    }\n    itemToolbar.Button(\"Rename\").OnClick(() =>\n    {\n      analytics.event(item.type, \"rename\", \"attempt\");\n      let newName = prompt(`Please enter a new name for ${item.name}`, item.name);\n      if (newName)\n      {\n        newName = newName.replace(/[^A-Z0-9a-z\\-_]/g, \"\");\n        if (newName && newName !== item.name)\n        {\n          let newKey = project.makeKey(newName, item.type);\n          project.renameFile(item.key, newKey)\n            .then(() =>\n            {\n              analytics.event(item.type, \"rename\", \"success\");\n              item.key = newKey;\n              showFiles(context, project);\n            }, err =>\n            {\n              alert(err);\n              analytics.event(item.type, \"rename\", \"failure\");\n            });\n        }\n      }\n    });\n    itemToolbar.Button(\"Edit\").OnClick(() =>\n    {\n      analytics.event(item.type, \"edit\");\n      itemToolbar.Display(\"none\");\n      let editContainer = itemContent.clear().Div();\n      let changed = contents;\n      try\n      {\n        types[item.type].edit(editContainer, {items, item}, contents, update =>\n        {\n          changed = update;\n        });  \n      }\n      catch(e)\n      {\n        console.error(e);\n      }\n      let editToolbar = itemContent.Div();\n      editToolbar.Button(\"Save\").OnClick(() =>\n      {\n        analytics.event(item.type, \"save\", \"attempt\");\n        project.setFile(item.key, changed).then(() =>\n        {\n          alert(\"Saved\");\n          contents = changed;\n          analytics.event(item.type, \"save\", \"success\");\n        }, err =>\n        {\n          alert(err);\n          analytics.event(item.type, \"save\", \"failure\");\n        });\n      });\n      editToolbar.Button(\"Done\").OnClick(() =>\n      {\n        itemToolbar.Display(\"\");\n        if (JSON.stringify(contents) !== JSON.stringify(changed) && confirm(\"Save changes?\"))\n        {\n          analytics.event(item.type, \"done\", \"attempt\");\n          project.setFile(item.key, changed).then(() =>\n          {\n            analytics.event(item.type, \"done\", \"success\");\n            contents = changed;\n            module.view(itemContent.clear(), item, contents);\n          }, err =>\n          {\n            console.error(err);\n            analytics.event(item.type, \"done\", \"failure\");\n          });\n        }\n        else\n        {\n          analytics.event(item.type, \"done\", \"nochange\");\n          module.view(itemContent.clear(), item, contents);\n        }\n      });\n    });\n    itemToolbar.Button(\"Delete\").OnClick(() =>\n    {\n      analytics.event(item.type, \"delete\", \"click\");\n      if (confirm(`Are you sure you want to delete ${item.name}?`))\n      {\n        analytics.event(item.type, \"delete\", \"attempt\");\n        project.deleteFile(item.key)\n          .then(() =>\n          {\n            analytics.event(item.type, \"delete\", \"success\");\n            showFiles(context, project);\n          }, err =>\n          {\n            analytics.event(item.type, \"delete\", \"failure\");\n            alert(err);\n          });\n      }\n      else\n      {\n        analytics.event(item.type, \"delete\", \"cancel\");\n      }\n    });\n  });\n}\n\nfunction getTypes()\n{\n  let output = {};\n  Object.keys(types).forEach(type => output[type] = types[type].name);\n  return output;\n}\n\nfunction getTypeDefaults(type)\n{\n  let output = {};\n  Object.keys(types[type].templates).forEach(template => output[template] = template.toUncamelCase());\n  return output;\n}\n",
     "static": true,
     "longname": "js/pages/project.js",
     "access": null,
@@ -2085,7 +2128,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 60,
+    "__docId__": 62,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/pages/project.js",
@@ -2111,7 +2154,7 @@
     }
   },
   {
-    "__docId__": 61,
+    "__docId__": 63,
     "kind": "variable",
     "name": "types",
     "memberof": "js/pages/project.js",
@@ -2137,7 +2180,7 @@
     }
   },
   {
-    "__docId__": 62,
+    "__docId__": 64,
     "kind": "variable",
     "name": "naturalSort",
     "memberof": "js/pages/project.js",
@@ -2163,7 +2206,7 @@
     }
   },
   {
-    "__docId__": 63,
+    "__docId__": 65,
     "kind": "function",
     "name": "project",
     "memberof": "js/pages/project.js",
@@ -2194,7 +2237,7 @@
     ]
   },
   {
-    "__docId__": 64,
+    "__docId__": 66,
     "kind": "function",
     "name": "showFiles",
     "memberof": "js/pages/project.js",
@@ -2231,7 +2274,7 @@
     ]
   },
   {
-    "__docId__": 65,
+    "__docId__": 67,
     "kind": "function",
     "name": "newFile",
     "memberof": "js/pages/project.js",
@@ -2274,7 +2317,7 @@
     ]
   },
   {
-    "__docId__": 66,
+    "__docId__": 68,
     "kind": "function",
     "name": "showFile",
     "memberof": "js/pages/project.js",
@@ -2329,7 +2372,7 @@
     ]
   },
   {
-    "__docId__": 67,
+    "__docId__": 69,
     "kind": "function",
     "name": "getTypes",
     "memberof": "js/pages/project.js",
@@ -2342,7 +2385,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 181,
+    "lineNumber": 195,
     "undocument": true,
     "unknown": [
       {
@@ -2358,7 +2401,7 @@
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 70,
     "kind": "function",
     "name": "getTypeDefaults",
     "memberof": "js/pages/project.js",
@@ -2371,7 +2414,7 @@
     "importPath": "janus/js/pages/project.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 188,
+    "lineNumber": 202,
     "undocument": true,
     "unknown": [
       {
@@ -2394,7 +2437,7 @@
     }
   },
   {
-    "__docId__": 69,
+    "__docId__": 71,
     "kind": "file",
     "name": "js/projects/IndexedDB.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport { Storage } from \"./Storage\";\n\nconst IndexedDB = self.indexedDB || self.webkitIndexedDB || self.mozIndexedDB || self.msIndexedDB;\n\nexport class IndexedDBStorage extends Storage\n{\n  constructor(state)\n  {\n    super(state);\n    this.db = new Promise((resolve, reject) =>\n    {\n      const request = IndexedDB.open(state.name, 1);\n      request.onupgradeneeded = () => request.result.createObjectStore(\"data\");\n      request.onsuccess = () => resolve(request.result);\n      request.onerror = e => reject(e);\n    });\n  }\n\n  _store()\n  {\n    return new Promise((resolve, reject) =>\n    {\n      this.db.then(db =>\n      {\n        try\n        {\n          resolve(db.transaction(\"data\", \"readwrite\").objectStore(\"data\"));\n        }\n        catch(e)\n        {\n          reject(e);\n        }\n      }, reject);\n    });\n  }\n\n  listFiles()\n  {\n    return new Promise((resolve, reject) =>\n    {\n      this._store().then(store =>\n      {\n        const request = store.getAllKeys();\n        request.onsuccess = () =>\n        {\n          let output = {};\n          for (let key of request.result)\n          {\n            if (this.isKey(key))\n            {\n              output[key] = this.getKeyItem(key);\n            }\n          }\n          resolve(output);\n        };\n        request.onerror = reject;\n      }, reject);\n    });\n  }\n  \n  getFile(key)\n  {\n    return new Promise((resolve, reject) =>\n    {\n      this._store().then(store =>\n      {\n        const request = store.get(key);\n        request.onsuccess = () =>\n        {\n          resolve(request.result);\n        };\n        request.onerror = reject;\n      }, reject);\n    });\n  }\n  \n  setFile(key, contents)\n  {\n    return new Promise((resolve, reject) =>\n    {\n      this._store().then(store =>\n      {\n        const request = store.put(contents, key);\n        request.onsuccess = () =>\n        {\n          resolve(request.result);\n        };\n        request.onerror = reject;\n      }, reject);\n    });\n  }\n  \n  deleteFile(key)\n  {\n    return new Promise((resolve, reject) =>\n    {\n      this._store().then(store =>\n      {\n        const request = store.delete(key);\n        request.onsuccess = () =>\n        {\n          resolve(request.result);\n        };\n        request.onerror = reject;\n      }, reject);\n    });\n  }\n}\n",
@@ -2405,7 +2448,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 70,
+    "__docId__": 72,
     "kind": "variable",
     "name": "IndexedDB",
     "memberof": "js/projects/IndexedDB.js",
@@ -2431,7 +2474,7 @@
     }
   },
   {
-    "__docId__": 71,
+    "__docId__": 73,
     "kind": "class",
     "name": "IndexedDBStorage",
     "memberof": "js/projects/IndexedDB.js",
@@ -2456,7 +2499,7 @@
     ]
   },
   {
-    "__docId__": 72,
+    "__docId__": 74,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "js/projects/IndexedDB.js~IndexedDBStorage",
@@ -2484,7 +2527,7 @@
     ]
   },
   {
-    "__docId__": 73,
+    "__docId__": 75,
     "kind": "member",
     "name": "db",
     "memberof": "js/projects/IndexedDB.js~IndexedDBStorage",
@@ -2507,7 +2550,7 @@
     }
   },
   {
-    "__docId__": 74,
+    "__docId__": 76,
     "kind": "method",
     "name": "_store",
     "memberof": "js/projects/IndexedDB.js~IndexedDBStorage",
@@ -2533,7 +2576,7 @@
     }
   },
   {
-    "__docId__": 75,
+    "__docId__": 77,
     "kind": "method",
     "name": "listFiles",
     "memberof": "js/projects/IndexedDB.js~IndexedDBStorage",
@@ -2559,7 +2602,7 @@
     }
   },
   {
-    "__docId__": 76,
+    "__docId__": 78,
     "kind": "method",
     "name": "getFile",
     "memberof": "js/projects/IndexedDB.js~IndexedDBStorage",
@@ -2592,7 +2635,7 @@
     }
   },
   {
-    "__docId__": 77,
+    "__docId__": 79,
     "kind": "method",
     "name": "setFile",
     "memberof": "js/projects/IndexedDB.js~IndexedDBStorage",
@@ -2631,7 +2674,7 @@
     }
   },
   {
-    "__docId__": 78,
+    "__docId__": 80,
     "kind": "method",
     "name": "deleteFile",
     "memberof": "js/projects/IndexedDB.js~IndexedDBStorage",
@@ -2664,7 +2707,7 @@
     }
   },
   {
-    "__docId__": 79,
+    "__docId__": 81,
     "kind": "file",
     "name": "js/projects/LocalStorage.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport { Storage } from \"./Storage\";\n\nexport class LocalStorage extends Storage\n{\n  /**\n   * @return {Promise} Will resolve with map[filekey]FileDetails\n   */\n  listFiles()\n  {\n    return new Promise(resolve =>\n    {\n      let output = {};\n      for (let key in localStorage)\n      {\n        if (this.isKey(key))\n        {\n          output[key] = this.getKeyItem(key);\n        }\n      }\n      resolve(output);\n    });\n  }\n  \n  /**\n   * @param {String} key Name of file to read.\n   * @return {Promise} Will resolve with content of file (string).\n   */\n  getFile(key)\n  {\n    return new Promise(resolve => resolve(localStorage[key]));\n  }\n  \n  /**\n   * @param {String} key Name of file to write.\n   * @param {String} contents Contents of file.\n   * @return {Promise} Will resolve when file is saved.\n   */\n  setFile(key, contents)\n  {\n    localStorage[key] = contents;\n    return new Promise(resolve => resolve());\n  }\n  \n  /**\n   * @param {String} key Name of file to delete.\n   * @return {Promise} Will resolve when file is deleted.\n   */\n  deleteFile(key)\n  {\n    delete localStorage[key];\n    return new Promise(resolve => resolve());\n  }\n}\n",
@@ -2675,7 +2718,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 80,
+    "__docId__": 82,
     "kind": "class",
     "name": "LocalStorage",
     "memberof": "js/projects/LocalStorage.js",
@@ -2700,7 +2743,7 @@
     ]
   },
   {
-    "__docId__": 81,
+    "__docId__": 83,
     "kind": "method",
     "name": "listFiles",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -2722,7 +2765,7 @@
     }
   },
   {
-    "__docId__": 82,
+    "__docId__": 84,
     "kind": "method",
     "name": "getFile",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -2755,7 +2798,7 @@
     }
   },
   {
-    "__docId__": 83,
+    "__docId__": 85,
     "kind": "method",
     "name": "setFile",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -2798,7 +2841,7 @@
     }
   },
   {
-    "__docId__": 84,
+    "__docId__": 86,
     "kind": "method",
     "name": "deleteFile",
     "memberof": "js/projects/LocalStorage.js~LocalStorage",
@@ -2831,7 +2874,7 @@
     }
   },
   {
-    "__docId__": 85,
+    "__docId__": 87,
     "kind": "file",
     "name": "js/projects/Storage.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport * as types from \"types\";\n\n/**\n * Parent class of all storage elements.\n */\nexport class Storage\n{\n  constructor(state)\n  {\n    this.state = state; \n  }\n  \n  makeKey(name, type)\n  {\n    return `${name}.${type}`;\n  }\n  \n  isKey(name)\n  {\n    const match = name.match(/^([A-Za-z0-9\\-_]+)\\.(\\w+)$/);\n    return match && types[match[2]];\n  }\n  \n  getKeyItem(name)\n  {\n    let match = name.match(/^([A-Za-z0-9\\-_]+)\\.(\\w+)$/);\n    return {\n      key: name,\n      type: match[2],\n      name: match[1],\n    };\n  }\n  \n  renameFile(oldKey, newKey)\n  {\n    return new Promise((resolve, reject) =>\n    {\n      this.getFile(oldKey).then(contents =>\n      {\n        this.setFile(newKey, contents).then(() =>\n        {\n          this.deleteFile(oldKey).then(resolve, reject);\n        }, reject);\n      }, reject);\n    });\n  }\n  \n}\n",
@@ -2842,7 +2885,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 86,
+    "__docId__": 88,
     "kind": "class",
     "name": "Storage",
     "memberof": "js/projects/Storage.js",
@@ -2857,7 +2900,7 @@
     "interface": false
   },
   {
-    "__docId__": 87,
+    "__docId__": 89,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "js/projects/Storage.js~Storage",
@@ -2885,7 +2928,7 @@
     ]
   },
   {
-    "__docId__": 88,
+    "__docId__": 90,
     "kind": "member",
     "name": "state",
     "memberof": "js/projects/Storage.js~Storage",
@@ -2908,7 +2951,7 @@
     }
   },
   {
-    "__docId__": 89,
+    "__docId__": 91,
     "kind": "method",
     "name": "makeKey",
     "memberof": "js/projects/Storage.js~Storage",
@@ -2947,7 +2990,7 @@
     }
   },
   {
-    "__docId__": 90,
+    "__docId__": 92,
     "kind": "method",
     "name": "isKey",
     "memberof": "js/projects/Storage.js~Storage",
@@ -2980,7 +3023,7 @@
     }
   },
   {
-    "__docId__": 91,
+    "__docId__": 93,
     "kind": "method",
     "name": "getKeyItem",
     "memberof": "js/projects/Storage.js~Storage",
@@ -3013,7 +3056,7 @@
     }
   },
   {
-    "__docId__": 92,
+    "__docId__": 94,
     "kind": "method",
     "name": "renameFile",
     "memberof": "js/projects/Storage.js~Storage",
@@ -3052,7 +3095,7 @@
     }
   },
   {
-    "__docId__": 93,
+    "__docId__": 95,
     "kind": "file",
     "name": "js/projects/index.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nlet projects = JSON.parse(localStorage.janus || \"{}\");\n\nimport { LocalStorage } from \"./LocalStorage\";\nimport { IndexedDBStorage } from \"./IndexedDB\";\n\nlet types = {\n  \"localstorage\": LocalStorage,\n  \"indexeddb\": IndexedDBStorage,\n};\n\nexport function add(spec)\n{\n  projects[spec.name] = spec;\n  localStorage.janus = JSON.stringify(projects);\n}\n\nexport function get(name)\n{\n  let project = projects[name];\n  let class_ = types[project.type];\n  return new class_(project);\n}\n\nexport function list()\n{\n  return Object.keys(projects).map(name => projects[name]);\n}\n",
@@ -3063,7 +3106,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 94,
+    "__docId__": 96,
     "kind": "variable",
     "name": "projects",
     "memberof": "js/projects/index.js",
@@ -3089,7 +3132,7 @@
     }
   },
   {
-    "__docId__": 95,
+    "__docId__": 97,
     "kind": "variable",
     "name": "types",
     "memberof": "js/projects/index.js",
@@ -3115,7 +3158,7 @@
     }
   },
   {
-    "__docId__": 96,
+    "__docId__": 98,
     "kind": "function",
     "name": "add",
     "memberof": "js/projects/index.js",
@@ -3146,7 +3189,7 @@
     ]
   },
   {
-    "__docId__": 97,
+    "__docId__": 99,
     "kind": "function",
     "name": "get",
     "memberof": "js/projects/index.js",
@@ -3182,7 +3225,7 @@
     }
   },
   {
-    "__docId__": 98,
+    "__docId__": 100,
     "kind": "function",
     "name": "list",
     "memberof": "js/projects/index.js",
@@ -3211,10 +3254,10 @@
     }
   },
   {
-    "__docId__": 99,
+    "__docId__": 101,
     "kind": "file",
     "name": "js/types/index.js",
-    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport * from \"./md\";\nexport * from \"./swot\";\nexport * from \"./usecase\";\nexport * from \"./user\";\n",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nexport * from \"./md\";\nexport * from \"./stakeholder\";\nexport * from \"./swot\";\nexport * from \"./usecase\";\nexport * from \"./user\";\n",
     "static": true,
     "longname": "js/types/index.js",
     "access": null,
@@ -3222,7 +3265,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 100,
+    "__docId__": 102,
     "kind": "file",
     "name": "js/types/md.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nconst marked = require(\"marked\");\n\nconst name = \"Note\";\n\nfunction view(container, item, content)\n{\n\n  let sanitize = true;\n    \n  content = marked(content, {sanitize});\n  \n  let progress = content.match(/\\[[x ]\\]/g);\n  \n  //content = content.replace(/\\[ ]/g, \"<input type=\"checkbox\" onclick=\"return false;\" />\");\n  //content = content.replace(/\\[x\\]/g, \"<input type=\"checkbox\" checked onclick=\"return false;\" />\");\n  \n  container.html(content);\n  \n  if (progress)\n  {\n    let width = Math.floor(progress.filter(x => x === \"[x]\").length / progress.length * 100) + \"%\";\n    if (width !== \"0%\")\n    {\n      container.Div().Class(\"progress\").Div(\"Progress \" + width).Width(width).Class(\"bar\");\n    }\n  }\n}\n\nfunction edit(container, item, content, save)\n{\n  let editor = container.Textarea(content).Display(\"inline-block\").BoxSizing(\"border-box\").VerticalAlign(\"top\").Width(\"50%\").MinHeight(\"200px\").Resize(\"vertical\");\n  let preview = container.Div().Display(\"inline-block\").BoxSizing(\"border-box\").VerticalAlign(\"top\").Width(\"50%\").Padding(\"0.5em 0.5em 0.5em 0.5em\");\n  editor.OnInput(() =>\n  {\n    this.view(preview, item, editor.Value());\n    save(editor.Value());\n  });\n  editor.OnChange(() =>\n  {\n    save(editor.Value());\n  });\n  editor.OnInput()();\n}\n\nconst templates = {\n  Blank: \"\",\n  Checklist: `\n\n- [x] Task #1\n- [ ] Task #2\n- [ ] Task #3\n\n`,\n};\n\nexport const md = {\n  name,\n  view,\n  edit,\n  templates\n};\n",
@@ -3233,7 +3276,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 101,
+    "__docId__": 103,
     "kind": "variable",
     "name": "marked",
     "memberof": "js/types/md.js",
@@ -3259,7 +3302,7 @@
     }
   },
   {
-    "__docId__": 102,
+    "__docId__": 104,
     "kind": "variable",
     "name": "name",
     "memberof": "js/types/md.js",
@@ -3285,7 +3328,7 @@
     }
   },
   {
-    "__docId__": 103,
+    "__docId__": 105,
     "kind": "function",
     "name": "view",
     "memberof": "js/types/md.js",
@@ -3328,7 +3371,7 @@
     ]
   },
   {
-    "__docId__": 104,
+    "__docId__": 106,
     "kind": "function",
     "name": "edit",
     "memberof": "js/types/md.js",
@@ -3377,7 +3420,7 @@
     ]
   },
   {
-    "__docId__": 105,
+    "__docId__": 107,
     "kind": "variable",
     "name": "templates",
     "memberof": "js/types/md.js",
@@ -3403,7 +3446,7 @@
     }
   },
   {
-    "__docId__": 106,
+    "__docId__": 108,
     "kind": "variable",
     "name": "md",
     "memberof": "js/types/md.js",
@@ -3429,10 +3472,194 @@
     }
   },
   {
-    "__docId__": 107,
+    "__docId__": 109,
+    "kind": "file",
+    "name": "js/types/stakeholder.js",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport * as schema from \"common/schema\"\n\nconst name = \"Stakeholder\";\n\nconst schemaDefinition = {\n  type: 'object',\n  properties: {\n    Photo: {\n      type: 'string',\n      format: 'image'\n    },\n    Background: {\n      type: 'string',\n    },\n    PerceivedSuccess: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    },\n    Power: {\n      type: 'number',\n      format: 'range'\n    },\n    Interest: {\n      type: 'number',\n      format: 'range'\n    }\n  }\n};\n\nfunction view(container, item, content)\n{\n  const board = container.Table().Class('Stakeholder').Tbody().Tr();\n  \n  if (content.Photo)\n  {\n    board.Td().Img().Src(content.Photo);\n  }\n  \n  if (content.Background)\n  {\n    board.Td().P(content.Background);\n  }\n  \n  if (content.PerceivedSuccess)\n  {\n    board.Td().Ul().Children(content.PerceivedSuccess, 'li', x => x.text(i => i));\n  }\n  \n  const outcome = board.Td()//.Border('2px solid black');\n  \n  if (content.Power > 0 && content.Interest > 0)\n  {\n    outcome.Strong('Promoter / Key Player');\n    outcome.UlList('Manage closely',\n                   'Engage regularly',\n                   'Consult regularly');\n  }\n  else if (content.Power > 0 && content.Interest < 0)\n  {\n    outcome.Strong('Latent');\n    outcome.UlList('Engage and consult in interest areas',\n                   'Aim to increase their level of interest');\n  }\n  else if (content.Power < 0 && content.Interest > 0)\n  {\n    outcome.Strong('Defender / Ambassador');\n    outcome.UlList('Keep informed',\n                   'Consult in interest area',\n                   'Keep involved in low risk areas');\n  }\n  else\n  {\n    outcome.Strong('Uninterested');\n    outcome.UlList('Inform via general communication (e.g. newsletters, websites)',\n                   'Aim to increase their level of interest');\n  }\n}\n\nconst edit = schema.editor(schemaDefinition);\n\nconst templates = {\n  Blank: {},\n};\n\nexport const stakeholder = {\n  name,\n  view,\n  edit,\n  templates\n};\n",
+    "static": true,
+    "longname": "js/types/stakeholder.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 110,
+    "kind": "variable",
+    "name": "name",
+    "memberof": "js/types/stakeholder.js",
+    "static": true,
+    "longname": "js/types/stakeholder.js~name",
+    "access": null,
+    "export": false,
+    "importPath": "janus/js/types/stakeholder.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 111,
+    "kind": "variable",
+    "name": "schemaDefinition",
+    "memberof": "js/types/stakeholder.js",
+    "static": true,
+    "longname": "js/types/stakeholder.js~schemaDefinition",
+    "access": null,
+    "export": false,
+    "importPath": "janus/js/types/stakeholder.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "{\"type\": string, \"properties\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 112,
+    "kind": "function",
+    "name": "view",
+    "memberof": "js/types/stakeholder.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "js/types/stakeholder.js~view",
+    "access": null,
+    "export": false,
+    "importPath": "janus/js/types/stakeholder.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 39,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "container",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "item",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "content",
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
+    "__docId__": 113,
+    "kind": "variable",
+    "name": "edit",
+    "memberof": "js/types/stakeholder.js",
+    "static": true,
+    "longname": "js/types/stakeholder.js~edit",
+    "access": null,
+    "export": false,
+    "importPath": "janus/js/types/stakeholder.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 88,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 114,
+    "kind": "variable",
+    "name": "templates",
+    "memberof": "js/types/stakeholder.js",
+    "static": true,
+    "longname": "js/types/stakeholder.js~templates",
+    "access": null,
+    "export": false,
+    "importPath": "janus/js/types/stakeholder.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 90,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "{\"Blank\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 115,
+    "kind": "variable",
+    "name": "stakeholder",
+    "memberof": "js/types/stakeholder.js",
+    "static": true,
+    "longname": "js/types/stakeholder.js~stakeholder",
+    "access": null,
+    "export": true,
+    "importPath": "janus/js/types/stakeholder.js",
+    "importStyle": "{stakeholder}",
+    "description": null,
+    "lineNumber": 94,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "{\"name\": *, \"view\": *, \"edit\": *, \"templates\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 116,
     "kind": "file",
     "name": "js/types/swot.js",
-    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport * as schema from \"common/schema\"\n\nconst name = \"SWOT\";\n\nconst schemaDefinition = {\n  type: 'object',\n  properties: {\n    Strengths: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    },\n    Weaknesses: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    },\n    Opportunities: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    },\n    Threats: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    }\n  }\n};\n\nfunction view(container, item, content)\n{\n  const board = container.Table().Class('SWOT').Tbody();\n  const upperHead = board.Tr();\n  const upperBody = board.Tr();\n  const lowerHead = board.Tr();\n  const lowerBody = board.Tr();\n  \n  upperHead.Th('Strengths');\n  upperBody.Td().Children(content.Strengths, 'li', point => point.text(text => text))\n  \n  upperHead.Th('Weaknesses');\n  upperBody.Td().Children(content.Weaknesses, 'li', point => point.text(text => text))\n  \n  lowerHead.Th('Opportunities');\n  lowerBody.Td().Children(content.Opportunities, 'li', point => point.text(text => text))\n  \n  lowerHead.Th('Threats');\n  lowerBody.Td().Children(content.Threats, 'li', point => point.text(text => text))\n  \n}\nconst edit = schema.editor(schemaDefinition);\n\nconst templates = {\n  Blank: {},\n};\n\nexport const swot = {\n  name,\n  view,\n  edit,\n  templates\n};\n",
+    "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport * as schema from \"common/schema\"\n\nconst name = \"SWOT\";\n\nconst schemaDefinition = {\n  type: 'object',\n  properties: {\n    Strengths: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    },\n    Weaknesses: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    },\n    Opportunities: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    },\n    Threats: {\n      type: 'array',\n      format: 'onePerLineString',\n      items: {\n        type: 'string'\n      }\n    }\n  }\n};\n\nfunction view(container, item, content)\n{\n  const board = container.Table().Class('SWOT').Tbody();\n  const upperHead = board.Tr();\n  const upperBody = board.Tr();\n  const lowerHead = board.Tr();\n  const lowerBody = board.Tr();\n  \n  upperHead.Th('Strengths');\n  upperBody.Td().Children(content.Strengths || [], 'li', point => point.text(text => text))\n  \n  upperHead.Th('Weaknesses');\n  upperBody.Td().Children(content.Weaknesses || [], 'li', point => point.text(text => text))\n  \n  lowerHead.Th('Opportunities');\n  lowerBody.Td().Children(content.Opportunities || [], 'li', point => point.text(text => text))\n  \n  lowerHead.Th('Threats');\n  lowerBody.Td().Children(content.Threats || [], 'li', point => point.text(text => text))\n  \n}\nconst edit = schema.editor(schemaDefinition);\n\nconst templates = {\n  Blank: {},\n};\n\nexport const swot = {\n  name,\n  view,\n  edit,\n  templates\n};\n",
     "static": true,
     "longname": "js/types/swot.js",
     "access": null,
@@ -3440,7 +3667,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 108,
+    "__docId__": 117,
     "kind": "variable",
     "name": "name",
     "memberof": "js/types/swot.js",
@@ -3466,7 +3693,7 @@
     }
   },
   {
-    "__docId__": 109,
+    "__docId__": 118,
     "kind": "variable",
     "name": "schemaDefinition",
     "memberof": "js/types/swot.js",
@@ -3492,7 +3719,7 @@
     }
   },
   {
-    "__docId__": 110,
+    "__docId__": 119,
     "kind": "function",
     "name": "view",
     "memberof": "js/types/swot.js",
@@ -3535,7 +3762,7 @@
     ]
   },
   {
-    "__docId__": 111,
+    "__docId__": 120,
     "kind": "variable",
     "name": "edit",
     "memberof": "js/types/swot.js",
@@ -3561,7 +3788,7 @@
     }
   },
   {
-    "__docId__": 112,
+    "__docId__": 121,
     "kind": "variable",
     "name": "templates",
     "memberof": "js/types/swot.js",
@@ -3587,7 +3814,7 @@
     }
   },
   {
-    "__docId__": 113,
+    "__docId__": 122,
     "kind": "variable",
     "name": "swot",
     "memberof": "js/types/swot.js",
@@ -3613,7 +3840,7 @@
     }
   },
   {
-    "__docId__": 114,
+    "__docId__": 123,
     "kind": "file",
     "name": "js/types/usecase.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport * as schema from \"common/schema\"\n\nconst name = \"Use Case\";\n\nconst schemaDefinition = {\n  type: \"object\",\n  properties: {\n    Description: {\n      type: \"string\",\n    },\n    ApplicablleTo: {\n      type: \"array\",\n      format: \"fileLinksString\",\n      linkageType: \"user\",\n      items: {\n        type: \"string\"\n      }\n    }\n  }\n};\n\nconst view = schema.viewer(schemaDefinition);\nconst edit = schema.editor(schemaDefinition);\n\nconst templates = {\n  Blank: {},\n};\n\nexport const usecase = {\n  name,\n  view,\n  edit,\n  templates\n};\n",
@@ -3624,7 +3851,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 115,
+    "__docId__": 124,
     "kind": "variable",
     "name": "name",
     "memberof": "js/types/usecase.js",
@@ -3650,7 +3877,7 @@
     }
   },
   {
-    "__docId__": 116,
+    "__docId__": 125,
     "kind": "variable",
     "name": "schemaDefinition",
     "memberof": "js/types/usecase.js",
@@ -3676,7 +3903,7 @@
     }
   },
   {
-    "__docId__": 117,
+    "__docId__": 126,
     "kind": "variable",
     "name": "view",
     "memberof": "js/types/usecase.js",
@@ -3702,7 +3929,7 @@
     }
   },
   {
-    "__docId__": 118,
+    "__docId__": 127,
     "kind": "variable",
     "name": "edit",
     "memberof": "js/types/usecase.js",
@@ -3728,7 +3955,7 @@
     }
   },
   {
-    "__docId__": 119,
+    "__docId__": 128,
     "kind": "variable",
     "name": "templates",
     "memberof": "js/types/usecase.js",
@@ -3754,7 +3981,7 @@
     }
   },
   {
-    "__docId__": 120,
+    "__docId__": 129,
     "kind": "variable",
     "name": "usecase",
     "memberof": "js/types/usecase.js",
@@ -3780,7 +4007,7 @@
     }
   },
   {
-    "__docId__": 121,
+    "__docId__": 130,
     "kind": "file",
     "name": "js/types/user.js",
     "content": "/**\n * Janus Copyright (C) 2017 Nahid Akbar\n */\n\n\"use strict\";\n\nimport * as schema from \"common/schema\"\n\nconst name = \"User\";\n\nconst schemaDefinition = {\n  type: 'object',\n  properties: {\n    Photo: {\n      type: 'string',\n      format: 'image'\n    },\n    Summary: {\n      type: 'string',\n    },\n    Needs: {\n      type: 'object',\n      properties: {\n        Stated: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Real: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Unstated: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Delight: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Secret: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        }\n      }\n    },\n    CurrentOptions: {\n      type: 'object',\n      properties: {\n        CompetingProducts: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Other: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        }\n      }\n    },\n    Demographics: {\n      type: 'object',\n      properties: {\n        AgeYears: {\n          type: 'object',\n          properties: {\n            Minimum: {\n              type: 'number'\n            },\n            Average: {\n              type: 'number'\n            },\n            Actual: {\n              type: 'number'\n            },\n            Estimated: {\n              type: 'number'\n            },\n            Expected: {\n              type: 'number'\n            },\n            Maximum: {\n              type: 'number'\n            }\n          }\n        },\n        Income: {\n          type: 'object',\n          properties: {\n            Low: {\n              type: 'boolean'\n            },\n            Medium: {\n              type: 'boolean'\n            },\n            High: {\n              type: 'boolean'\n            }\n          }\n        },\n        Gender: {\n          type: 'object',\n          properties: {\n            Male: {\n              type: 'boolean'\n            },\n            Female: {\n              type: 'boolean'\n            }\n          }\n        },\n        EducationLevel: {\n          type: 'object',\n          properties: {\n            Uneducated: {\n              type: 'boolean'\n            },\n            Elementary: {\n              type: 'boolean'\n            },\n            HighSchool: {\n              type: 'boolean'\n            },\n            Diploma: {\n              type: 'boolean'\n            },\n            Bachelors: {\n              type: 'boolean'\n            },\n            Masters: {\n              type: 'boolean'\n            },\n            Doctorate: {\n              type: 'boolean'\n            }\n          }\n        },\n        Occupation: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        SocialClass: {\n          type: 'object',\n          properties: {\n            Lower: {\n              type: 'boolean'\n            },\n            Middle: {\n              type: 'boolean'\n            },\n            Upper: {\n              type: 'boolean'\n            }\n          }\n        },\n        SizeOfFamily: {\n          type: 'object',\n          properties: {\n            Small: {\n              type: 'boolean'\n            },\n            Medium: {\n              type: 'boolean'\n            },\n            Large: {\n              type: 'boolean'\n            }\n          }\n        },\n        MaritalStatus: {\n          type: 'object',\n          properties: {\n            Single: {\n              type: 'boolean'\n            },\n            Married: {\n              type: 'boolean'\n            },\n            Divorced: {\n              type: 'boolean'\n            },\n            Widowed: {\n              type: 'boolean'\n            }\n          }\n        },\n        FamilyAge: {\n          type: 'object',\n          properties: {\n            Young: {\n              type: 'boolean'\n            },\n            MiddleAged: {\n              type: 'boolean'\n            },\n            Old: {\n              type: 'boolean'\n            }\n          }\n        },\n        FamilyDependants: {\n          type: 'object',\n          properties: {\n            Children: {\n              type: 'boolean'\n            },\n            NoChildren: {\n              type: 'boolean'\n            },\n            Dependants: {\n              type: 'boolean'\n            },\n            NoDependants: {\n              type: 'boolean'\n            }\n          }\n        },\n        EthnicBackground: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Other: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        }\n      }\n    },\n    Psychographic: {\n      type: 'object',\n      properties: {\n        Motivation: {\n          type: 'object',\n          properties: {\n            Safety: {\n              type: 'boolean'\n            },\n            PersonalAppearance: {\n              type: 'boolean'\n            },\n            Health: {\n              type: 'boolean'\n            },\n            Status: {\n              type: 'boolean'\n            },\n            Affiliation: {\n              type: 'boolean'\n            }\n          }\n        },\n        PersonalityType: {\n          type: 'object',\n          properties: {\n            Introverted: {\n              type: 'boolean'\n            },\n            Extroverted: {\n              type: 'boolean'\n            },\n            Sensing: {\n              type: 'boolean'\n            },\n            Intuition: {\n              type: 'boolean'\n            },\n            Thinking: {\n              type: 'boolean'\n            },\n            Feeling: {\n              type: 'boolean'\n            },\n            Judging: {\n              type: 'boolean'\n            },\n            Perceiving: {\n              type: 'boolean'\n            }\n          }\n        },\n        Activities: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Interests: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Opinions: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        BeliefsValues: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Other: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        }\n      }\n    },\n    Geographic: {\n      type: 'object',\n      properties: {\n        Location: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        }\n      }\n    },\n    Behavioural: {\n      type: 'object',\n      properties: {\n        UsageOccation: {\n          type: 'object',\n          properties: {\n            Regular: {\n              type: 'boolean'\n            },\n            Special: {\n              type: 'boolean'\n            },\n            Festive: {\n              type: 'boolean'\n            },\n            GiftGiving: {\n              type: 'boolean'\n            }\n          }\n        },\n        UsageRate: {\n          type: 'object',\n          properties: {\n            Light: {\n              type: 'boolean'\n            },\n            Moderate: {\n              type: 'boolean'\n            },\n            Heavy: {\n              type: 'boolean'\n            }\n          }\n        },\n        BenefitSought: {\n          type: 'object',\n          properties: {\n            Economy: {\n              type: 'boolean'\n            },\n            Quality: {\n              type: 'boolean'\n            },\n            ServiceLevel: {\n              type: 'boolean'\n            },\n            Convenience: {\n              type: 'boolean'\n            },\n            Access: {\n              type: 'boolean'\n            }\n          }\n        },\n        UserType: {\n          type: 'object',\n          properties: {\n            FirstTime: {\n              type: 'boolean'\n            },\n            Regular: {\n              type: 'boolean'\n            },\n            NonUser: {\n              type: 'boolean'\n            }\n          }\n        },\n        Loyalty: {\n          type: 'object',\n          properties: {\n            Loyal: {\n              type: 'boolean'\n            },\n            Switcher: {\n              type: 'boolean'\n            },\n            NonLoyal: {\n              type: 'boolean'\n            },\n            Lapsed: {\n              type: 'boolean'\n            }\n          }\n        },\n        Readiness: {\n          type: 'object',\n          properties: {\n            Unaware: {\n              type: 'boolean'\n            },\n            Arare: {\n              type: 'boolean'\n            },\n            Intent: {\n              type: 'boolean'\n            },\n            NotIntent: {\n              type: 'boolean'\n            }\n          }\n        },\n        Attitude: {\n          type: 'object',\n          properties: {\n            Enthusiast: {\n              type: 'boolean'\n            },\n            Indifferent: {\n              type: 'boolean'\n            },\n            Hostile: {\n              type: 'boolean'\n            },\n            PriceConscious: {\n              type: 'boolean'\n            },\n            QualityConscious: {\n              type: 'boolean'\n            }\n          }\n        },\n        Adaption: {\n          type: 'object',\n          properties: {\n            Innovator: {\n              type: 'boolean'\n            },\n            EarlyAdapter: {\n              type: 'boolean'\n            },\n            EarlyMajority: {\n              type: 'boolean'\n            },\n            LateMajority: {\n              type: 'boolean'\n            },\n            LateAdapter: {\n              type: 'boolean'\n            },\n            Laggerd: {\n              type: 'boolean'\n            }\n          }\n        },\n        LearningType: {\n          type: 'object',\n          properties: {\n            VisualSpatial: {\n              type: 'boolean'\n            },\n            Auditory: {\n              type: 'boolean'\n            },\n            VerbalLinguistic: {\n              type: 'boolean'\n            },\n            PhysicalKinesthetic: {\n              type: 'boolean'\n            },\n            SoliteryIntrapersornal: {\n              type: 'boolean'\n            },\n            SocialInterpersonal: {\n              type: 'boolean'\n            },\n            LogicalMathematical: {\n              type: 'boolean'\n            }\n          }\n        },\n        LearningStage: {\n          type: 'object',\n          properties: {\n            UnconsciousIncompetence: {\n              type: 'boolean'\n            },\n            ConsciousIncompetence: {\n              type: 'boolean'\n            },\n            ConsciousCompetence: {\n              type: 'boolean'\n            },\n            UnconsciousCompetence: {\n              type: 'boolean'\n            }\n          }\n        },\n        Other: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        }\n      }\n    },\n    Technographic: {\n      type: 'object',\n      properties: {\n        Optimism: {\n          type: 'object',\n          properties: {\n            Optimist: {\n              type: 'boolean'\n            },\n            Pessimist: {\n              type: 'boolean'\n            }\n          }\n        },\n        Career: {\n          type: 'object',\n          properties: {\n            FastForwarder: {\n              type: 'boolean'\n            },\n            TechnoStriver: {\n              type: 'boolean'\n            },\n            HandShaker: {\n              type: 'boolean'\n            }\n          }\n        },\n        Family: {\n          type: 'object',\n          properties: {\n            NewAgeNurcherer: {\n              type: 'boolean'\n            },\n            DigitalHopeful: {\n              type: 'boolean'\n            },\n            Traditionalist: {\n              type: 'boolean'\n            }\n          }\n        },\n        Entertainment: {\n          type: 'object',\n          properties: {\n            MousePotato: {\n              type: 'boolean'\n            },\n            GadgetGrabber: {\n              type: 'boolean'\n            },\n            MediaJunkie: {\n              type: 'boolean'\n            }\n          }\n        },\n        OperatingSystem: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Browser: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        TechnologyStack: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        },\n        Other: {\n          type: 'array',\n          format: 'onePerLineString',\n          items: {\n            type: 'string'\n          }\n        }\n      }\n    }\n  }\n};\n\nconst view = schema.viewer(schemaDefinition);\n\nconst edit = schema.editor(schemaDefinition);\n\nconst templates = {\n  Blank: {},\n};\n\nexport const user = {\n  name,\n  view,\n  edit,\n  templates\n};\n",
@@ -3791,7 +4018,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 122,
+    "__docId__": 131,
     "kind": "variable",
     "name": "name",
     "memberof": "js/types/user.js",
@@ -3817,7 +4044,7 @@
     }
   },
   {
-    "__docId__": 123,
+    "__docId__": 132,
     "kind": "variable",
     "name": "schemaDefinition",
     "memberof": "js/types/user.js",
@@ -3843,7 +4070,7 @@
     }
   },
   {
-    "__docId__": 124,
+    "__docId__": 133,
     "kind": "variable",
     "name": "view",
     "memberof": "js/types/user.js",
@@ -3869,7 +4096,7 @@
     }
   },
   {
-    "__docId__": 125,
+    "__docId__": 134,
     "kind": "variable",
     "name": "edit",
     "memberof": "js/types/user.js",
@@ -3895,7 +4122,7 @@
     }
   },
   {
-    "__docId__": 126,
+    "__docId__": 135,
     "kind": "variable",
     "name": "templates",
     "memberof": "js/types/user.js",
@@ -3921,7 +4148,7 @@
     }
   },
   {
-    "__docId__": 127,
+    "__docId__": 136,
     "kind": "variable",
     "name": "user",
     "memberof": "js/types/user.js",
@@ -3947,7 +4174,7 @@
     }
   },
   {
-    "__docId__": 129,
+    "__docId__": 138,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -3959,7 +4186,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 130,
+    "__docId__": 139,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -3971,7 +4198,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 131,
+    "__docId__": 140,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -3983,7 +4210,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 132,
+    "__docId__": 141,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -3995,7 +4222,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 133,
+    "__docId__": 142,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -4007,7 +4234,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 134,
+    "__docId__": 143,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -4019,7 +4246,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 135,
+    "__docId__": 144,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -4031,7 +4258,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 136,
+    "__docId__": 145,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -4043,7 +4270,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 137,
+    "__docId__": 146,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -4055,7 +4282,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 138,
+    "__docId__": 147,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -4067,7 +4294,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 139,
+    "__docId__": 148,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -4079,7 +4306,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 140,
+    "__docId__": 149,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -4091,7 +4318,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 141,
+    "__docId__": 150,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -4103,7 +4330,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 142,
+    "__docId__": 151,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -4115,7 +4342,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 143,
+    "__docId__": 152,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -4127,7 +4354,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 144,
+    "__docId__": 153,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -4139,7 +4366,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 145,
+    "__docId__": 154,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -4151,7 +4378,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 146,
+    "__docId__": 155,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -4163,7 +4390,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 147,
+    "__docId__": 156,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -4175,7 +4402,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 148,
+    "__docId__": 157,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -4187,7 +4414,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 149,
+    "__docId__": 158,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -4199,7 +4426,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 150,
+    "__docId__": 159,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -4211,7 +4438,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 151,
+    "__docId__": 160,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -4223,7 +4450,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 152,
+    "__docId__": 161,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -4235,7 +4462,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 153,
+    "__docId__": 162,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -4247,7 +4474,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 154,
+    "__docId__": 163,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -4259,7 +4486,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 155,
+    "__docId__": 164,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -4271,7 +4498,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 156,
+    "__docId__": 165,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -4283,7 +4510,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 157,
+    "__docId__": 166,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -4295,7 +4522,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 158,
+    "__docId__": 167,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -4307,7 +4534,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 159,
+    "__docId__": 168,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -4319,7 +4546,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 160,
+    "__docId__": 169,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -4331,7 +4558,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 161,
+    "__docId__": 170,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -4343,7 +4570,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 162,
+    "__docId__": 171,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -4355,7 +4582,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 163,
+    "__docId__": 172,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -4367,7 +4594,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 164,
+    "__docId__": 173,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -4379,7 +4606,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 165,
+    "__docId__": 174,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -4391,7 +4618,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 166,
+    "__docId__": 175,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -4403,7 +4630,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 167,
+    "__docId__": 176,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -4415,7 +4642,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 168,
+    "__docId__": 177,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -4427,7 +4654,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 169,
+    "__docId__": 178,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -4439,7 +4666,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 170,
+    "__docId__": 179,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -4451,7 +4678,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 171,
+    "__docId__": 180,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -4463,7 +4690,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 172,
+    "__docId__": 181,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -4475,7 +4702,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 173,
+    "__docId__": 182,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -4487,7 +4714,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 174,
+    "__docId__": 183,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -4499,7 +4726,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 175,
+    "__docId__": 184,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -4512,7 +4739,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 177,
+    "__docId__": 186,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -4524,7 +4751,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 178,
+    "__docId__": 187,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -4536,7 +4763,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 179,
+    "__docId__": 188,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -4548,7 +4775,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 180,
+    "__docId__": 189,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -4560,7 +4787,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 181,
+    "__docId__": 190,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -4572,7 +4799,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 182,
+    "__docId__": 191,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -4584,7 +4811,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 183,
+    "__docId__": 192,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -4596,7 +4823,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 184,
+    "__docId__": 193,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",

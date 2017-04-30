@@ -1,6 +1,6 @@
 {
-  "coverage": "10.71%",
-  "expectCount": 56,
+  "coverage": "10.52%",
+  "expectCount": 57,
   "actualCount": 6,
   "files": {
     "js/common/request.js": {
@@ -122,7 +122,7 @@
       "actualCount": 0,
       "undocumentLines": [
         7,
-        25
+        35
       ]
     },
     "js/common/schema/object.js": {
@@ -138,6 +138,13 @@
       "actualCount": 0,
       "undocumentLines": [
         13
+      ]
+    },
+    "js/types/stakeholder.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        94
       ]
     },
     "js/common/schema/string.js": {
