@@ -6,7 +6,17 @@
 
 export function numberEditor(editors, container, schema, content, save, options)
 {
-  const control = container.Number().Value(content || '');
+  const control = container.Number().Value(content || 0);
+  if (schema.format)
+  {
+    control.attr('type', schema.format);
+  }
+  if (schema.format === 'range')
+  {
+    control.attr('min', -1);
+    control.attr('max', 1);
+    control.attr('step', 0.1);
+  }
   control.OnChange(() =>
   {
     const value = control.Value();

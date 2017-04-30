@@ -174,10 +174,18 @@ body {
     padding: 1em 1em 1em 1em;
   }
   tr {
-    border: 2x solid $color;
+    border: 2px solid $color;
   }
-  
 }
+
+.Stakeholder {
+  width: 100%;
+  border-collapse: collapse;
+  td {
+    border: 2px solid black;
+  }
+}
+
 
 // print and special media
 

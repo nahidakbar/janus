@@ -1,13 +1,12 @@
 # Changelog
 
-* [ ] v0.0.3 JSON schema based diagrams
+* [x] v0.0.3 JSON schema based diagrams
   * [x] plan
   * [x] indexedDB storage
   * [x] User Data
   * [x] SWOT Analysis
-  * [ ] Stakeholder Profile
-  * [ ] Use Cases
-
+  * [x] Use Cases
+  * [x] Stakeholder Profile
 * [x] v0.0.2 More boilerplate 2017-04-16
   * [x] plan
   * [x] Fix wiki editor height

@@ -69,3 +69,8 @@ String.prototype.trim = function()
 {
   return this.replace(/(^\s+|\s+$)/g, "");
 };
+
+d3.selection.prototype.UlList = function(...children)
+{
+  this.Ul().Children(children, 'li', x => x.text(i => i));
+};

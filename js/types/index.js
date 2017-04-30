@@ -5,6 +5,7 @@
 "use strict";
 
 export * from "./md";
+export * from "./stakeholder";
 export * from "./swot";
 export * from "./usecase";
 export * from "./user";
