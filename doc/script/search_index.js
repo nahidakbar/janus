@@ -174,6 +174,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "janus/js/types/stakeholder.js~stakeholder",
+    "variable/index.html#static-variable-stakeholder",
+    "<span>stakeholder</span> <span class=\"search-result-import-path\">janus/js/types/stakeholder.js</span>",
+    "variable"
+  ],
+  [
     "janus/js/common/schema/string.js~stringeditor",
     "function/index.html#static-function-stringEditor",
     "<span>stringEditor</span> <span class=\"search-result-import-path\">janus/js/common/schema/string.js</span>",
@@ -576,6 +582,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "js/common/graph/index.js",
+    "file/js/common/graph/index.js.html",
+    "js/common/graph/index.js",
+    "file"
+  ],
+  [
     "js/common/request.js",
     "file/js/common/request.js.html",
     "js/common/request.js",
@@ -777,6 +789,12 @@ window.esdocSearchIndex = [
     "js/types/md.js",
     "file/js/types/md.js.html",
     "js/types/md.js",
+    "file"
+  ],
+  [
+    "js/types/stakeholder.js",
+    "file/js/types/stakeholder.js.html",
+    "js/types/stakeholder.js",
     "file"
   ],
   [

@@ -69,6 +69,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get">get</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-list">list</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-md">md</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stakeholder">stakeholder</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-swot">swot</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-usecase">usecase</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-user">user</a></span></span></li>
@@ -158,7 +159,14 @@ function showFile(context, section, project, item, items)
   items[item.key] = project.getFile(item.key);
   items[item.key].then(contents =&gt;
   {
-    module.view(itemContent.clear(), {items, item}, contents);
+    try
+    {
+      module.view(itemContent.clear(), {items, item}, contents);
+    }
+    catch(e)
+    {
+      console.error(e);
+    }
     itemToolbar.Button(&quot;Rename&quot;).OnClick(() =&gt;
     {
       analytics.event(item.type, &quot;rename&quot;, &quot;attempt&quot;);
@@ -189,10 +197,17 @@ function showFile(context, section, project, item, items)
       itemToolbar.Display(&quot;none&quot;);
       let editContainer = itemContent.clear().Div();
       let changed = contents;
-      types[item.type].edit(editContainer, {items, item}, contents, update =&gt;
+      try
       {
-        changed = update;
-      });  
+        types[item.type].edit(editContainer, {items, item}, contents, update =&gt;
+        {
+          changed = update;
+        });  
+      }
+      catch(e)
+      {
+        console.error(e);
+      }
       let editToolbar = itemContent.Div();
       editToolbar.Button(&quot;Save&quot;).OnClick(() =&gt;
       {
