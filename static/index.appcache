@@ -1,0 +1,10 @@
+CACHE MANIFEST
+# 2010-06-18:v0020
+
+CACHE:
+index.html
+index.css
+index.png
+
+NETWORK:
+*
